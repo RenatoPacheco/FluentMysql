@@ -1,0 +1,70 @@
+﻿@model FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta.LoginForm
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutClean.cshtml";
+    ViewBag.Title = "Login";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <h2 class="text-center">Autenticação de acesso</h2>
+            <div class="alertas">
+                @Html.Raw(ViewBag.Mensagem)
+            </div>
+            <form class="form-horizontal" method="post" action="">
+                <fieldset>
+                    <legend class="sr-only">Formulário de autenticação</legend>
+                    @using (Html.BsBeginFormGroupFor(x => x.Login, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.Login, new { @class = "col-sm-2 control-label" })
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                @Html.TextBoxFor(x => x.Login, new { @class = "form-control", @autofocus = "autofocus", @title = "Informe seu login, e-mail ou CPF", @placeholder = "Informe seu login, e-mail ou CPF" })
+                            </div>
+                            @Html.BsValidationMessageFor(x => x.Login, true)
+                        </div>
+                    }
+                    @using (Html.BsBeginFormGroupFor(x => x.Senha, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.Senha, new { @class = "col-sm-2 control-label" })
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-unlock-alt"></i>
+                                </div>
+                                @Html.PasswordFor(x => x.Senha, new { @class = "form-control", @title = "Informe sua senha", @placeholder = "Informe sua senha" })
+                            </div>
+                            @Html.BsValidationMessageFor(x => x.Senha, true)
+                        </div>
+                    }
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(x => x.LembarAcesso) @Html.DisplayNameFor(x => x.LembarAcesso)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary btn-lg col-md-6 col-sm-12 col-xs-12" title="clique aqui para entrar">
+                                <i class="fa fa-sign-in"></i>
+                                Entrar
+                            </button>
+                            <!--
+                            <a href="@Url.Action("Recupera")" class="btn btn-link btn-lg col-md-6 col-sm-12 col-xs-12" title="clique aqui se você esqueceu seu login ou senha de acesso">
+                                <i class="fa fa-question-circle"></i>
+                                Recuperar acesso
+                            </a>
+                            -->
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
