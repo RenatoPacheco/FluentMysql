@@ -29,15 +29,15 @@ namespace FluentMysql.Infrastructure.Maps
 
             Map(x => x.Sobrenome)
                .Not.Nullable()
-               .Length(300);
+               .Length(255);
 
             Map(x => x.Email)
                .Not.Nullable()
-               .Length(300);
+               .Length(255);
 
             Map(x => x.Login)
                .Nullable()
-               .Length(300);
+               .Length(255);
 
             Map(x => x.Senha)
                .Nullable()

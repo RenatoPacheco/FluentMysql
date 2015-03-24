@@ -32,7 +32,10 @@ namespace FluentMysql.Domain.Tests
                 acao.Add(info);
             }
 
+            Assert.AreNotEqual(0, info.Id);
+
             Debug.WriteLine(string.Format("Id: {0}", info.Id));
+            Debug.WriteLine(string.Format("Nome: {0} {1}", info.Nome, info.Sobrenome));
         }
     }
 }
