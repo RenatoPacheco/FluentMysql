@@ -3,7 +3,49 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentMysql.Infrastructure", "FluentMysql.Infrastructure\FluentMysql.Infrastructure.csproj", "{6CE7BD8B-490E-465B-A2BE-B3FC631EDDB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentMysql.Infrastructure.Tests", "FluentMysql.Infrastructure.Tests\FluentMysql.Infrastructure.Tests.csproj", "{5BC6F6A9-2D73-4464-BE00-71DDB5F28148}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentMysql.Domain", "FluentMysql.Domain\FluentMysql.Domain.csproj", "{026C15C6-43E3-424F-88D1-FF5B4A0A5FD8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentMysql.Domain.Tests", "FluentMysql.Domain.Tests\FluentMysql.Domain.Tests.csproj", "{D9B131E1-4049-4396-B11A-547F30DAA7CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentMysql.Site", "FluentMysql.Site\FluentMysql.Site.csproj", "{2673D817-2BD6-4B3E-A848-C8D46DD06E72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentMysql.Site.Tests", "FluentMysql.Site.Tests\FluentMysql.Site.Tests.csproj", "{0354CA05-6E63-4A9D-8BC0-85AA5E79DF3D}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CE7BD8B-490E-465B-A2BE-B3FC631EDDB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CE7BD8B-490E-465B-A2BE-B3FC631EDDB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CE7BD8B-490E-465B-A2BE-B3FC631EDDB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CE7BD8B-490E-465B-A2BE-B3FC631EDDB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BC6F6A9-2D73-4464-BE00-71DDB5F28148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BC6F6A9-2D73-4464-BE00-71DDB5F28148}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BC6F6A9-2D73-4464-BE00-71DDB5F28148}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BC6F6A9-2D73-4464-BE00-71DDB5F28148}.Release|Any CPU.Build.0 = Release|Any CPU
+		{026C15C6-43E3-424F-88D1-FF5B4A0A5FD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{026C15C6-43E3-424F-88D1-FF5B4A0A5FD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{026C15C6-43E3-424F-88D1-FF5B4A0A5FD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{026C15C6-43E3-424F-88D1-FF5B4A0A5FD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9B131E1-4049-4396-B11A-547F30DAA7CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9B131E1-4049-4396-B11A-547F30DAA7CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9B131E1-4049-4396-B11A-547F30DAA7CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9B131E1-4049-4396-B11A-547F30DAA7CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2673D817-2BD6-4B3E-A848-C8D46DD06E72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2673D817-2BD6-4B3E-A848-C8D46DD06E72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2673D817-2BD6-4B3E-A848-C8D46DD06E72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2673D817-2BD6-4B3E-A848-C8D46DD06E72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0354CA05-6E63-4A9D-8BC0-85AA5E79DF3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0354CA05-6E63-4A9D-8BC0-85AA5E79DF3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0354CA05-6E63-4A9D-8BC0-85AA5E79DF3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0354CA05-6E63-4A9D-8BC0-85AA5E79DF3D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
