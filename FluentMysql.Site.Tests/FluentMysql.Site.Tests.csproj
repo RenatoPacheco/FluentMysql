@@ -92,6 +92,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FluentMysql.Domain\FluentMysql.Domain.csproj">
+      <Project>{026c15c6-43e3-424f-88d1-ff5b4a0a5fd8}</Project>
+      <Name>FluentMysql.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FluentMysql.Infrastructure\FluentMysql.Infrastructure.csproj">
+      <Project>{6ce7bd8b-490e-465b-a2be-b3fc631eddb0}</Project>
+      <Name>FluentMysql.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FluentMysql.Site\FluentMysql.Site.csproj">
       <Project>{2673D817-2BD6-4B3E-A848-C8D46DD06E72}</Project>
       <Name>FluentMysql.Site</Name>

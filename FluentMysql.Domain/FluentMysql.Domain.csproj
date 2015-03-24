@@ -41,6 +41,12 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FluentMysql.Infrastructure\FluentMysql.Infrastructure.csproj">
+      <Project>{6ce7bd8b-490e-465b-a2be-b3fc631eddb0}</Project>
+      <Name>FluentMysql.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
