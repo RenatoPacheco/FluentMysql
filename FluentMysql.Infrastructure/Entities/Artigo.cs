@@ -8,54 +8,41 @@ using System.Text;
 
 namespace FluentMysql.Infrastructure.Entities
 {
-    public class Usuario : IEntities, ICloneable
+    public class Artigo : IEntities, ICloneable
     {
-        [Display(Name = "Usuário")]
+        [Display(Name = "Artigo")]
         public virtual long Id { get; set; }
 
         [Display(Name = "Identificação Única")]
         [Required(ErrorMessage = "{0} é obrigatório")]
         public virtual Guid Guid { get; set; }
 
-        [Display(Name = "Nome")]
+        [Display(Name="Autor")]
         [Required(ErrorMessage = "{0} é obrigatório")]
-        [MaxLength(100, ErrorMessage = "{0} deve conter no máximo {1} caractér(es)")]
-        public virtual string Nome { get; set; }
+        public virtual IList<Usuario> Autor { get; set; }
 
-        [Display(Name = "Sobrenome")]
-        [Required(ErrorMessage = "{0} é obrigatório")]
-        [MaxLength(255, ErrorMessage = "{0} deve conter no máximo {1} caractér(es)")]
-        public virtual string Sobrenome { get; set; }
-
-        [Display(Name = "E-mail")]
+        [Display(Name = "Título")]
         [Required(ErrorMessage = "{0} é obrigatório")]
         [MaxLength(255, ErrorMessage = "{0} deve conter no máximo {1} caractér(es)")]
-        public virtual string Email { get; set; }
+        public virtual string Titulo { get; set; }
 
-        [Display(Name = "Login")]
+        [Display(Name = "Resumo")]
         [MaxLength(255, ErrorMessage = "{0} deve conter no máximo {1} caractér(es)")]
-        public virtual string Login { get; set; }
+        public virtual string Resumo { get; set; }
 
-        [Display(Name = "Senha")]
-        [MaxLength(100, ErrorMessage = "{0} deve conter no máximo {1} caractér(es)")]
-        public virtual string Senha { get; set; }
+        [Display(Name = "Hashtag")]
+        [MaxLength(255, ErrorMessage = "{0} deve conter no máximo {1} caractér(es)")]
+        public virtual string Hashtag { get; set; }
 
-        [Display(Name = "CPF")]
+        [Display(Name = "Texto")]
         [Required(ErrorMessage = "{0} é obrigatório")]
-        [MaxLength(11, ErrorMessage = "{0} deve conter no máximo {1} caractér(es)")]
-        public virtual string CPF { get; set; }
+        public virtual string Texto { get; set; }
 
         [Display(Name = "Data de Início")]
         public virtual DateTime? DataInicio { get; set; }
 
         [Display(Name = "Data de Término")]
         public virtual DateTime? DataTermino { get; set; }
-
-        [Display(Name = "Nível")]
-        public virtual Nivel Nivel { get; set; }
-
-        [Display(Name="Artigo")]
-        public virtual IList<Artigo> Artigo { get; set; }
 
         [Display(Name = "Data de Criação")]
         public virtual DateTime DataCriacao { get; set; }
@@ -70,9 +57,10 @@ namespace FluentMysql.Infrastructure.Entities
         [Required(ErrorMessage = "{0} é obrigatório")]
         public virtual Usuario Responsavel { get; set; }
 
-        public Usuario()
+        public Artigo()
         {
             Guid = Guid.NewGuid();
+            Autor = new List<Usuario>();
             DataCriacao = DateTime.Now;
             DataAlteracao = DateTime.Now;
         }

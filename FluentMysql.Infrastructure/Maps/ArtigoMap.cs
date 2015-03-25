@@ -9,11 +9,11 @@ using System.Text;
 
 namespace FluentMysql.Infrastructure.Maps
 {
-    public class UsuarioMap : ClassMap<Usuario>
+    public class ArtigoMap : ClassMap<Artigo>
     {
-        public UsuarioMap()
+        public ArtigoMap()
         {
-            Table("tbl_usuario");
+            Table("tbl_artigo");
 
             Id(x => x.Id)
                 .GeneratedBy
@@ -23,40 +23,27 @@ namespace FluentMysql.Infrastructure.Maps
                .Not.Nullable()
                .Length(100);
 
-            Map(x => x.Nome)
-               .Not.Nullable()
-               .Length(100);
-
-            Map(x => x.Sobrenome)
+            Map(x => x.Titulo)
                .Not.Nullable()
                .Length(255);
 
-            Map(x => x.Email)
-               .Not.Nullable()
-               .Length(255);
-
-            Map(x => x.Login)
+            Map(x => x.Resumo)
                .Nullable()
                .Length(255);
 
-            Map(x => x.Senha)
-               .Nullable()
-               .Length(100);
-
-            Map(x => x.CPF)
+            Map(x => x.Texto)
                .Not.Nullable()
-               .Length(100);
+               .CustomSqlType("text");
+
+            Map(x => x.Hashtag)
+               .Not.Nullable()
+               .Length(255);
 
             Map(x => x.DataInicio)
                .Nullable();
 
             Map(x => x.DataTermino)
                .Nullable();
-
-            Map(x => x.Nivel)
-               .Not.Nullable()
-               .CustomType<EnumAsChar<Nivel>>()
-               .CustomSqlType("char(1)");
 
             Map(x => x.DataCriacao)
                .Not.Nullable();
@@ -73,7 +60,7 @@ namespace FluentMysql.Infrastructure.Maps
                .Nullable()
                .Not.LazyLoad();
 
-            HasManyToMany<Artigo>(x => x.Artigo)
+            HasManyToMany<Usuario>(x => x.Autor)
                 .LazyLoad()
                 .Cascade.Merge()
                 .Table("tbl_autor");
