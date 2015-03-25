@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
+    @RenderSection("metas", required: false)
+    <title>@ViewBag.Title - Sistema</title>
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Styles.Render("~/Content/font-awesome.min.css")
+    @Styles.Render("~/Content/areas/admin/template.min.css")
+    @RenderSection("styles", required: false)
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        @Scripts.Render("~/Scripts/html5shiv.js")
+        @Scripts.Render("~/Scripts/respond.min.js")
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="@Url.Action("Index", new { @Controller="Home" })" title="clique aqui para voltar a home">Sistema</a>
+            </div>
+        </div>
+    </nav>
+    @RenderBody()
+    <footer class="navbar navbar-inverse navbar-fixed-bottom">
+        <div class="container">
+            <p class="text-center">Copyright 1999-@DateTime.Now.Year - Sistema - Todos os direitos reservados</p>
+        </div>
+    </footer>
+    @Scripts.Render("~/Scripts/jquery-1.11.2.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

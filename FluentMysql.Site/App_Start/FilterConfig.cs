@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using FluentMysql.Site.Filters;
+using System.Web;
 using System.Web.Mvc;
 
 namespace FluentMysql.Site
@@ -8,6 +9,7 @@ namespace FluentMysql.Site
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new InitFilterAttribute());
         }
     }
 }
