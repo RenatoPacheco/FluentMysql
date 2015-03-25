@@ -8,6 +8,8 @@
     @Styles.Render("~/Content/bootstrap-tagsinput.min.css")
 }
 @section scripts{
+    @Scripts.Render("~/Scripts/ckeditor/ckeditor.js")
+    @Scripts.Render("~/Scripts/ckeditor/adapters/jquery.js")
     @Scripts.Render("~/Scripts/bootstrap-tagsinput.min.js")
     @Scripts.Render("~/Scripts/Areas/Admin/artigo.altera.min.js")
 }
@@ -33,7 +35,7 @@
                     {
                         @Html.LabelFor(x => x.Texto, new { @class = "col-sm-2 control-label" })
                         <div class="col-sm-10">
-                            @Html.TextAreaFor(x => x.Texto, new { @class = "form-control", @title = "Informe a url", @placeholder = "Informe o texto do artigo", @rows = "5" })
+                            @Html.TextAreaFor(x => x.Texto, new { @class = "form-control basic", @title = "Informe a url", @placeholder = "Informe o texto do artigo", @rows = "5" })
                             @Html.BsValidationMessageFor(x => x.Texto, true)
                         </div>
                     }

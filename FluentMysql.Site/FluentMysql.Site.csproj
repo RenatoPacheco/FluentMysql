@@ -140,6 +140,7 @@
     <Compile Include="Areas\Admin\ViewsData\Artigo\AlteraForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\FiltroForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\InsereForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\Artigo\UploadForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\LoginForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\RecuperaForm.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -343,6 +344,7 @@
     <Content Include="Scripts\bootstrap-tagsinput-angular.min.js.map">
       <DependentUpon>bootstrap-tagsinput-angular.min.js</DependentUpon>
     </Content>
+    <Content Include="Areas\Admin\Views\Artigo\Upload.cshtml" />
     <None Include="Scripts\jquery-1.11.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-1.11.2.js" />
@@ -376,6 +378,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

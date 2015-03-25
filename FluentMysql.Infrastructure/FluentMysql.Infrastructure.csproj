@@ -48,6 +48,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -68,6 +69,7 @@
     <Compile Include="DataAnnotations\BaseValidationAttribute.cs" />
     <Compile Include="DataAnnotations\IsDateAttribute.cs" />
     <Compile Include="DataAnnotations\IsDateTimeAttribute.cs" />
+    <Compile Include="DataAnnotations\IsFileImageAttribute.cs" />
     <Compile Include="Entities\Artigo.cs" />
     <Compile Include="Entities\Usuario.cs" />
     <Compile Include="Interfaces\IConnection.cs" />
