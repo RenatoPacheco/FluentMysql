@@ -13,7 +13,7 @@ using System.Web.Security;
 
 namespace FluentMysql.Site.Areas.Admin.Controllers
 {
-    [AuthorizeUser(Nivel = new Nivel[] { Nivel.Operador })]
+    [AuthorizeUser(Nivel = new Nivel[] { Nivel.Visitante })]
     public class MinhaContaController : Controller
     {
         public ActionResult Index()

@@ -36,7 +36,7 @@ namespace FluentMysql.Infrastructure.Maps
                .CustomSqlType("text");
 
             Map(x => x.Hashtag)
-               .Not.Nullable()
+               .Nullable()
                .Length(255);
 
             Map(x => x.DataInicio)

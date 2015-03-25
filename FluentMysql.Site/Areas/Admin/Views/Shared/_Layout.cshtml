@@ -37,6 +37,12 @@
                             <span>Home</span>
                         </a>
                     </li>
+                    <li class="@TempData["Controller-Artigo"]">
+                        <a href="@Url.Action("Index", new { @Controller="Artigo" })" title="clique aqui para gerenciar seus artigos">
+                            <i class="fa fa-file"></i>
+                            <span>Artigo</span>
+                        </a>
+                    </li>
                     <li class="@TempData["Controller-Sobre"]">
                         <a href="@Url.Action("Index", new { @Controller="Sobre" })" title="clique aqui para saber sobre o sistema">
                             <i class="fa fa-info-circle"></i>

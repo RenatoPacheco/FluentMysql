@@ -8,9 +8,8 @@ namespace FluentMysql.Infrastructure.ValueObject
 {
     public enum Status
     {
-        Indefinido,
-        Ativo,
         Inativo,
+        Ativo,
         Excluido
     }
 }

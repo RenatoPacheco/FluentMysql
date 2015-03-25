@@ -1,0 +1,98 @@
+﻿@using FluentMysql.Infrastructure.Entities
+@model FluentMysql.Site.Areas.Admin.ViewsData.Artigo.InsereForm
+@{
+    ViewBag.Title = "Insere Artigo";
+    Usuario MinhaConta = (Usuario)ViewBag.MinhaConta;
+}
+@section styles{
+    @Styles.Render("~/Content/bootstrap-tagsinput.min.css")
+}
+@section scripts{
+    @Scripts.Render("~/Scripts/bootstrap-tagsinput.min.js")
+    @Scripts.Render("~/Scripts/Areas/Admin/artigo.insere.min.js")
+}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <h2 class="text-center">@ViewBag.Title</h2>
+            <div class="alertas">
+                @Html.Raw(ViewBag.Mensagem)
+            </div>
+            <form class="form-horizontal" method="post" action="@Url.Action("Insere", new { })">
+                <fieldset>
+                    <legend class="sr-only">Formulário de inserção</legend>
+                    @using (Html.BsBeginFormGroupFor(x => x.Titulo, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.Titulo, new { @class = "col-sm-2 control-label" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.Titulo, new { @class = "form-control", @autofocus = "autofocus", @title = "Informe o título", @placeholder = "Informe o título" })
+                            @Html.BsValidationMessageFor(x => x.Titulo, true)
+                        </div>
+                    }
+                    @using (Html.BsBeginFormGroupFor(x => x.Texto, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.Texto, new { @class = "col-sm-2 control-label" })
+                        <div class="col-sm-10">
+                            @Html.TextAreaFor(x => x.Texto, new { @class = "form-control", @title = "Informe a url", @placeholder = "Informe o texto do artigo", @rows = "5" })
+                            @Html.BsValidationMessageFor(x => x.Texto, true)
+                        </div>
+                    }
+                @using (Html.BsBeginFormGroupFor(x => x.Resumo, new { @class = "has-feedback" }))
+                {
+                    @Html.LabelFor(x => x.Resumo, new { @class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextAreaFor(x => x.Resumo, new { @class = "form-control", @title = "Informe a url", @placeholder = "Informe o resumo", @rows = "5" })
+                        @Html.BsValidationMessageFor(x => x.Resumo, true)
+                    </div>
+                }
+                    @using (Html.BsBeginFormGroupFor(x => x.DataInicio, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.DataInicio, new { @class = "col-sm-2 control-label" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.DataInicio, new { @class = "form-control", @title = "Informe data de início", @placeholder = "Informe data de início" })
+                            @Html.BsValidationMessageFor(x => x.DataInicio, true)
+                        </div>
+                    }
+                    @using (Html.BsBeginFormGroupFor(x => x.DataTermino, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.DataTermino, new { @class = "col-sm-2 control-label" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.DataTermino, new { @class = "form-control", @title = "Informe data de término", @placeholder = "Informe data de término" })
+                            @Html.BsValidationMessageFor(x => x.DataTermino, true)
+                        </div>
+                    }
+                    @using (Html.BsBeginFormGroupFor(x => x.Hashtag, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.Hashtag, new { @class = "col-sm-2 control-label" })
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.Hashtag, new { @class = "form-control col-sm-10", @title = "Informe as hashtag", @placeholder = "Informe as hashtag" })
+                            @Html.BsValidationMessageFor(x => x.Hashtag, true)
+                        </div>
+                    }
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-md-offset-2 col-sm-9 col-md-10">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.CheckBoxFor(x => x.Status) @Html.DisplayNameFor(x => x.Status)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Hidden("Autores", MinhaConta.Id)
+                        <div class="col-sm-offset-3 col-md-offset-2 col-sm-9 col-md-10">
+                            <button type="submit" class="btn btn-primary btn-lg col-md-6 col-sm-12 col-xs-12" title="clique aqui para salvar">
+                                <i class="fa fa-save"></i>
+                                Salvar
+                            </button>
+                            <a href="@Url.Action("Index", new { @Voltar=true })" class="btn btn-link btn-lg col-md-6 col-sm-12 col-xs-12" title="clique aqui para voltar">
+                                <i class="fa fa-reply"></i>
+                                Voltar
+                            </a>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

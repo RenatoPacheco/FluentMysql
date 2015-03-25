@@ -131,10 +131,15 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\App_Start\AutoMapperConfig.cs" />
+    <Compile Include="Areas\Admin\Controllers\ArtigoController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\MinhaContaController.cs" />
     <Compile Include="Areas\Admin\Controllers\SobreController.cs" />
+    <Compile Include="Areas\Admin\Models\Services\ArtigoService.cs" />
     <Compile Include="Areas\Admin\Models\Services\MinhaContaService.cs" />
+    <Compile Include="Areas\Admin\ViewsData\Artigo\AlteraForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\Artigo\FiltroForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\Artigo\InsereForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\LoginForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\RecuperaForm.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -164,6 +169,12 @@
     <Content Include="Content\Areas\Admin\template.min.css">
       <DependentUpon>template.css</DependentUpon>
     </Content>
+    <Content Include="Content\bootstrap-tagsinput.css">
+      <DependentUpon>bootstrap-tagsinput.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap-tagsinput.min.css">
+      <DependentUpon>bootstrap-tagsinput.css</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -187,6 +198,26 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Scripts\Areas\Admin\artigo.altera.js" />
+    <Content Include="Scripts\Areas\Admin\artigo.altera.min.js">
+      <DependentUpon>artigo.altera.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\Areas\Admin\artigo.index.js" />
+    <Content Include="Scripts\Areas\Admin\artigo.index.min.js">
+      <DependentUpon>artigo.index.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\Areas\Admin\artigo.insere.js" />
+    <Content Include="Scripts\Areas\Admin\artigo.insere.min.js">
+      <DependentUpon>artigo.insere.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\bootstrap-tagsinput-angular.js" />
+    <Content Include="Scripts\bootstrap-tagsinput-angular.min.js">
+      <DependentUpon>bootstrap-tagsinput-angular.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\bootstrap-tagsinput.js" />
+    <Content Include="Scripts\bootstrap-tagsinput.min.js">
+      <DependentUpon>bootstrap-tagsinput.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
@@ -289,6 +320,28 @@
     <Content Include="Content\template.less" />
     <Content Include="Content\template.css.map">
       <DependentUpon>template.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\Admin\Views\Artigo\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Artigo\Insere.cshtml" />
+    <Content Include="Areas\Admin\Views\Artigo\Altera.cshtml" />
+    <Content Include="Scripts\Areas\Admin\artigo.altera.min.js.map">
+      <DependentUpon>artigo.altera.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\Areas\Admin\artigo.index.min.js.map">
+      <DependentUpon>artigo.index.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\Areas\Admin\artigo.insere.min.js.map">
+      <DependentUpon>artigo.insere.min.js</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap-tagsinput.less" />
+    <Content Include="Content\bootstrap-tagsinput.css.map">
+      <DependentUpon>bootstrap-tagsinput.css</DependentUpon>
+    </Content>
+    <Content Include="Scripts\bootstrap-tagsinput.min.js.map">
+      <DependentUpon>bootstrap-tagsinput.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\bootstrap-tagsinput-angular.min.js.map">
+      <DependentUpon>bootstrap-tagsinput-angular.min.js</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.11.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.js" />
