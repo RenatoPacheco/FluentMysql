@@ -77,11 +77,12 @@
     <Compile Include="Repository.cs" />
     <Compile Include="Security\Encryption.cs" />
     <Compile Include="Security\Token.cs" />
+    <Compile Include="EnumExtensions.cs" />
     <Compile Include="UserTypes\EnumAsChar.cs" />
     <Compile Include="ValueObject\Nivel.cs" />
     <Compile Include="ValueObject\Status.cs" />
-    <Compile Include="Xml\Extensions.cs" />
-    <Compile Include="Xml\Linq\Extensions.cs" />
+    <Compile Include="Xml\XmlDocumentExtensions.cs" />
+    <Compile Include="Xml\Linq\XDocumentExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace FluentMysql.Infrastructure.Xml.Linq
 {
-    public static class Extensions
+    public static class XDocumentExtensions
     {
         public static XDocument ToXDocument(this XmlDocument xmlDocument)
         {
