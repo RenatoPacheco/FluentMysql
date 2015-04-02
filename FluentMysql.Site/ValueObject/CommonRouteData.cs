@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace FluentMysql.Site.ObjectValue
+namespace FluentMysql.Site.ValueObject
 {
     public class CommonRouteData
     {
