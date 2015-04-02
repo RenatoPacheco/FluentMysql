@@ -41,7 +41,6 @@ namespace FluentMysql.Infrastructure.Entities
         public virtual string Senha { get; set; }
 
         [Display(Name = "CPF")]
-        [Required(ErrorMessage = "{0} é obrigatório")]
         [MaxLength(11, ErrorMessage = "{0} deve conter no máximo {1} caractér(es)")]
         public virtual string CPF { get; set; }
 
