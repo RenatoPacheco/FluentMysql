@@ -1,4 +1,14 @@
-﻿body {
+﻿.navbar-toggle-button(){
+    .navbar-toggle {
+        border:none;
+        background-color:transparent;
+        &:focus, &:hover{
+            background-color:transparent;
+        }
+    }
+}
+
+body {
     padding-top: 60px;
     padding-bottom: 80px;
     min-width: 320px;
@@ -11,4 +21,12 @@ body > footer {
 
 h2 {
     padding-bottom:0.5em;
+}
+
+.navbar-inverse {
+     .navbar-toggle-button();
+}
+
+.navbar-default {
+     .navbar-toggle-button();
 }

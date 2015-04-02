@@ -10,4 +10,20 @@ body > footer {
 h2 {
   padding-bottom: 0.5em;
 }
+.navbar-inverse .navbar-toggle {
+  border: none;
+  background-color: transparent;
+}
+.navbar-inverse .navbar-toggle:focus,
+.navbar-inverse .navbar-toggle:hover {
+  background-color: transparent;
+}
+.navbar-default .navbar-toggle {
+  border: none;
+  background-color: transparent;
+}
+.navbar-default .navbar-toggle:focus,
+.navbar-default .navbar-toggle:hover {
+  background-color: transparent;
+}
 /*# sourceMappingURL=template.css.map */
