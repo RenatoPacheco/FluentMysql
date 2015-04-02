@@ -56,6 +56,9 @@
       <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MySql.Data">
+      <HintPath>..\packages\MySql.Data.6.9.6\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -122,31 +125,101 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AutoMapperConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\App_Start\AutoMapperConfig.cs" />
+    <Compile Include="Areas\Admin\Controllers\ArtigoController.cs" />
+    <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\MinhaContaController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SobreController.cs" />
+    <Compile Include="Areas\Admin\Models\Services\ArtigoService.cs" />
+    <Compile Include="Areas\Admin\Models\Services\MinhaContaService.cs" />
+    <Compile Include="Areas\Admin\ViewsData\Artigo\AlteraForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\Artigo\FiltroForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\Artigo\InsereForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\Artigo\UploadForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\MinhaConta\LoginForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\MinhaConta\RecuperaForm.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Filters\AuthorizeUserAttribute.cs" />
+    <Compile Include="Filters\BaseFilterAttribute.cs" />
+    <Compile Include="Filters\InitFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AlertsMessages.cs" />
+    <Compile Include="Helpers\ConvertToJson.cs" />
+    <Compile Include="Helpers\ObjectToDictionaryHelper.cs" />
+    <Compile Include="ObjectValue\CommonRouteData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web\MVC\HtmlHelperExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Areas\Admin\error.404.css">
+      <DependentUpon>error.404.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Areas\Admin\error.404.min.css">
+      <DependentUpon>error.404.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Areas\Admin\template.css">
+      <DependentUpon>template.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Areas\Admin\template.min.css">
+      <DependentUpon>template.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap-tagsinput.css">
+      <DependentUpon>bootstrap-tagsinput.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap-tagsinput.min.css">
+      <DependentUpon>bootstrap-tagsinput.css</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\template.css">
+      <DependentUpon>template.less</DependentUpon>
+    </Content>
+    <Content Include="Content\template.min.css">
+      <DependentUpon>template.css</DependentUpon>
+    </Content>
     <Content Include="favicon.ico" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Scripts\Areas\Admin\artigo.altera.js" />
+    <Content Include="Scripts\Areas\Admin\artigo.altera.min.js">
+      <DependentUpon>artigo.altera.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\Areas\Admin\artigo.index.js" />
+    <Content Include="Scripts\Areas\Admin\artigo.index.min.js">
+      <DependentUpon>artigo.index.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\Areas\Admin\artigo.insere.js" />
+    <Content Include="Scripts\Areas\Admin\artigo.insere.min.js">
+      <DependentUpon>artigo.insere.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\bootstrap-tagsinput-angular.js" />
+    <Content Include="Scripts\bootstrap-tagsinput-angular.min.js">
+      <DependentUpon>bootstrap-tagsinput-angular.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\bootstrap-tagsinput.js" />
+    <Content Include="Scripts\bootstrap-tagsinput.min.js">
+      <DependentUpon>bootstrap-tagsinput.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
@@ -223,6 +296,56 @@
     <Content Include="Content\bootstrap\bootstrap.less" />
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_LayoutClean.cshtml" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Error\404.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\MinhaConta\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\MinhaConta\Login.cshtml" />
+    <Content Include="Areas\Admin\Views\MinhaConta\Recupera.cshtml" />
+    <Content Include="Content\Areas\Admin\error.404.less" />
+    <Content Include="Content\Areas\Admin\template.less" />
+    <Content Include="Content\Areas\Admin\error.404.css.map">
+      <DependentUpon>error.404.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Areas\Admin\template.css.map">
+      <DependentUpon>template.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\Admin\Views\Sobre\Index.cshtml" />
+    <Content Include="Content\template.less" />
+    <Content Include="Content\template.css.map">
+      <DependentUpon>template.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\Admin\Views\Artigo\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Artigo\Insere.cshtml" />
+    <Content Include="Areas\Admin\Views\Artigo\Altera.cshtml" />
+    <Content Include="Scripts\Areas\Admin\artigo.altera.min.js.map">
+      <DependentUpon>artigo.altera.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\Areas\Admin\artigo.index.min.js.map">
+      <DependentUpon>artigo.index.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\Areas\Admin\artigo.insere.min.js.map">
+      <DependentUpon>artigo.insere.min.js</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap-tagsinput.less" />
+    <Content Include="Content\bootstrap-tagsinput.css.map">
+      <DependentUpon>bootstrap-tagsinput.css</DependentUpon>
+    </Content>
+    <Content Include="Scripts\bootstrap-tagsinput.min.js.map">
+      <DependentUpon>bootstrap-tagsinput.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\bootstrap-tagsinput-angular.min.js.map">
+      <DependentUpon>bootstrap-tagsinput-angular.min.js</DependentUpon>
+    </Content>
+    <Content Include="Areas\Admin\Views\Artigo\Upload.cshtml" />
     <None Include="Scripts\jquery-1.11.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-1.11.2.js" />
@@ -251,13 +374,14 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_html5shiv.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
