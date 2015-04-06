@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace FluentMysql.Site.Areas.Admin.ViewsData.Artigo
+namespace FluentMysql.Site.Areas.Admin.ViewsData.Upload
 {
-    public class UploadForm
+    public class CKEditorForm
     {
         [Display(Name = "Arquivo")]
         [Required(ErrorMessage = "{0} é obrigatório")]

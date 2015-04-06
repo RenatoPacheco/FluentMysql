@@ -46,7 +46,7 @@ namespace FluentMysql.Domain.Services
                 usuatioInfo = new UsuarioInfo(usuario, minhaPermissao);
 
                 if (!usuatioInfo.Subordinado)
-                    throw new HttpException(406, "Sua permissõa não dá acesso a essa ação para este registro");
+                    throw new HttpException(406, "Sua permissão não dá acesso a essa ação para este registro");
 
                 if (usuatioInfo.Autenticado && !afetarAutenticado)
                     throw new HttpException(406, "Ação não permitida para registro já autenticado");

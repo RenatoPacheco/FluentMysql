@@ -77,13 +77,18 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
 
         internal static IList<Artigo> Filtrar(FiltroForm filtro)
         {
-            IList<Artigo> resultado = null;
-            using (ArtigoRepository acao = new ArtigoRepository())
+            IList<Artigo> resultado = new List<Artigo>();
+
+            using (Connection connection = new Connection())
             {
-                resultado = acao.Query()
-                    .Where(x => x.Status == Status.Ativo || x.Status == Status.Inativo)
-                    .OrderByDescending(x => x.Id)
-                    .ToList();
+                using (ISession session = connection.Session)
+                {
+                    resultado = session.CreateQuery(@"FROM Artigo WHERE Status IN (:status) AND (Titulo LIKE :texto OR Texto LIKE :texto OR Resumo LIKE :texto) ORDER BY Id Desc")
+                        .SetParameterList("status", new List<Status>() { Status.Ativo, Status.Inativo })
+                        .SetString("texto", "%" + filtro.PalavraChave + "%")
+                        .SetMaxResults(1000)
+                        .List<Artigo>();
+                }
             }
 
             return resultado;
@@ -121,6 +126,29 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
                 resultado = acao.Find(id);
                 if (resultado != null)
                     resultado.Autor.Count();
+            }
+
+            return resultado;
+        }
+
+        internal static IList<Artigo> Info(IList<long> ids)
+        {
+            if (object.Equals(ids, null))
+                throw new ArgumentNullException("Valor não pode ser nulo", "ids");
+
+            if (ids.Where(x => x <= 0).Count() > 0)
+                throw new ArgumentException("Valor não pode ser menor ou igual a 0", "ids");
+
+            IList<Artigo> resultado = new List<Artigo>();
+
+            using (Connection connection = new Connection())
+            {
+                using (ISession session = connection.Session)
+                {
+                    resultado = session.CreateQuery(@"FROM Artigo WHERE Id IN (:id)")
+                        .SetParameterList("id", ids)
+                        .List<Artigo>();
+                }
             }
 
             return resultado;
