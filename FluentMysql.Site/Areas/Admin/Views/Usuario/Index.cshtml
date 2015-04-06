@@ -105,12 +105,23 @@
                                     <span class="sr-only">Inativo</span>
                                 </a>
                             }
-                            @if (minhaPermissao.Operador)
+                            @if (minhaPermissao.Administrador)
                             {
-                                <a href="@Url.Action("Altera", new { @Id = @Html.Raw(item.Id) })" class="btn btn-primary @string.Format("{0}", usuatioInfo.Subordinado && !usuatioInfo.Autenticado ? "" : "disabled")" title="clique aqui para altera">
-                                    <i class="fa fa-edit"></i>
-                                    <span class="hidden-xs">Alterar</span>
-                                </a>
+                                if (!usuatioInfo.Autenticado)
+                                {
+                                    <a href="@Url.Action("Altera", new { @Id = @Html.Raw(item.Id) })" class="btn btn-primary @string.Format("{0}", usuatioInfo.Subordinado && !usuatioInfo.Autenticado ? "" : "disabled")" title="clique aqui para altera">
+                                        <i class="fa fa-edit"></i>
+                                        <span class="hidden-xs">Alterar</span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Info", new { @Id = @Html.Raw(item.Id) })" class="btn btn-link" title="clique aqui para ver as informações">
+                                        <i class="fa fa-info hidden-xs"></i>
+                                        <i class="fa fa-info-circle visible-xs"></i>
+                                        <span class="hidden-xs">Detalhe</span>
+                                    </a>
+                                }
                                 <label class="btn btn-link">
                                     <input type="checkbox" name="Selecionados" value="@Html.Raw(item.Id)" @string.Format("{0}", Model.Selecionados != null && Model.Selecionados.Contains(item.Id) ? "checked=\"checked\"" : "") @string.Format("{0}", usuatioInfo.Subordinado ? "" : "disabled=\"disabled\"") />
                                 </label>

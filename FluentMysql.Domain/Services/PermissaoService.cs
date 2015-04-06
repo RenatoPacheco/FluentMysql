@@ -22,6 +22,11 @@ namespace FluentMysql.Domain.Services
             return SobreUsuario(minhaConta, usuarios, false);
         }
 
+        public static bool SobreUsuario(Usuario minhaConta, Usuario usuario, bool afetarAutenticado)
+        {
+            return SobreUsuario(minhaConta, new List<Usuario>() { usuario }, afetarAutenticado);
+        }
+
         public static bool SobreUsuario(Usuario minhaConta, IList<Usuario> usuarios, bool afetarAutenticado)
         {
             if (object.Equals(minhaConta, null))

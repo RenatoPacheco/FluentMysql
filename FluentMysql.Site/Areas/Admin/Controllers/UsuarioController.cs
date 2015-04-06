@@ -103,6 +103,18 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             ViewBag.Info = info;
             return View(dados);
         }
+        
+        [HttpGet]
+        public ActionResult Info(long id = 0)
+        {
+            Usuario info = UsuarioService.Info(id);
+
+
+            if (object.Equals(info, null) || info.Id <= 0)
+                throw new HttpException(404, "O registro solicitado não foi encontrado");
+
+            return View(info);
+        }
 
         [HttpPost]
         public ActionResult Altera(AlteraForm dados)
