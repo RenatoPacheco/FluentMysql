@@ -1,16 +1,22 @@
 ﻿@using FluentMysql.Infrastructure.Entities
 @using FluentMysql.Infrastructure.ValueObject
 @using FluentMysql.Infrastructure.Interfaces
+@using FluentMysql.Domain.ValueObject
 @model FluentMysql.Site.Areas.Admin.ViewsData.Artigo.FiltroForm
 @{
     ViewBag.Title = "Lista de Artigos";
+    Usuario minhaConta = !object.Equals(ViewBag.MinhaConta, null) ? (Usuario)ViewBag.MinhaConta : new Usuario();
+    PermissaoInfo minhaPermissao = new PermissaoInfo(minhaConta);
     IList<Artigo> Lista = object.Equals(ViewBag.Lista, null) ? new List<Artigo>() : (List<Artigo>)ViewBag.Lista;
 }
 @section scripts{
     @Scripts.Render("~/Scripts/Areas/Admin/artigo.index.min.js")
 }
 <div class="container">
-    <h2>@ViewBag.Title</h2>
+    <h2>
+        <i class="fa fa-file"></i>
+        @ViewBag.Title
+    </h2>
     <div class="alertas">
         @Html.Raw(ViewBag.Mensagem)
     </div>
@@ -53,7 +59,7 @@
                     <th class="hidden-xs">#</th>
                     <th>Título</th>
                     <th class="hidden-xs">Resumo</th>
-                    <th class="col-sm-5 col-md-4 text-right">
+                    <th class="col-xs-6 col-md-4 text-right">
                         <button action="selecionaTodos" type="submit" name="Acao" value="selecionar-todos" class="btn btn-default" title="clique aqui para selecionar todos os item">
                             <i class="fa fa-check-square-o"></i>
                             <span class="hidden-xs">Seleciona</span>

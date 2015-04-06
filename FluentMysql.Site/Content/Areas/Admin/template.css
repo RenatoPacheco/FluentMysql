@@ -26,4 +26,12 @@ h2 {
 .navbar-default .navbar-toggle:hover {
   background-color: transparent;
 }
+.btn,
+.label-control,
+.form-control,
+.alert {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
 /*# sourceMappingURL=template.css.map */

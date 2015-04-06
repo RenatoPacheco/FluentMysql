@@ -29,6 +29,12 @@ namespace FluentMysql.Site.Areas.Admin
                 .AfterMap((s, d) => d.DataTermino = string.IsNullOrEmpty(d.DataTermino) ? d.DataTermino : Regex.Replace(d.DataTermino.Trim(), " [^ ]*$", ""))
                 .AfterMap((s, d) => d.Autores = s.Autor.Select(x => x.Id).ToList() );
 
+            Mapper.CreateMap<ViewsData.Usuario.InsereForm, InfraEntities.Usuario>();
+            Mapper.CreateMap<InfraEntities.Usuario, ViewsData.Usuario.InsereForm>();
+            
+            Mapper.CreateMap<ViewsData.Usuario.AlteraForm, InfraEntities.Usuario>();
+            Mapper.CreateMap<InfraEntities.Usuario, ViewsData.Usuario.AlteraForm>();
+
         }
     }
 }

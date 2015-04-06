@@ -44,7 +44,7 @@ namespace FluentMysql.Infrastructure.Maps
                .Length(100);
 
             Map(x => x.CPF)
-               .Not.Nullable()
+               .Nullable()
                .Length(100);
 
             Map(x => x.DataInicio)

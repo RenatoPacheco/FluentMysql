@@ -1,7 +1,7 @@
 ﻿using FluentMysql.Infrastructure.Entities;
 using FluentMysql.Infrastructure.ValueObject;
 using FluentMysql.Site.Areas.Admin.Models.Services;
-using FluentMysql.Site.ObjectValue;
+using FluentMysql.Site.ValueObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;

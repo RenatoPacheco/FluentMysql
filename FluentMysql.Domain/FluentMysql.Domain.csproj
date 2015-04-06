@@ -48,6 +48,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,6 +61,9 @@
     <Compile Include="Repository\UsuarioRepository.cs" />
     <Compile Include="Services\AutenticacaoService.cs" />
     <Compile Include="Services\MinhaContaService.cs" />
+    <Compile Include="Services\PermissaoService.cs" />
+    <Compile Include="ValueObject\PermissaoInfo.cs" />
+    <Compile Include="ValueObject\UsuarioInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FluentMysql.Infrastructure\FluentMysql.Infrastructure.csproj">
