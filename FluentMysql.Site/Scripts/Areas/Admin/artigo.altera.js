@@ -23,4 +23,10 @@
         filebrowserImageWindowWidth: '640',
         filebrowserImageWindowHeight: '480'
     });
+
+    $('*[action="excluir"]').bind({
+        'click': function (evento) {
+            return confirm("Deseja realmente excluir este registro?");
+        }
+    });
 });

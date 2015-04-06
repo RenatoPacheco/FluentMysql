@@ -115,8 +115,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         public ActionResult Info(long id = 0)
         {
             Usuario info = UsuarioService.Info(id);
-
-
+            
             if (object.Equals(info, null) || info.Id <= 0)
                 throw new HttpException(404, "O registro solicitado não foi encontrado");
 

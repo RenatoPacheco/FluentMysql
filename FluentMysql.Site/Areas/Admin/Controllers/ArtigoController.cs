@@ -5,6 +5,7 @@ using FluentMysql.Site.Areas.Admin.Models.Services;
 using FluentMysql.Site.Areas.Admin.ViewsData.Artigo;
 using FluentMysql.Site.Filters;
 using FluentMysql.Site.Helpers;
+using FluentMysql.Site.ValueObject;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -41,9 +42,11 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             return View(dados);
         }
 
-        public ActionResult Index(FiltroForm filtro = null)
+        public ActionResult Index(FiltroForm filtro = null, bool voltar = false)
         {
             IList<Artigo> lista = new List<Artigo>();
+            CommonRouteData routeData = new CommonRouteData(ControllerContext);
+            string sessionRef = string.Format("{0}-{1}-{2}", routeData.Action, routeData.Controller, routeData.Area);
 
             if (ModelState.IsValid)
             {
@@ -77,6 +80,10 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                     ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
                 }
 
+                if (voltar && !object.Equals(Session[sessionRef], null))
+                    filtro = (FiltroForm)Session[sessionRef];
+
+                Session[sessionRef] = filtro;
                 lista = ArtigoService.Filtrar(filtro);
             }
 
@@ -91,6 +98,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Insere(InsereForm dados)
         {
             if (ModelState.IsValid)
@@ -121,19 +129,22 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             Artigo info = ArtigoService.Info(id);
             AlteraForm dados = info == null ? new AlteraForm() : Mapper.Map<Artigo, AlteraForm>(info);
 
+            if (object.Equals(info, null) || info.Id <= 0)
+                throw new HttpException(404, "O registro solicitado não foi encontrado");
+
             ViewBag.Info = info;
-
-            string view = "Altera";
-
-            if (object.Equals(info, null))
-                view = "../Error/404";
-
-            return View(view, dados);
+            return View(dados);
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Altera(AlteraForm dados)
         {
+            Artigo info = ArtigoService.Info(dados.Id);
+
+            if (object.Equals(info, null) || info.Id <= 0)
+                throw new HttpException(404, "O registro solicitado não foi encontrado");
+
             if (ModelState.IsValid)
             {
                 try
@@ -151,16 +162,9 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                     ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
                 }
             }
-
-            Artigo info = ArtigoService.Info(dados.Id);
+                        
             ViewBag.Info = info;
-
-            string view = "Altera";
-
-            if (object.Equals(info, null))
-                view = "../Error/404";
-
-            return View(view, dados);
+            return View(dados);
         }
 
         public ActionResult Ativa(IList<long> id)
