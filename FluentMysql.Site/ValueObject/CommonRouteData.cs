@@ -16,14 +16,22 @@ namespace FluentMysql.Site.ValueObject
 
         public CommonRouteData(ActionExecutingContext filterContext)
                 : this(filterContext.HttpContext) { }
+        public CommonRouteData(ControllerContext controllerContext)
+        {
+            var RouteData = controllerContext.RouteData;
+
+            Area = RouteData.DataTokens.Keys.Contains("area") ? RouteData.DataTokens["area"].ToString() : string.Empty;
+            Controller = RouteData.Values.ContainsKey("controller") ? RouteData.GetRequiredString("controller") : string.Empty;
+            Action = RouteData.Values.ContainsKey("action") ? RouteData.GetRequiredString("action") : string.Empty;
+        }
 
         public CommonRouteData(HttpContextBase httpContext)
-            {
-                var RouteData = httpContext.Request.RequestContext.RouteData;
+        {
+            var RouteData = httpContext.Request.RequestContext.RouteData;
 
-                Area = RouteData.DataTokens.Keys.Contains("area") ? RouteData.DataTokens["area"].ToString() : string.Empty;
-                Controller = RouteData.Values.ContainsKey("controller") ? RouteData.GetRequiredString("controller") : string.Empty;
-                Action = RouteData.Values.ContainsKey("action") ? RouteData.GetRequiredString("action") : string.Empty;
-            }
+            Area = RouteData.DataTokens.Keys.Contains("area") ? RouteData.DataTokens["area"].ToString() : string.Empty;
+            Controller = RouteData.Values.ContainsKey("controller") ? RouteData.GetRequiredString("controller") : string.Empty;
+            Action = RouteData.Values.ContainsKey("action") ? RouteData.GetRequiredString("action") : string.Empty;
+        }
     }
 }

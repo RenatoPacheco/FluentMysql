@@ -7,6 +7,7 @@ using FluentMysql.Site.Areas.Admin.Models.Services;
 using FluentMysql.Site.Areas.Admin.ViewsData.Usuario;
 using FluentMysql.Site.Filters;
 using FluentMysql.Site.Helpers;
+using FluentMysql.Site.ValueObject;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,10 +21,12 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
     [AuthorizeUser(Nivel = new Nivel[] { Nivel.Administrador })]
     public class UsuarioController : Controller
     {
-        public ActionResult Index(FiltroForm filtro = null)
+        public ActionResult Index(FiltroForm filtro = null, bool voltar = false)
         {
             IList<Usuario> lista = new List<Usuario>();
-
+            CommonRouteData routeData = new CommonRouteData(ControllerContext);
+            string sessionRef = string.Format("{0}-{1}-{2}", routeData.Action, routeData.Controller, routeData.Area);
+            
             if (ModelState.IsValid)
             {
                 try
@@ -56,6 +59,10 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                     ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
                 }
 
+                if (voltar && !object.Equals(Session[sessionRef], null))
+                    filtro = (FiltroForm)Session[sessionRef];
+
+                Session[sessionRef] = filtro;
                 lista = UsuarioService.Filtrar(filtro);
             }
 

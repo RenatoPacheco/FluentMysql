@@ -77,13 +77,18 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
 
         internal static IList<Usuario> Filtrar(FiltroForm filtro)
         {
-            IList<Usuario> resultado = null;
-            using (UsuarioRepository acao = new UsuarioRepository())
+            IList<Usuario> resultado = new List<Usuario>();
+            
+            using (Connection connection = new Connection())
             {
-                resultado = acao.Query()
-                    .Where(x => x.Status == Status.Ativo || x.Status == Status.Inativo)
-                    .OrderByDescending(x => x.Id)
-                    .ToList();
+                using (ISession session = connection.Session)
+                {
+                    resultado = session.CreateQuery(@"FROM Usuario WHERE Status IN (:status) AND (Email LIKE :texto OR concat(Nome, ' ', Sobrenome) LIKE :texto) ORDER BY Id Desc")
+                        .SetParameterList("status", new List<Status>() { Status.Ativo, Status.Inativo })
+                        .SetString("texto", "%" + filtro.PalavraChave + "%")
+                        .SetMaxResults(1000)
+                        .List<Usuario>();
+                }
             }
 
             return resultado;
