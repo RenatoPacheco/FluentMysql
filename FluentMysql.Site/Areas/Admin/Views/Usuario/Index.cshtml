@@ -11,7 +11,7 @@
     UsuarioInfo usuatioInfo;
 }
 @section scripts{
-    @Scripts.Render("~/Scripts/Areas/Admin/artigo.index.min.js")
+    @Scripts.Render("~/Scripts/Areas/Admin/usuario.index.min.js")
 }
 <div class="container">
     <h2>
@@ -39,7 +39,7 @@
         @if(minhaPermissao.Operador)
         {
             <div class="form-group">
-                <a href="@Url.Action("Insere")" class="btn btn-primary" title="clique aqui para inserir novo">
+                <a href="@Url.Action("Insere")" class="btn btn-info" title="clique aqui para inserir novo">
                     <i class="fa fa-plus"></i>
                     <span>Novo</span>
                 </a>

@@ -217,6 +217,10 @@
     <Content Include="Scripts\Areas\Admin\artigo.insere.min.js">
       <DependentUpon>artigo.insere.js</DependentUpon>
     </Content>
+    <Content Include="Scripts\Areas\Admin\usuario.altera.js" />
+    <Content Include="Scripts\Areas\Admin\usuario.altera.min.js">
+      <DependentUpon>usuario.altera.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\bootstrap-tagsinput-angular.js" />
     <Content Include="Scripts\bootstrap-tagsinput-angular.min.js">
       <DependentUpon>bootstrap-tagsinput-angular.js</DependentUpon>
@@ -357,6 +361,9 @@
     </Content>
     <Content Include="Areas\Admin\Views\Usuario\Insere.cshtml" />
     <Content Include="Areas\Admin\Views\Usuario\Altera.cshtml" />
+    <Content Include="Scripts\Areas\Admin\usuario.altera.min.js.map">
+      <DependentUpon>usuario.altera.min.js</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.11.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-1.11.2.js" />
