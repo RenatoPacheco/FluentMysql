@@ -131,6 +131,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\App_Start\AutoMapperConfig.cs" />
+    <Compile Include="Areas\Admin\Controllers\UploadController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsuarioController.cs" />
     <Compile Include="Areas\Admin\Controllers\ArtigoController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
@@ -142,7 +143,7 @@
     <Compile Include="Areas\Admin\ViewsData\Artigo\AlteraForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\FiltroForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\InsereForm.cs" />
-    <Compile Include="Areas\Admin\ViewsData\Artigo\UploadForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\Upload\CKEditorForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\LoginForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\RecuperaForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Usuario\AlteraForm.cs" />
@@ -358,7 +359,6 @@
     <Content Include="Scripts\bootstrap-tagsinput-angular.min.js.map">
       <DependentUpon>bootstrap-tagsinput-angular.min.js</DependentUpon>
     </Content>
-    <Content Include="Areas\Admin\Views\Artigo\Upload.cshtml" />
     <Content Include="Areas\Admin\Views\Usuario\Index.cshtml">
       <SubType>
       </SubType>
@@ -372,6 +372,7 @@
       <DependentUpon>usuario.index.min.js</DependentUpon>
     </Content>
     <Content Include="Areas\Admin\Views\Usuario\Info.cshtml" />
+    <Content Include="Areas\Admin\Views\Upload\CKEditor.cshtml" />
     <None Include="Scripts\jquery-1.11.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-1.11.2.js" />

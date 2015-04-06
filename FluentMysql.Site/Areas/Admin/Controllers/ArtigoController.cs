@@ -19,29 +19,6 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
     [AuthorizeUser(Nivel = new Nivel[] { Nivel.Operador })]
     public class ArtigoController : Controller
     {
-        public ActionResult Upload(UploadForm dados = null)
-        {
-            if (ModelState.IsValid)
-            {
-                string dir = string.Format("/Images/{0}/{1}/{2}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-                
-                if (!Directory.Exists(Server.MapPath(string.Format("~{0}", dir))))
-                        Directory.CreateDirectory(Server.MapPath(string.Format("~{0}", dir)));
-                
-                dados.Upload.SaveAs(Server.MapPath(string.Format("~{0}/{1}", dir, dados.Upload.FileName)));
-
-                ViewBag.Url = string.Format("{0}/{1}", dir, dados.Upload.FileName);
-                ViewBag.Mensagem = "Arquivo enviado com sucesso";
-            }
-            else
-            {
-                ViewBag.Url = "";
-                ViewBag.Mensagem = "Ocorreu um erro ao enviar o arquivo";
-            }
-
-            return View(dados);
-        }
-
         public ActionResult Index(FiltroForm filtro = null, bool voltar = false)
         {
             IList<Artigo> lista = new List<Artigo>();
