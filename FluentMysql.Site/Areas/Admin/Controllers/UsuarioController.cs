@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentMysql.Domain.Services;
+using FluentMysql.Domain.ValueObject;
 using FluentMysql.Infrastructure.Entities;
 using FluentMysql.Infrastructure.ValueObject;
 using FluentMysql.Site.Areas.Admin.Models.Services;
@@ -15,7 +17,7 @@ using System.Web.Mvc;
 
 namespace FluentMysql.Site.Areas.Admin.Controllers
 {
-    [AuthorizeUser(Nivel = new Nivel[] { Nivel.Operador })]
+    [AuthorizeUser(Nivel = new Nivel[] { Nivel.Administrador })]
     public class UsuarioController : Controller
     {
         public ActionResult Index(FiltroForm filtro = null)
@@ -94,23 +96,20 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Altera(long id = 0)
         {
-
             Usuario info = UsuarioService.Info(id);
             AlteraForm dados = info == null ? new AlteraForm() : Mapper.Map<Usuario, AlteraForm>(info);
-
+            PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, info);
+            
             ViewBag.Info = info;
-
-            string view = "Altera";
-
-            if (object.Equals(info, null))
-                view = "../Error/404";
-
-            return View(view, dados);
+            return View(dados);
         }
 
         [HttpPost]
         public ActionResult Altera(AlteraForm dados)
         {
+            Usuario info = UsuarioService.Info(dados.Id);
+            PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, info);
+
             if (ModelState.IsValid)
             {
                 try
@@ -129,31 +128,31 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 }
             }
 
-            Usuario info = UsuarioService.Info(dados.Id);
             ViewBag.Info = info;
-
-            string view = "Altera";
-
-            if (object.Equals(info, null))
-                view = "../Error/404";
-
-            return View(view, dados);
+            return View(dados);
         }
 
         public ActionResult Ativa(IList<long> id)
-        {
+        {            
             try
             {
+                IList<Usuario> usuarios = UsuarioService.Info(id);
+                PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, usuarios, true);
+
                 UsuarioService.Ativar(id, (Usuario)ViewBag.MinhaConta);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) ativado(s) com sucesso");
             }
             catch (ValidationException ex)
             {
-                ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                TempData["Mensagem"] = AlertsMessages.Warning(ex.Message.ToString());
             }
             catch (ArgumentException ex)
             {
-                ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                TempData["Mensagem"] = AlertsMessages.Warning(ex.Message.ToString());
+            }
+            catch (HttpException ex)
+            {
+                TempData["Mensagem"] = AlertsMessages.Warning(ex.Message.ToString());
             }
 
             return RedirectToAction("Index", new { @Voltar = true });
@@ -163,16 +162,23 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
+                IList<Usuario> usuarios = UsuarioService.Info(id);
+                PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, usuarios, true);
+
                 UsuarioService.Desativar(id, (Usuario)ViewBag.MinhaConta);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) desativado(s) com sucesso");
             }
             catch (ValidationException ex)
             {
-                ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                TempData["Mensagem"] = AlertsMessages.Warning(ex.Message.ToString());
             }
             catch (ArgumentException ex)
             {
-                ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                TempData["Mensagem"] = AlertsMessages.Warning(ex.Message.ToString());
+            }
+            catch (HttpException ex)
+            {
+                TempData["Mensagem"] = AlertsMessages.Warning(ex.Message.ToString());
             }
 
             return RedirectToAction("Index", new { @Voltar = true });
@@ -182,16 +188,23 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
+                IList<Usuario> usuarios = UsuarioService.Info(id);
+                PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, usuarios, true);
+
                 UsuarioService.Excluir(id, (Usuario)ViewBag.MinhaConta);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) excluído(s) com sucesso");
             }
             catch (ValidationException ex)
             {
-                ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                TempData["Mensagem"] = AlertsMessages.Warning(ex.Message.ToString());
             }
             catch (ArgumentException ex)
             {
-                ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                TempData["Mensagem"] = AlertsMessages.Warning(ex.Message.ToString());
+            }
+            catch (HttpException ex)
+            {
+                TempData["Mensagem"] = AlertsMessages.Warning(ex.Message.ToString());
             }
 
             return RedirectToAction("Index", new { @Voltar = true });

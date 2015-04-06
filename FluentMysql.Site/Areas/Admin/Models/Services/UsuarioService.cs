@@ -123,6 +123,29 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
 
             return resultado;
         }
+        
+        internal static IList<Usuario> Info(IList<long> ids)
+        {
+            if (object.Equals(ids, null))
+                throw new ArgumentNullException("Valor não pode ser nulo", "ids");
+
+            if (ids.Where(x => x <= 0).Count() > 0)
+                throw new ArgumentException("Valor não pode ser menor ou igual a 0", "ids");
+
+            IList<Usuario> resultado = new List<Usuario>();
+
+            using (Connection connection = new Connection())
+            {
+                using (ISession session = connection.Session)
+                {
+                    resultado =session.CreateQuery(@"FROM Usuario WHERE Id IN (:id)")
+                        .SetParameterList("id", ids)
+                        .List<Usuario>();
+                }
+            }
+
+            return resultado;
+        }
 
         internal static Usuario Inserir(InsereForm dados, Usuario usuario)
         {

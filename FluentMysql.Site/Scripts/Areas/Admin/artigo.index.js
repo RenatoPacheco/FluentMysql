@@ -13,7 +13,7 @@ var $page = new function () {
         this.iniciar = function () {
             $('#filtro *[action="selecionaTodos"]').bind({
                 'click': function (evento) {
-                    $('#filtro input:checkbox').prop('checked', true);
+                    $('#filtro input:checkbox').not('input:disabled').prop('checked', true);
                     return false;
                 }
             });
