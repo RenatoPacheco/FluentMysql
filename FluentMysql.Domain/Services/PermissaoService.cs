@@ -30,7 +30,7 @@ namespace FluentMysql.Domain.Services
         public static bool SobreUsuario(Usuario minhaConta, IList<Usuario> usuarios, bool afetarAutenticado)
         {
             if (object.Equals(minhaConta, null))
-                throw new ArgumentNullException("O valor não pode ser nulo", "minhaConta");
+                throw new ArgumentNullException("minhaConta", "O valor não pode ser nulo");
 
             if (object.Equals(usuarios, null) || usuarios.Count <= 0)
                 throw new HttpException(404, "O usuário solicitado não foi encontrado");

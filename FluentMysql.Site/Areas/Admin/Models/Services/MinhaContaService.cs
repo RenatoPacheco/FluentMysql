@@ -120,7 +120,7 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
         public static void SolicitarAutenticacao(Usuario usuario)
         {
             if (object.Equals(usuario, null))
-                throw new ArgumentNullException("O valor não pode ser nulo", "usuario");
+                throw new ArgumentNullException("usuario", "O valor não pode ser nulo");
 
             UsuarioInfo info = new UsuarioInfo(usuario);
 
