@@ -114,10 +114,7 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
 
             resultado.Responsavel = responsavel;
             resultado.DataAlteracao = DateTime.Now;
-            using (UsuarioRepository acao = new UsuarioRepository())
-            {
-                acao.Edit(resultado);
-            }
+            resultado = Domain.Services.UsuarioService.AlterarUnico(resultado);
 
             return resultado;
         }
@@ -193,10 +190,7 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             Usuario resultado = Mapper.Map<InsereForm, Usuario>(dados);
 
             resultado.Responsavel = responsavel;
-            using (UsuarioRepository acao = new UsuarioRepository())
-            {
-                acao.Add(resultado);
-            }
+            resultado = Domain.Services.UsuarioService.InserirUnico(resultado);
 
             return resultado;
         }

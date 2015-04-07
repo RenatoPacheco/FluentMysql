@@ -62,6 +62,7 @@
     <Compile Include="Services\AutenticacaoService.cs" />
     <Compile Include="Services\MinhaContaService.cs" />
     <Compile Include="Services\PermissaoService.cs" />
+    <Compile Include="Services\UsuarioService.cs" />
     <Compile Include="ValueObject\PermissaoInfo.cs" />
     <Compile Include="ValueObject\UsuarioInfo.cs" />
   </ItemGroup>

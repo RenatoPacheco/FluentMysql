@@ -33,19 +33,19 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 {
                     if (filtro.Acao == "ativar")
                     {
-                        UsuarioService.Ativar(filtro.Selecionados, (Usuario)ViewBag.MinhaConta);
+                        Models.Services.UsuarioService.Ativar(filtro.Selecionados, (Usuario)ViewBag.MinhaConta);
                         ViewBag.Mensagem += AlertsMessages.Success("Registro(s) ativado(s) com sucesso");
                         filtro.Selecionados = null;
                     }
                     else if (filtro.Acao == "desativar")
                     {
-                        UsuarioService.Desativar(filtro.Selecionados, (Usuario)ViewBag.MinhaConta);
+                        Models.Services.UsuarioService.Desativar(filtro.Selecionados, (Usuario)ViewBag.MinhaConta);
                         ViewBag.Mensagem += AlertsMessages.Success("Registro(s) desativado(s) com sucesso");
                         filtro.Selecionados = null;
                     }
                     else if (filtro.Acao == "remover")
                     {
-                        UsuarioService.Excluir(filtro.Selecionados, (Usuario)ViewBag.MinhaConta);
+                        Models.Services.UsuarioService.Excluir(filtro.Selecionados, (Usuario)ViewBag.MinhaConta);
                         ViewBag.Mensagem += AlertsMessages.Success("Registro(s) excluído(s) com sucesso");
                         filtro.Selecionados = null;
                     }
@@ -63,7 +63,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                     filtro = (FiltroForm)Session[sessionRef];
 
                 Session[sessionRef] = filtro;
-                lista = UsuarioService.Filtrar(filtro);
+                lista = Models.Services.UsuarioService.Filtrar(filtro);
             }
 
             ViewBag.Lista = lista;
@@ -83,7 +83,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             {
                 try
                 {
-                    Usuario info = UsuarioService.Inserir(dados, (Usuario)ViewBag.MinhaConta);
+                    Usuario info = Models.Services.UsuarioService.Inserir(dados, (Usuario)ViewBag.MinhaConta);
                     TempData["Mensagem"] = AlertsMessages.Success("Registro inserido com sucesso");
                     try
                     {
@@ -113,7 +113,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Altera(long id = 0)
         {
-            Usuario info = UsuarioService.Info(id);
+            Usuario info = Models.Services.UsuarioService.Info(id);
 
             if (object.Equals(info, null) || info.Id <= 0)
                 throw new HttpException(404, "O registro solicitado não foi encontrado");
@@ -128,7 +128,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult Altera(AlteraForm dados)
         {
-            Usuario info = UsuarioService.Info(dados.Id);
+            Usuario info = Models.Services.UsuarioService.Info(dados.Id);
             
             if (object.Equals(info, null) || info.Id <= 0)
                 throw new HttpException(404, "O registro solicitado não foi encontrado");
@@ -139,7 +139,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             {
                 try
                 {
-                    var Usuario = UsuarioService.Alterar(dados, (Usuario)ViewBag.MinhaConta);
+                    var Usuario = Models.Services.UsuarioService.Alterar(dados, (Usuario)ViewBag.MinhaConta);
                     TempData["Mensagem"] = AlertsMessages.Success("Registro alterado com sucesso");
                     return RedirectToAction("Altera", new { @Id = Usuario.Id });
                 }
@@ -160,7 +160,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Info(long id = 0)
         {
-            Usuario info = UsuarioService.Info(id);
+            Usuario info = Models.Services.UsuarioService.Info(id);
             
             if (object.Equals(info, null) || info.Id <= 0)
                 throw new HttpException(404, "O registro solicitado não foi encontrado");
@@ -173,7 +173,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
-                Usuario usuario = UsuarioService.Info(id);
+                Usuario usuario = Models.Services.UsuarioService.Info(id);
 
                 if (object.Equals(usuario, null) || usuario.Id <= 0)
                     throw new HttpException(404, "O registro solicitado não foi encontrado");
@@ -197,10 +197,10 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {            
             try
             {
-                IList<Usuario> usuarios = UsuarioService.Info(id);
+                IList<Usuario> usuarios = Models.Services.UsuarioService.Info(id);
                 PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, usuarios, true);
 
-                UsuarioService.Ativar(id, (Usuario)ViewBag.MinhaConta);
+                Models.Services.UsuarioService.Ativar(id, (Usuario)ViewBag.MinhaConta);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) ativado(s) com sucesso");
             }
             catch (ValidationException ex)
@@ -223,10 +223,10 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
-                IList<Usuario> usuarios = UsuarioService.Info(id);
+                IList<Usuario> usuarios = Models.Services.UsuarioService.Info(id);
                 PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, usuarios, true);
 
-                UsuarioService.Desativar(id, (Usuario)ViewBag.MinhaConta);
+                Models.Services.UsuarioService.Desativar(id, (Usuario)ViewBag.MinhaConta);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) desativado(s) com sucesso");
             }
             catch (ValidationException ex)
@@ -249,10 +249,10 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
-                IList<Usuario> usuarios = UsuarioService.Info(id);
+                IList<Usuario> usuarios = Models.Services.UsuarioService.Info(id);
                 PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, usuarios, true);
 
-                UsuarioService.Excluir(id, (Usuario)ViewBag.MinhaConta);
+                Models.Services.UsuarioService.Excluir(id, (Usuario)ViewBag.MinhaConta);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) excluído(s) com sucesso");
             }
             catch (ValidationException ex)

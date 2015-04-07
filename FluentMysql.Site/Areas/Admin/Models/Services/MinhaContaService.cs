@@ -148,11 +148,8 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             resultado.Senha = dados.Senha;
             resultado.DataAlteracao = DateTime.Now;
             resultado.Responsavel = resultado;
-
-            using(UsuarioRepository acao = new UsuarioRepository())
-            {
-                acao.Edit(resultado);
-            }
+            
+            resultado = Domain.Services.UsuarioService.AlterarUnico(resultado);
 
             return resultado;
         }
