@@ -85,6 +85,7 @@
     <Compile Include="UserTypes\EnumAsChar.cs" />
     <Compile Include="ValueObject\Nivel.cs" />
     <Compile Include="ValueObject\Status.cs" />
+    <Compile Include="Web\UriUtility.cs" />
     <Compile Include="Xml\XmlDocumentExtensions.cs" />
     <Compile Include="Xml\Linq\XDocumentExtensions.cs" />
   </ItemGroup>

@@ -92,7 +92,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                     }
                     catch (Exception ex)
                     {
-                        TempData["Mensagem"] = AlertsMessages.Danger(string.Format("<p>Ocorreu um erro ao enviar o e-mail de autenticação: <strong>{0}</strong><p><pre>{1}</pre>", ex.Message.ToString(), ex.StackTrace.ToString()), "div");
+                        TempData["Mensagem"] += AlertsMessages.Danger(string.Format("<p>Ocorreu um erro ao enviar o e-mail de autenticação: <strong>{0}</strong><p><pre>{1}</pre>", ex.Message.ToString(), ex.StackTrace.ToString()), "div");
                     }
                     
                     return RedirectToAction("Altera", new { @Id = info.Id });
@@ -114,13 +114,49 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         public ActionResult Altera(long id = 0)
         {
             Usuario info = UsuarioService.Info(id);
-            AlteraForm dados = info == null ? new AlteraForm() : Mapper.Map<Usuario, AlteraForm>(info);
+
+            if (object.Equals(info, null) || info.Id <= 0)
+                throw new HttpException(404, "O registro solicitado não foi encontrado");
+
+            AlteraForm dados = Mapper.Map<Usuario, AlteraForm>(info);
             PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, info);
             
             ViewBag.Info = info;
             return View(dados);
         }
         
+        [HttpPost]
+        public ActionResult Altera(AlteraForm dados)
+        {
+            Usuario info = UsuarioService.Info(dados.Id);
+            
+            if (object.Equals(info, null) || info.Id <= 0)
+                throw new HttpException(404, "O registro solicitado não foi encontrado");
+
+            PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, info);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var Usuario = UsuarioService.Alterar(dados, (Usuario)ViewBag.MinhaConta);
+                    TempData["Mensagem"] = AlertsMessages.Success("Registro alterado com sucesso");
+                    return RedirectToAction("Altera", new { @Id = Usuario.Id });
+                }
+                catch (ValidationException ex)
+                {
+                    ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                }
+                catch (ArgumentException ex)
+                {
+                    ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                }
+            }
+
+            ViewBag.Info = info;
+            return View(dados);
+        }
+
         [HttpGet]
         public ActionResult Info(long id = 0)
         {
@@ -156,35 +192,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
 
             return RedirectToAction("Index", new { @Voltar = true });
         }
-
-        [HttpPost]
-        public ActionResult Altera(AlteraForm dados)
-        {
-            Usuario info = UsuarioService.Info(dados.Id);
-            PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, info);
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var Usuario = UsuarioService.Alterar(dados, (Usuario)ViewBag.MinhaConta);
-                    TempData["Mensagem"] = AlertsMessages.Success("Registro alterado com sucesso");
-                    return RedirectToAction("Altera", new { @Id = Usuario.Id });
-                }
-                catch (ValidationException ex)
-                {
-                    ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
-                }
-                catch (ArgumentException ex)
-                {
-                    ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
-                }
-            }
-
-            ViewBag.Info = info;
-            return View(dados);
-        }
-
+        
         public ActionResult Ativa(IList<long> id)
         {            
             try

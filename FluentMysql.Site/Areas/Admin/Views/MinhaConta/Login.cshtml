@@ -22,7 +22,7 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-user"></i>
                                 </div>
-                                @Html.TextBoxFor(x => x.Login, new { @class = "form-control", @autofocus = "autofocus", @title = "Informe seu login, e-mail ou CPF", @placeholder = "Informe seu login, e-mail ou CPF" })
+                                @Html.TextBoxFor(x => x.Login, new { @class = "form-control", @autofocus = "autofocus", @title = "Informe seu login, e-mail ou CPF", @placeholder = "Informe seu login, e-mail ou CPF", @required = "required" })
                             </div>
                             @Html.BsValidationMessageFor(x => x.Login, true)
                         </div>
@@ -35,7 +35,7 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-unlock-alt"></i>
                                 </div>
-                                @Html.PasswordFor(x => x.Senha, new { @class = "form-control", @title = "Informe sua senha", @placeholder = "Informe sua senha" })
+                                @Html.PasswordFor(x => x.Senha, new { @class = "form-control", @title = "Informe sua senha", @placeholder = "Informe sua senha", @required = "required" })
                             </div>
                             @Html.BsValidationMessageFor(x => x.Senha, true)
                         </div>
@@ -55,12 +55,10 @@
                                 <i class="fa fa-sign-in"></i>
                                 Entrar
                             </button>
-                            <!--
-                            <a href="@Url.Action("Recupera")" class="btn btn-link btn-lg col-md-6 col-sm-12 col-xs-12" title="clique aqui se você esqueceu seu login ou senha de acesso">
+                            <a href="@Url.Action("RecuperaAcesso")" class="btn btn-link btn-lg col-md-6 col-sm-12 col-xs-12" title="clique aqui se você esqueceu seu login ou senha de acesso">
                                 <i class="fa fa-question-circle"></i>
                                 Recuperar acesso
                             </a>
-                            -->
                         </div>
                     </div>
                 </fieldset>

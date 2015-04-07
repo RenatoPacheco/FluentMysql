@@ -15,13 +15,13 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
 {
     public static class UsuarioService
     {
-        internal static void Ativar(IList<long> id, Usuario usuario)
+        internal static void Ativar(IList<long> id, Usuario responsavel)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
-                throw new ArgumentException("Valor não pode ser nulo ou vazio", "id");
+                throw new ArgumentNullException("Valor não pode ser nulo ou vazio", "id");
 
-            if (object.Equals(usuario, null))
-                throw new ArgumentException("Valor não pode ser nulo ou vazio", "usuario");
+            if (object.Equals(responsavel, null))
+                throw new ArgumentNullException("Valor não pode ser nulo ou vazio", "responsavel");
 
             using (Connection connection = new Connection())
             {
@@ -35,13 +35,13 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             }
         }
 
-        internal static void Desativar(IList<long> id, Usuario usuario)
+        internal static void Desativar(IList<long> id, Usuario responsavel)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
-                throw new ArgumentException("Valor não pode ser nulo ou vazio", "id");
+                throw new ArgumentNullException("Valor não pode ser nulo ou vazio", "id");
 
-            if (object.Equals(usuario, null))
-                throw new ArgumentException("Valor não pode ser nulo ou vazio", "usuario");
+            if (object.Equals(responsavel, null))
+                throw new ArgumentNullException("Valor não pode ser nulo", "responsavel");
 
             using (Connection connection = new Connection())
             {
@@ -55,13 +55,13 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             }
         }
 
-        internal static void Excluir(IList<long> id, Usuario usuario)
+        internal static void Excluir(IList<long> id, Usuario responsavel)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
-                throw new ArgumentException("Valor não pode ser nulo ou vazio", "id");
+                throw new ArgumentNullException("Valor não pode ser nulo ou vazio", "id");
 
-            if (object.Equals(usuario, null))
-                throw new ArgumentException("Valor não pode ser nulo ou vazio", "usuario");
+            if (object.Equals(responsavel, null))
+                throw new ArgumentNullException("Valor não pode ser nulo", "responsavel");
 
             using (Connection connection = new Connection())
             {
@@ -75,8 +75,16 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             }
         }
 
+        internal static IList<Usuario> Filtrar()
+        {
+            return Filtrar(new FiltroForm());
+        }
+
         internal static IList<Usuario> Filtrar(FiltroForm filtro)
         {
+            if (object.Equals(filtro, null))
+                throw new ArgumentNullException("Valor não pode ser nulo", "filtro");
+
             IList<Usuario> resultado = new List<Usuario>();
             
             using (Connection connection = new Connection())
@@ -94,17 +102,17 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             return resultado;
         }
 
-        internal static Usuario Alterar(AlteraForm dados, Usuario usuario)
+        internal static Usuario Alterar(AlteraForm dados, Usuario responsavel)
         {
             if (object.Equals(dados, null))
-                throw new ArgumentException("Valor não pode ser nulo", "dados");
+                throw new ArgumentNullException("Valor não pode ser nulo", "dados");
 
-            if (object.Equals(usuario, null))
-                throw new ArgumentException("Valor não pode ser nulo", "usuario");
+            if (object.Equals(responsavel, null))
+                throw new ArgumentNullException("Valor não pode ser nulo", "responsavel");
 
             Usuario resultado = Mapper.Map<AlteraForm, Usuario>(dados);
 
-            resultado.Responsavel = usuario;
+            resultado.Responsavel = responsavel;
             resultado.DataAlteracao = DateTime.Now;
             using (UsuarioRepository acao = new UsuarioRepository())
             {
@@ -151,18 +159,40 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
 
             return resultado;
         }
+        
+        internal static Usuario Info(string identificacao)
+        {
+            if (string.IsNullOrWhiteSpace(identificacao))
+                throw new ArgumentNullException("Valor não pode ser nulo ou vazio", "identificacao");
+            
+            Usuario resultado = null;
 
-        internal static Usuario Inserir(InsereForm dados, Usuario usuario)
+            using (Connection connection = new Connection())
+            {
+                using (ISession session = connection.Session)
+                {
+                    resultado = session.CreateQuery(@"FROM Usuario WHERE Login = :id OR Email = :id OR CPF = :id")
+                        .SetString("id", identificacao)
+                        .SetMaxResults(1)
+                        .List<Usuario>()
+                        .FirstOrDefault();
+                }
+            }
+
+            return resultado;
+        }
+
+        internal static Usuario Inserir(InsereForm dados, Usuario responsavel)
         {
             if (object.Equals(dados, null))
-                throw new ArgumentException("Valor não pode ser nulo", "dados");
+                throw new ArgumentNullException("Valor não pode ser nulo", "dados");
 
-            if (object.Equals(usuario, null))
-                throw new ArgumentException("Valor não pode ser nulo", "usuario");
+            if (object.Equals(responsavel, null))
+                throw new ArgumentNullException("Valor não pode ser nulo", "responsavel");
 
             Usuario resultado = Mapper.Map<InsereForm, Usuario>(dados);
 
-            resultado.Responsavel = usuario;
+            resultado.Responsavel = responsavel;
             using (UsuarioRepository acao = new UsuarioRepository())
             {
                 acao.Add(resultado);
