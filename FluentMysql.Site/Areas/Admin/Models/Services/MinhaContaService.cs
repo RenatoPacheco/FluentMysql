@@ -1,12 +1,17 @@
 ﻿using FluentMysql.Domain.Repository;
 using FluentMysql.Domain.Services;
+using FluentMysql.Domain.ValueObject;
 using FluentMysql.Infrastructure.Entities;
+using FluentMysql.Infrastructure.Security;
 using FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta;
+using FluentMysql.Site.Mail;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Security;
@@ -94,6 +99,25 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             resultado = AutenticacaoService.Recuperar(dados.Login);
 
             return resultado;
+        }
+
+        public static void SolicitarAutenticacao(Usuario usuario)
+        {
+            if (object.Equals(usuario, null))
+                throw new ArgumentNullException("O valor não pode ser nulo", "usuario");
+
+            UsuarioInfo info = new UsuarioInfo(usuario);
+
+            if (info.Autenticado)
+                throw new ValidationException("Este registro já foi autenticado");
+            
+            string token = Token.EncryptString(string.Format("{0}|{1}",usuario.Id, usuario.Email), DateTime.Now.AddDays(14));
+            string mensagem = File.ReadAllText(HttpContext.Current.Server.MapPath("~/Areas/Admin/Template/Email/SolicitarAutenticacaoUsuario.html"));
+            
+            mensagem = Regex.Replace(mensagem, "{nome}", usuario.Nome, RegexOptions.IgnoreCase);
+            mensagem = Regex.Replace(mensagem, "{link}", string.Format("?token={0}",token), RegexOptions.IgnoreCase);
+
+            EmailSimples.Enviar("Autenticar conta de acesso", mensagem, new List<string>() { usuario.Email });
         }
     }
 }

@@ -75,7 +75,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             return View(new InsereForm());
         }
-
+        
         [HttpPost]
         public ActionResult Insere(InsereForm dados)
         {
@@ -85,6 +85,16 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 {
                     Usuario info = UsuarioService.Inserir(dados, (Usuario)ViewBag.MinhaConta);
                     TempData["Mensagem"] = AlertsMessages.Success("Registro inserido com sucesso");
+                    try
+                    {
+                        Models.Services.MinhaContaService.SolicitarAutenticacao(info);
+                        TempData["Mensagem"] += AlertsMessages.Success("E-mail de autenticação enviado com sucesso");
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["Mensagem"] = AlertsMessages.Danger(string.Format("<p>Ocorreu um erro ao enviar o e-mail de autenticação: <strong>{0}</strong><p><pre>{1}</pre>", ex.Message.ToString(), ex.StackTrace.ToString()), "div");
+                    }
+                    
                     return RedirectToAction("Altera", new { @Id = info.Id });
                 }
                 catch (ValidationException ex)
@@ -120,6 +130,31 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 throw new HttpException(404, "O registro solicitado não foi encontrado");
 
             return View(info);
+        }
+        
+        [HttpGet]
+        public ActionResult SolicitaAutenticacao(long id = 0)
+        {
+            try
+            {
+                Usuario usuario = UsuarioService.Info(id);
+
+                if (object.Equals(usuario, null) || usuario.Id <= 0)
+                    throw new HttpException(404, "O registro solicitado não foi encontrado");
+                
+                Models.Services.MinhaContaService.SolicitarAutenticacao(usuario);                
+                TempData["Mensagem"] = AlertsMessages.Success("E-mail solicitando autenticação enviado com sucesso");
+            }
+            catch (ValidationException ex)
+            {
+                TempData["Mensagem"] = AlertsMessages.Warning(string.Format("Atenção: <strong>{0}</strong>", ex.Message.ToString()));
+            }
+            catch (Exception ex)
+            {
+                TempData["Mensagem"] = AlertsMessages.Danger(string.Format("<p>Ocorreu um erro ao enviar o e-mail de autenticação: <strong>{0}</strong><p><pre>{1}</pre>", ex.Message.ToString(), ex.StackTrace.ToString()), "div");
+            }
+
+            return RedirectToAction("Index", new { @Voltar = true });
         }
 
         [HttpPost]
