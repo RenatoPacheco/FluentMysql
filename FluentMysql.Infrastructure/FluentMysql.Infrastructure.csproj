@@ -67,6 +67,7 @@
     <Compile Include="AutoMapper\TypeConverter\StringToDateNullable.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="DataAnnotations\BaseValidationAttribute.cs" />
+    <Compile Include="DataAnnotations\IsCPFAttribute.cs" />
     <Compile Include="DataAnnotations\IsDateAttribute.cs" />
     <Compile Include="DataAnnotations\IsDateTimeAttribute.cs" />
     <Compile Include="DataAnnotations\IsFileImageAttribute.cs" />
