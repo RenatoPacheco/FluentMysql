@@ -18,10 +18,10 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
         internal static void Ativar(IList<long> id, Usuario usuario)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
-                throw new ArgumentException("Valor não pode ser nulo ou vazio", "id");
+                throw new ArgumentNullException("id", "Valor não pode ser nulo ou vazio");
 
             if (object.Equals(usuario, null))
-                throw new ArgumentException("Valor não pode ser nulo ou vazio", "usuario");
+                throw new ArgumentNullException("usuario", "Valor não pode ser nulo ou vazio");
 
             using (Connection connection = new Connection())
             {
@@ -134,7 +134,7 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
         internal static IList<Artigo> Info(IList<long> ids)
         {
             if (object.Equals(ids, null))
-                throw new ArgumentNullException("Valor não pode ser nulo", "ids");
+                throw new ArgumentNullException("ids", "Valor não pode ser nulo");
 
             if (ids.Where(x => x <= 0).Count() > 0)
                 throw new ArgumentException("Valor não pode ser menor ou igual a 0", "ids");

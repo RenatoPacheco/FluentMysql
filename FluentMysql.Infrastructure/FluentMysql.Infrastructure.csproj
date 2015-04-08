@@ -67,9 +67,11 @@
     <Compile Include="AutoMapper\TypeConverter\StringToDateNullable.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="DataAnnotations\BaseValidationAttribute.cs" />
+    <Compile Include="DataAnnotations\IsCPFAttribute.cs" />
     <Compile Include="DataAnnotations\IsDateAttribute.cs" />
     <Compile Include="DataAnnotations\IsDateTimeAttribute.cs" />
     <Compile Include="DataAnnotations\IsFileImageAttribute.cs" />
+    <Compile Include="DataAnnotations\IsRequeridIfOtherNotNull.cs" />
     <Compile Include="Entities\Artigo.cs" />
     <Compile Include="Entities\Usuario.cs" />
     <Compile Include="Interfaces\IConnection.cs" />
@@ -85,6 +87,7 @@
     <Compile Include="UserTypes\EnumAsChar.cs" />
     <Compile Include="ValueObject\Nivel.cs" />
     <Compile Include="ValueObject\Status.cs" />
+    <Compile Include="Web\UriUtility.cs" />
     <Compile Include="Xml\XmlDocumentExtensions.cs" />
     <Compile Include="Xml\Linq\XDocumentExtensions.cs" />
   </ItemGroup>

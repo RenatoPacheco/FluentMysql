@@ -143,9 +143,12 @@
     <Compile Include="Areas\Admin\ViewsData\Artigo\AlteraForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\FiltroForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\InsereForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\MinhaConta\AutenticaForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\MinhaConta\AlterarDadosForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\MinhaConta\RedefineSenhaForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Upload\CKEditorForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\LoginForm.cs" />
-    <Compile Include="Areas\Admin\ViewsData\MinhaConta\RecuperaForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\MinhaConta\RecuperaAcessoForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Usuario\AlteraForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Usuario\FiltroForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Usuario\InsereForm.cs" />
@@ -160,11 +163,15 @@
     <Compile Include="Helpers\AlertsMessages.cs" />
     <Compile Include="Helpers\ConvertToJson.cs" />
     <Compile Include="Helpers\ObjectToDictionaryHelper.cs" />
+    <Compile Include="Mail\EmailSimples.cs" />
     <Compile Include="ValueObject\CommonRouteData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\MVC\HtmlHelperExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Admin\Template\Email\EnviarLoginUsuario.html" />
+    <Content Include="Areas\Admin\Template\Email\SolicitarRedefinirSenhaUsuario.html" />
+    <Content Include="Areas\Admin\Template\Email\SolicitarAutenticacaoUsuario.html" />
     <Content Include="Content\Areas\Admin\error.404.css">
       <DependentUpon>error.404.less</DependentUpon>
     </Content>
@@ -323,7 +330,7 @@
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
     <Content Include="Areas\Admin\Views\MinhaConta\Index.cshtml" />
     <Content Include="Areas\Admin\Views\MinhaConta\Login.cshtml" />
-    <Content Include="Areas\Admin\Views\MinhaConta\Recupera.cshtml" />
+    <Content Include="Areas\Admin\Views\MinhaConta\RecuperaAcesso.cshtml" />
     <Content Include="Content\Areas\Admin\error.404.less" />
     <Content Include="Content\Areas\Admin\template.less" />
     <Content Include="Content\Areas\Admin\error.404.css.map">
@@ -373,6 +380,9 @@
     </Content>
     <Content Include="Areas\Admin\Views\Usuario\Info.cshtml" />
     <Content Include="Areas\Admin\Views\Upload\CKEditor.cshtml" />
+    <Content Include="Areas\Admin\Views\MinhaConta\Autentica.cshtml" />
+    <Content Include="Areas\Admin\Views\MinhaConta\RedefineSenha.cshtml" />
+    <Content Include="Areas\Admin\Views\MinhaConta\Acesso.cshtml" />
     <None Include="Scripts\jquery-1.11.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-1.11.2.js" />

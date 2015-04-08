@@ -13,15 +13,18 @@ namespace FluentMysql.Site.Areas.Admin.ViewsData.Usuario
     public class InsereForm
     {
         [Display(Name="Nome")]
-        [Required(ErrorMessage="{0} é obrigatório")]
+        [Required(ErrorMessage = "{0} é obrigatório")]
+        [MaxLength(100, ErrorMessage = "{0} deve ter no máximo caractére(s)")]
         public virtual string Nome { get; set; }
 
         [Display(Name = "Sobrenome")]
         [Required(ErrorMessage = "{0} é obrigatório")]
+        [MaxLength(255, ErrorMessage = "{0} deve ter no máximo caractére(s)")]
         public virtual string Sobrenome { get; set; }
 
         [Display(Name = "E-mail")]
         [Required(ErrorMessage = "{0} é obrigatório")]
+        [MaxLength(255, ErrorMessage = "{0} deve ter no máximo caractére(s)")]
         [EmailAddress(ErrorMessage = "{0} não está em um formato válido")]
         public virtual string Email { get; set; }
 

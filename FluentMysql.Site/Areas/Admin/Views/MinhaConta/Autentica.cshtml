@@ -1,0 +1,86 @@
+﻿@using FluentMysql.Infrastructure.Entities
+@model FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta.AutenticaForm
+@{    
+    ViewBag.Title = "Autenticar Minha Conta";
+}
+@section styles{
+
+}
+@section scripts{
+
+}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <h2 class="text-center">
+                <i class="fa fa-users"></i>
+                @ViewBag.Title
+            </h2>
+            <div class="alertas">
+                @Html.Raw(ViewBag.Mensagem)
+            </div>
+            <form class="form-horizontal" method="post" action="@Url.Action("Autentica", new { })">
+                <fieldset>
+                    <legend class="sr-only">Formulário de inserção</legend>
+                    @using (Html.BsBeginFormGroupFor(x => x.Nome, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.Nome, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @autofocus = "autofocus", @title = "Informe seu nome", @placeholder = "Informe seu nome", @required = "required" })
+                            @Html.BsValidationMessageFor(x => x.Nome, true)
+                        </div>
+                    }
+                    @using (Html.BsBeginFormGroupFor(x => x.Sobrenome, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.Sobrenome, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(x => x.Sobrenome, new { @class = "form-control", @title = "Informe seu sobrenome", @placeholder = "Informe seu sobrenome", @required = "required" })
+                            @Html.BsValidationMessageFor(x => x.Sobrenome, true)
+                        </div>
+                    }
+                    @using (Html.BsBeginFormGroupFor(x => x.Login, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.Login, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(x => x.Login, new { @class = "form-control", @title = "Informe seu login", @placeholder = "Informe seu login", @required = "required" })
+                            @Html.BsValidationMessageFor(x => x.Login, true)
+                        </div>
+                    }
+                    @using (Html.BsBeginFormGroupFor(x => x.CPF, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.CPF, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(x => x.CPF, new { @class = "form-control", @title = "Informe seu CPF", @placeholder = "Informe seu CPF", @required = "required" })
+                            @Html.BsValidationMessageFor(x => x.CPF, true)
+                        </div>
+                    }
+                    @using (Html.BsBeginFormGroupFor(x => x.Senha, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.Senha, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.PasswordFor(x => x.Senha, new { @class = "form-control", @title = "Informe sua senha", @placeholder = "Informe sua senha", @required = "required" })
+                            @Html.BsValidationMessageFor(x => x.Senha, true)
+                        </div>
+                    }
+                    @using (Html.BsBeginFormGroupFor(x => x.ConfirmaSenha, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.ConfirmaSenha, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.PasswordFor(x => x.ConfirmaSenha, new { @class = "form-control", @title = "Confirme sua senha", @placeholder = "Confirme sua senha", @required = "required" })
+                            @Html.BsValidationMessageFor(x => x.ConfirmaSenha, true)
+                        </div>
+                    }
+                    <div class="form-group">
+                        @Html.HiddenFor(x => x.Token)
+                        <div class="col-sm-12">
+                            <button type="submit" class="btn btn-primary btn-lg col-md-6 col-sm-6 col-xs-12" title="clique aqui para salvar">
+                                <i class="fa fa-save"></i>
+                                Salvar
+                            </button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

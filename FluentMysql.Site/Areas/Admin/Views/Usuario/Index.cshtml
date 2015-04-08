@@ -6,7 +6,7 @@
 @{
     ViewBag.Title = "Lista de Usuários";
     Usuario minhaConta = !object.Equals(ViewBag.MinhaConta, null) ? (Usuario)ViewBag.MinhaConta : new Usuario();
-    PermissaoInfo minhaPermissao = new PermissaoInfo(minhaConta);
+    UsuarioPermissao minhaPermissao = new UsuarioPermissao(minhaConta);
     IList<Usuario> lista = object.Equals(ViewBag.Lista, null) ? new List<Usuario>() : (List<Usuario>)ViewBag.Lista;
     UsuarioInfo usuatioInfo;
 }
@@ -64,7 +64,7 @@
                     <th>Nome</th>
                     <th class="hidden-xs">E-mail</th>
                     <th class="hidden-xs">Nível</th>
-                    <th class="col-xs-6 col-md-4 text-right">
+                    <th class="col-xs-8 col-md-4 text-right">
                         @if (minhaPermissao.Operador)
                         {
                             <button action="selecionaTodos" type="submit" name="Acao" value="selecionar-todos" class="btn btn-default" title="clique aqui para selecionar todos os item">
@@ -91,6 +91,13 @@
                         </td>
                         <td class="hidden-xs">@Html.Raw(item.Nivel)</td>
                         <td class="text-right">
+                            @if (!usuatioInfo.Autenticado)
+                            {
+                                <a href="@Url.Action("SolicitaAutenticacao", new { @Id = item.Id })" class="btn btn-link" title="clique aqui para enviar a solicitação de autenticação">
+                                    <i class="fa fa-envelope"></i>
+                                    <span class="sr-only">Solicitar autenticação</span>
+                                </a>
+                            }
                             @if (item.Status == Status.Ativo)
                             {
                                 <a href="@Url.Action("Desativa", new { @Id=item.Id })" class="btn btn-success @string.Format("{0}", usuatioInfo.Subordinado ? "" : "disabled")" title="clique aqui para desativar">
@@ -127,6 +134,7 @@
                                 </label>
                             }
                         </td>
+
                     </tr>
                 }
             </tbody>

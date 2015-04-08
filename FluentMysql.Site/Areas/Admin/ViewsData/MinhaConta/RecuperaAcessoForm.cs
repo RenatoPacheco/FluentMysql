@@ -7,10 +7,14 @@ using System.Threading.Tasks;
 
 namespace FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta
 {
-    public class RecuperaForm
+    public class RecuperaAcessoForm
     {
-        [Display(Name="Login")]
+        [Display(Name="Identificação")]
         [Required(ErrorMessage="{0} é obrigatório")]
-        public virtual string Login { get; set; }
+        public virtual string Identificacao { get; set; }
+
+        [Display(Name = "Ação")]
+        [Required(ErrorMessage = "{0} é obrigatório")]
+        public virtual string Acao { get; set; }
     }
 }

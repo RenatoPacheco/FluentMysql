@@ -62,7 +62,8 @@
     <Compile Include="Services\AutenticacaoService.cs" />
     <Compile Include="Services\MinhaContaService.cs" />
     <Compile Include="Services\PermissaoService.cs" />
-    <Compile Include="ValueObject\PermissaoInfo.cs" />
+    <Compile Include="Services\UsuarioService.cs" />
+    <Compile Include="ValueObject\UsuarioPermissao.cs" />
     <Compile Include="ValueObject\UsuarioInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +74,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataAnnotations\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
