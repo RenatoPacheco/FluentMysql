@@ -19,27 +19,8 @@ namespace FluentMysql.Infrastructure.DataAnnotations
 
                 retorno = false;
 
-                // Checando se o valor não é nulo ou tem o mínimo de 11 dígitos
-                if (Input != null)
-                {
-                    pattern = @"^([0-9]{11})$";
-                    regex = new Regex(pattern);
-                    retorno = regex.Match(Input).Success;
-                    if (retorno == false)
-                    {
-                        pattern = @"^([0-9]{9}-[0-9]{2})$";
-                        regex = new Regex(pattern);
-                        retorno = regex.Match(Input).Success;
-                        if (retorno == false)
-                        {
-                            pattern = @"^([0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2})$";
-                            regex = new Regex(pattern);
-                            retorno = regex.Match(Input).Success;
-                        }
-                    }
-                }
                 // Checando se tem apenas números
-                pattern = @"^([0-9]{11})$";
+                pattern = @"^([0-9]{11})$|^([0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2})$";
                 regex = new Regex(pattern);
                 retorno = regex.Match(Input).Success;
                 //Checando se não são 11 dígitos iguais
@@ -104,11 +85,10 @@ namespace FluentMysql.Infrastructure.DataAnnotations
                     // Para finalizar adicionamos o digito ao cpf
                     cpf = cpf + segundoDigito.ToString();
                     // Agora que obtivemos um cpf completo comparamos o resultado com o informado
-                    if (Input != cpf)
-                    {
-                        retorno = false;
-                    }
+                    return (Input == cpf);
                 }
+
+                return false;
             }
             return true;
         }
