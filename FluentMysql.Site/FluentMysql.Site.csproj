@@ -381,6 +381,7 @@
     <Content Include="Areas\Admin\Views\Upload\CKEditor.cshtml" />
     <Content Include="Areas\Admin\Views\MinhaConta\Autentica.cshtml" />
     <Content Include="Areas\Admin\Views\MinhaConta\RedefineSenha.cshtml" />
+    <Content Include="Areas\Admin\Views\MinhaConta\Acesso.cshtml" />
     <None Include="Scripts\jquery-1.11.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-1.11.2.js" />

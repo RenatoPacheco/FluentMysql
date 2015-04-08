@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FluentMysql.Domain.ValueObject
 {
-    public class PermissaoInfo
+    public class UsuarioPermissao
     {
         public virtual bool Operador { get; protected set; }
 
@@ -20,7 +20,7 @@ namespace FluentMysql.Domain.ValueObject
         
         public virtual Nivel Nivel { get; protected set; }
 
-        public PermissaoInfo(Usuario usuario)
+        public UsuarioPermissao(Usuario usuario)
         {
             int nivel = (int)usuario.Nivel;
             Nivel = usuario.Nivel;

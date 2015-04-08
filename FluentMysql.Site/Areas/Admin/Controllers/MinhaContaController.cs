@@ -194,5 +194,10 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             ViewBag.MinhaConta = usuario;
             return View("RedefineSenha", "_LayoutClean", dados);
         }
+
+        public ActionResult Acesso()
+        {
+            return View();
+        }
     }
 }

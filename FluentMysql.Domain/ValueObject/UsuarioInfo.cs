@@ -15,9 +15,9 @@ namespace FluentMysql.Domain.ValueObject
         public virtual bool Subordinado { get; protected set; }
 
         public UsuarioInfo(Usuario usuario)
-            : this(usuario, new PermissaoInfo(usuario)) { }
+            : this(usuario, new UsuarioPermissao(usuario)) { }
 
-        public UsuarioInfo(Usuario usuario, PermissaoInfo responsavel)
+        public UsuarioInfo(Usuario usuario, UsuarioPermissao responsavel)
         {
             Autenticado = !string.IsNullOrWhiteSpace(usuario.CPF)
                 && !string.IsNullOrWhiteSpace(usuario.Senha)

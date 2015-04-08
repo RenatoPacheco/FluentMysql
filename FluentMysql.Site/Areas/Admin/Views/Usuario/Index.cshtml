@@ -6,7 +6,7 @@
 @{
     ViewBag.Title = "Lista de Usuários";
     Usuario minhaConta = !object.Equals(ViewBag.MinhaConta, null) ? (Usuario)ViewBag.MinhaConta : new Usuario();
-    PermissaoInfo minhaPermissao = new PermissaoInfo(minhaConta);
+    UsuarioPermissao minhaPermissao = new UsuarioPermissao(minhaConta);
     IList<Usuario> lista = object.Equals(ViewBag.Lista, null) ? new List<Usuario>() : (List<Usuario>)ViewBag.Lista;
     UsuarioInfo usuatioInfo;
 }

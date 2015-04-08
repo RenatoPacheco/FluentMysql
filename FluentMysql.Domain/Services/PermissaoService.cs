@@ -35,7 +35,7 @@ namespace FluentMysql.Domain.Services
             if (object.Equals(usuarios, null) || usuarios.Count <= 0)
                 throw new HttpException(404, "O usuário solicitado não foi encontrado");
 
-            PermissaoInfo minhaPermissao = new PermissaoInfo(minhaConta);
+            UsuarioPermissao minhaPermissao = new UsuarioPermissao(minhaConta);
             UsuarioInfo usuatioInfo;
 
             foreach (Usuario usuario in usuarios)
