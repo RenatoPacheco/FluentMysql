@@ -23,36 +23,39 @@
             <form class="form-horizontal" method="post" action="@Url.Action("Insere", new { })">
                 <fieldset>
                     <legend class="sr-only">Formulário de inserção</legend>
-                    @using (Html.BsBeginFormGroupFor(x => x.Nome, new { @class = "has-feedback" }))
+                    @using (Html.BSFormGroupFor(x => x.Nome, false, new { @class = "has-feedback" }))
                     {
                         @Html.LabelFor(x => x.Nome, new { @class = "col-md-2 control-label" })
                         <div class="col-md-10">
                             @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @autofocus = "autofocus", @title = "Informe o título", @placeholder = "Informe o título" })
-                            @Html.BsValidationMessageFor(x => x.Nome, true)
+                            @Html.BSValidationIconFor(x => x.Nome, false)
+                            @Html.ValidationMessageFor(x => x.Nome, string.Empty, new { @class = "text-danger" })
                         </div>
                     }
-                    @using (Html.BsBeginFormGroupFor(x => x.Sobrenome, new { @class = "has-feedback" }))
+                    @using (Html.BSFormGroupFor(x => x.Sobrenome, false, new { @class = "has-feedback" }))
                     {
                         @Html.LabelFor(x => x.Sobrenome, new { @class = "col-md-2 control-label" })
                         <div class="col-md-10">
                             @Html.TextBoxFor(x => x.Sobrenome, new { @class = "form-control basic", @title = "Informe a url", @placeholder = "Informe o texto do artigo" })
-                            @Html.BsValidationMessageFor(x => x.Sobrenome, true)
+                            @Html.BSValidationIconFor(x => x.Sobrenome, false)
+                            @Html.ValidationMessageFor(x => x.Sobrenome, string.Empty, new { @class = "text-danger" })
                         </div>
                     }
-                    @using (Html.BsBeginFormGroupFor(x => x.Email, new { @class = "has-feedback" }))
+                    @using (Html.BSFormGroupFor(x => x.Email, false, new { @class = "has-feedback" }))
                     {
                         @Html.LabelFor(x => x.Email, new { @class = "col-md-2 control-label" })
                         <div class="col-md-10">
                             @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @title = "Informe a url", @placeholder = "Informe o resumo" })
-                            @Html.BsValidationMessageFor(x => x.Email, true)
+                            @Html.BSValidationIconFor(x => x.Email, false)
+                            @Html.ValidationMessageFor(x => x.Email, string.Empty, new { @class = "text-danger" })
                         </div>
                     }
-                    @using (Html.BsBeginFormGroupFor(x => x.Nivel, new { @class = "has-feedback" }))
+                    @using (Html.BSFormGroupFor(x => x.Nivel, false, new { @class = "has-feedback" }))
                     {
                         @Html.LabelFor(x => x.Nivel, new { @class = "col-md-2 control-label" })
                         <div class="col-md-10">
                             @Html.DropDownListFor(x => x.Nivel, Model.NivelOpcoes((Usuario)ViewBag.MinhaConta), new { @class = "form-control", @title = "Informe a url", @placeholder = "Informe o resumo" })
-                            @Html.BsValidationMessageFor(x => x.Nivel, true)
+                            @Html.ValidationMessageFor(x => x.Nivel, string.Empty, new { @class = "text-danger" })
                         </div>
                     }
                     <div class="form-group">
