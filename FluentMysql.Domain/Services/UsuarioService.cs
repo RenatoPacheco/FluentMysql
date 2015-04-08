@@ -1,5 +1,7 @@
 ﻿using FluentMysql.Domain.Repository;
+using FluentMysql.Infrastructure;
 using FluentMysql.Infrastructure.Entities;
+using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -34,10 +36,17 @@ namespace FluentMysql.Domain.Services
                 throw new ArgumentNullException("usuario", "O valor não pode ser nulo ou vazio");
 
             Usuario resultado = null;
-
-            using (UsuarioRepository acao = new UsuarioRepository())
+            
+            using (Connection connection = new Connection())
             {
-                resultado = acao.Query().Where(x => x.Email == email && x.Id != usuario.Id).FirstOrDefault();
+                using (ISession session = connection.Session)
+                {
+                    resultado = session.QueryOver<Usuario>()
+                        .Where(x => x.Email == email && x.Id != usuario.Id)
+                        .Take(1)
+                        .List<Usuario>()
+                        .FirstOrDefault();
+                }
             }
 
             return resultado;
@@ -67,9 +76,16 @@ namespace FluentMysql.Domain.Services
 
             Usuario resultado = null;
 
-            using (UsuarioRepository acao = new UsuarioRepository())
+            using (Connection connection = new Connection())
             {
-                resultado = acao.Query().Where(x => x.Login == login && x.Id != usuario.Id).FirstOrDefault();
+                using (ISession session = connection.Session)
+                {
+                    resultado = session.QueryOver<Usuario>()
+                        .Where(x => x.Login == login && x.Id != usuario.Id)
+                        .Take(1)
+                        .List<Usuario>()
+                        .FirstOrDefault();
+                }
             }
 
             return resultado;
@@ -99,9 +115,16 @@ namespace FluentMysql.Domain.Services
 
             Usuario resultado = null;
 
-            using (UsuarioRepository acao = new UsuarioRepository())
+            using (Connection connection = new Connection())
             {
-                resultado = acao.Query().Where(x => x.CPF == cpf && x.Id != usuario.Id).FirstOrDefault();
+                using (ISession session = connection.Session)
+                {
+                    resultado = session.QueryOver<Usuario>()
+                        .Where(x => x.CPF == cpf && x.Id != usuario.Id)
+                        .Take(1)
+                        .List<Usuario>()
+                        .FirstOrDefault();
+                }
             }
 
             return resultado;

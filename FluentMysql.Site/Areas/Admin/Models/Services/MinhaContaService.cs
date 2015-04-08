@@ -276,10 +276,10 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
 
             Usuario resultado = UsuarioService.Info(dados.Id);
 
-            if ((!string.IsNullOrWhiteSpace(dados.NovoEmail) && !dados.NovoEmail.Equals(resultado.Email)) && !resultado.Senha.Equals(dados.ConfirmaSenha))
+            if ((!string.IsNullOrWhiteSpace(dados.NovoEmail) && !dados.NovoEmail.Equals(resultado.Email)) && !resultado.Senha.Equals(dados.SenhaAtual))
                 throw new ValidationException("A senha atual não é válida");
 
-            if ((!string.IsNullOrWhiteSpace(dados.NovaSenha) && !dados.NovaSenha.Equals(resultado.Senha)) && !resultado.Senha.Equals(dados.ConfirmaSenha))
+            if ((!string.IsNullOrWhiteSpace(dados.NovaSenha) && !dados.NovaSenha.Equals(resultado.Senha)) && !resultado.Senha.Equals(dados.SenhaAtual))
                 throw new ValidationException("A senha atual não é válida");
             
             resultado.Nome = dados.Nome;
