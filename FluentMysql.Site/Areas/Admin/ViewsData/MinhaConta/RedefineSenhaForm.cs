@@ -22,6 +22,6 @@ namespace FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta
         [Display(Name = "Confirma senha")]
         [Required(ErrorMessage = "{0} é obrigatório")]
         [Compare("NovaSenha", ErrorMessage = "{0} não conicide com {1}")]
-        public string ComfirmaSenha { get; set; }
+        public string ConfirmaSenha { get; set; }
     }
 }

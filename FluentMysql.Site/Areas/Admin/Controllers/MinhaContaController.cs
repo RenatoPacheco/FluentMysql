@@ -17,9 +17,44 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
     [AuthorizeUser(Nivel = new Nivel[] { Nivel.Visitante })]
     public class MinhaContaController : Controller
     {
+        [HttpGet]
         public ActionResult Index()
         {
-            return View();
+            Usuario minhaConta = (Usuario)ViewBag.MinhaConta;
+            AlterarDadosForm dados = new AlterarDadosForm();
+            dados.Id = minhaConta.Id;
+            dados.Nome = minhaConta.Nome;
+            dados.Sobrenome = minhaConta.Sobrenome;
+            dados.Login = minhaConta.Login;
+            dados.CPF = minhaConta.CPF;
+
+            return View(dados);
+        }
+
+        [HttpPost]
+        public ActionResult Index(AlterarDadosForm dados)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Usuario minhaConta = (Usuario)ViewBag.MinhaConta;
+                    dados.Id = minhaConta.Id;
+                    MinhaContaService.AlterarDados(dados);
+                    TempData["Mensagem"] = AlertsMessages.Success("Seus dados foram alterados com sucesso");
+                    return RedirectToAction("Index");
+                }
+                catch (ValidationException ex)
+                {
+                    ViewBag.Mensagem += AlertsMessages.Warning(string.Format("Atenção: <strong>{0}</strong>", ex.Message.ToString()));
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Mensagem += AlertsMessages.Danger(string.Format("<p>Ocorreu um erro ao enviar o e-mail de autenticação: <strong>{0}</strong><p><pre>{1}</pre>", ex.Message.ToString(), ex.StackTrace.ToString()), "div");
+                }
+            }
+
+            return View(dados);
         }
 
         [HttpGet]

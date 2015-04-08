@@ -36,10 +36,10 @@ namespace FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta
         [RegularExpression(@"^[0-9A-Za-z]*$", ErrorMessage="{0} deve ter somente caracteres de a-z e 0-9")]
         public string Senha { get; set; }
 
-        [Display(Name = "Comfirma")]
+        [Display(Name = "Confirma")]
         [Required(ErrorMessage = "{0} é obrigatório")]
         [Compare("Senha", ErrorMessage="{0} não coincide com {1}")]
-        public string ComfirmaSenha { get; set; }
+        public string ConfirmaSenha { get; set; }
 
         [Display(Name = "Token")]
         [Required(ErrorMessage = "{0} é obrigatório")]

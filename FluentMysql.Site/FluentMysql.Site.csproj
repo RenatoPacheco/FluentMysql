@@ -144,6 +144,7 @@
     <Compile Include="Areas\Admin\ViewsData\Artigo\FiltroForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\InsereForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\AutenticaForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\MinhaConta\AlterarDadosForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\RedefineSenhaForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Upload\CKEditorForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\LoginForm.cs" />

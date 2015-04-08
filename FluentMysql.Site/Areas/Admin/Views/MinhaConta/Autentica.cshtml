@@ -62,12 +62,12 @@
                             @Html.BsValidationMessageFor(x => x.Senha, true)
                         </div>
                     }
-                    @using (Html.BsBeginFormGroupFor(x => x.ComfirmaSenha, new { @class = "has-feedback" }))
+                    @using (Html.BsBeginFormGroupFor(x => x.ConfirmaSenha, new { @class = "has-feedback" }))
                     {
-                        @Html.LabelFor(x => x.ComfirmaSenha, new { @class = "col-md-2 control-label" })
+                        @Html.LabelFor(x => x.ConfirmaSenha, new { @class = "col-md-2 control-label" })
                         <div class="col-md-10">
-                            @Html.PasswordFor(x => x.ComfirmaSenha, new { @class = "form-control", @title = "Confirme sua senha", @placeholder = "Confirme sua senha", @required = "required" })
-                            @Html.BsValidationMessageFor(x => x.ComfirmaSenha, true)
+                            @Html.PasswordFor(x => x.ConfirmaSenha, new { @class = "form-control", @title = "Confirme sua senha", @placeholder = "Confirme sua senha", @required = "required" })
+                            @Html.BsValidationMessageFor(x => x.ConfirmaSenha, true)
                         </div>
                     }
                     <div class="form-group">

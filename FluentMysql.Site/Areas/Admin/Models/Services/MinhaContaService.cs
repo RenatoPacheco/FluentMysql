@@ -208,6 +208,9 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
 
         internal static Usuario RedefinirSenha(RedefineSenhaForm dados)
         {
+            if (object.Equals(dados, null))
+                throw new ArgumentNullException("dados", "O valor não pode ser nulo");
+
             Usuario resultado = MinhaContaService.ExtrairTokenRedefinirSenha(dados.Token);
             resultado.Senha = dados.NovaSenha;
             resultado.DataAlteracao = DateTime.Now;
@@ -264,6 +267,37 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             mensagem = Regex.Replace(mensagem, "{site}", UriUtility.ToAbsoluteUrl("~/"), RegexOptions.IgnoreCase);
 
             EmailSimples.Enviar("Login de acesso", mensagem, new List<string>() { usuario.Email });
+        }
+
+        public static Usuario AlterarDados(AlterarDadosForm dados)
+        {
+            if (object.Equals(dados, null))
+                throw new ArgumentNullException("dados", "O valor não pode ser nulo");
+
+            Usuario resultado = UsuarioService.Info(dados.Id);
+
+            if ((!string.IsNullOrWhiteSpace(dados.NovoEmail) && !dados.NovoEmail.Equals(resultado.Email)) && !resultado.Senha.Equals(dados.ConfirmaSenha))
+                throw new ValidationException("A senha atual não é válida");
+
+            if ((!string.IsNullOrWhiteSpace(dados.NovaSenha) && !dados.NovaSenha.Equals(resultado.Senha)) && !resultado.Senha.Equals(dados.ConfirmaSenha))
+                throw new ValidationException("A senha atual não é válida");
+            
+            resultado.Nome = dados.Nome;
+            resultado.Sobrenome = dados.Sobrenome;
+            resultado.Login = dados.Login;
+            resultado.CPF = dados.CPF;
+            resultado.DataAlteracao = DateTime.Now;
+            resultado.Responsavel = resultado;
+
+            if (!string.IsNullOrWhiteSpace(dados.NovaSenha))
+                resultado.Senha = dados.NovaSenha;
+
+            if (!string.IsNullOrWhiteSpace(dados.NovoEmail))
+                resultado.Email = dados.NovoEmail;
+
+            resultado = FluentMysql.Domain.Services.UsuarioService.AlterarUnico(resultado);
+
+            return resultado;
         }
     }
 }

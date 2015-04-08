@@ -71,6 +71,7 @@
     <Compile Include="DataAnnotations\IsDateAttribute.cs" />
     <Compile Include="DataAnnotations\IsDateTimeAttribute.cs" />
     <Compile Include="DataAnnotations\IsFileImageAttribute.cs" />
+    <Compile Include="DataAnnotations\IsRequeridIfOtherNotNull.cs" />
     <Compile Include="Entities\Artigo.cs" />
     <Compile Include="Entities\Usuario.cs" />
     <Compile Include="Interfaces\IConnection.cs" />
