@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using FluentMysql.Infrastructure.Entities
+@using FluentMysql.Domain.ValueObject
+@{
+    Usuario minhaConta = (Usuario)ViewBag.MinhaConta;
+    UsuarioInfo usuarioInfo = new UsuarioInfo(minhaConta);
+    UsuarioPermissao usuarioPermissao = new UsuarioPermissao(minhaConta);
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -37,24 +44,29 @@
                             <span>Home</span>
                         </a>
                     </li>
-                    <li class="@TempData["Controller-Artigo"]">
-                        <a href="@Url.Action("Index", new { @Controller="Artigo" })" title="clique aqui para gerenciar seus artigos">
-                            <i class="fa fa-file"></i>
-                            <span>Artigo</span>
-                        </a>
-                    </li>
-                    <li class="@TempData["Controller-Sobre"]">
-                        <a href="@Url.Action("Index", new { @Controller="Sobre" })" title="clique aqui para saber sobre o sistema">
-                            <i class="fa fa-info-circle"></i>
-                            <span>Sobre</span>
-                        </a>
-                    </li>
+                    @if (usuarioPermissao.Operador) {
+                        <li class="@TempData["Controller-Artigo"]">
+                            <a href="@Url.Action("Index", new { @Controller="Artigo" })" title="clique aqui para gerenciar seus artigos">
+                                <i class="fa fa-file"></i>
+                                <span>Artigo</span>
+                            </a>
+                        </li>
+                    }
+                    @if (usuarioPermissao.Administrador)
+                    {
+                        <li class="@TempData["Controller-Usuario"]">
+                            <a href="@Url.Action("Index", new { @Controller = "Usuario" })" title="clique aqui para gerenciar os usuários">
+                                <i class="fa fa-users"></i>
+                                <span>Usuário</span>
+                            </a>
+                        </li>
+                    }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="@TempData["Controller-MinhaConta"]">
                         <a href="@Url.Action("Index", new { @Controller="MinhaConta" })" title="clique aqui para ir a sua conta">
                             <i class="fa fa-user"></i>
-                            <span>Olá, @ViewBag.MinhaConta.Nome</span>
+                            <span>Olá, @minhaConta.Nome</span>
                         </a>
                     </li>
                     <li>

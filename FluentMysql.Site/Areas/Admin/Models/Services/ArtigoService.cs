@@ -18,10 +18,10 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
         internal static void Ativar(IList<long> id, Usuario usuario)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
-                throw new ArgumentException("Valor não pode ser nulo ou vazio", "id");
+                throw new ArgumentNullException("id", "Valor não pode ser nulo ou vazio");
 
             if (object.Equals(usuario, null))
-                throw new ArgumentException("Valor não pode ser nulo ou vazio", "usuario");
+                throw new ArgumentNullException("usuario", "Valor não pode ser nulo ou vazio");
 
             using (Connection connection = new Connection())
             {
@@ -77,13 +77,18 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
 
         internal static IList<Artigo> Filtrar(FiltroForm filtro)
         {
-            IList<Artigo> resultado = null;
-            using (ArtigoRepository acao = new ArtigoRepository())
+            IList<Artigo> resultado = new List<Artigo>();
+
+            using (Connection connection = new Connection())
             {
-                resultado = acao.Query()
-                    .Where(x => x.Status == Status.Ativo || x.Status == Status.Inativo)
-                    .OrderByDescending(x => x.Id)
-                    .ToList();
+                using (ISession session = connection.Session)
+                {
+                    resultado = session.CreateQuery(@"FROM Artigo WHERE Status IN (:status) AND (Titulo LIKE :texto OR Texto LIKE :texto OR Resumo LIKE :texto) ORDER BY Id Desc")
+                        .SetParameterList("status", new List<Status>() { Status.Ativo, Status.Inativo })
+                        .SetString("texto", "%" + filtro.PalavraChave + "%")
+                        .SetMaxResults(1000)
+                        .List<Artigo>();
+                }
             }
 
             return resultado;
@@ -121,6 +126,29 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
                 resultado = acao.Find(id);
                 if (resultado != null)
                     resultado.Autor.Count();
+            }
+
+            return resultado;
+        }
+
+        internal static IList<Artigo> Info(IList<long> ids)
+        {
+            if (object.Equals(ids, null))
+                throw new ArgumentNullException("ids", "Valor não pode ser nulo");
+
+            if (ids.Where(x => x <= 0).Count() > 0)
+                throw new ArgumentException("Valor não pode ser menor ou igual a 0", "ids");
+
+            IList<Artigo> resultado = new List<Artigo>();
+
+            using (Connection connection = new Connection())
+            {
+                using (ISession session = connection.Session)
+                {
+                    resultado = session.CreateQuery(@"FROM Artigo WHERE Id IN (:id)")
+                        .SetParameterList("id", ids)
+                        .List<Artigo>();
+                }
             }
 
             return resultado;

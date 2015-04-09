@@ -1,0 +1,145 @@
+﻿@using FluentMysql.Infrastructure.Entities
+@using FluentMysql.Infrastructure.ValueObject
+@using FluentMysql.Infrastructure.Interfaces
+@using FluentMysql.Domain.ValueObject
+@model FluentMysql.Site.Areas.Admin.ViewsData.Usuario.FiltroForm
+@{
+    ViewBag.Title = "Lista de Usuários";
+    Usuario minhaConta = !object.Equals(ViewBag.MinhaConta, null) ? (Usuario)ViewBag.MinhaConta : new Usuario();
+    UsuarioPermissao minhaPermissao = new UsuarioPermissao(minhaConta);
+    IList<Usuario> lista = object.Equals(ViewBag.Lista, null) ? new List<Usuario>() : (List<Usuario>)ViewBag.Lista;
+    UsuarioInfo usuatioInfo;
+}
+@section scripts{
+    @Scripts.Render("~/Scripts/Areas/Admin/usuario.index.min.js")
+}
+<div class="container">
+    <h2>
+        <i class="fa fa-users"></i>
+        @ViewBag.Title
+    </h2>
+    <div class="alertas">
+        @Html.Raw(ViewBag.Mensagem)
+    </div>
+    <form action="@Url.Action("Index", new { })" method="post" id="filtro">
+        <div class="form-group">
+            @Html.LabelFor(x => x.PalavraChave, new { @class = "sr-only" })
+            <div class="row">
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(x => x.PalavraChave, new { @class = "form-control", @autofocus = "autofocus", @placeholder = "Filtrar por" })
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-primary btn-block">
+                        <i class="fa fa-filter"></i>
+                        <span>Filtrar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        @if(minhaPermissao.Operador)
+        {
+            <div class="form-group">
+                <a href="@Url.Action("Insere")" class="btn btn-info" title="clique aqui para inserir novo">
+                    <i class="fa fa-plus"></i>
+                    <span>Novo</span>
+                </a>
+                <button type="submit" name="Acao" value="ativar" class="btn btn-success" title="clique aqui para ativar selecionados">
+                    <i class="fa fa-eye"></i>
+                    <span class="hidden-xs">Ativar</span>
+                </button>
+                <button type="submit" name="Acao" value="desativar" class="btn btn-warning" title="clique aqui para desativar selecionados">
+                    <i class="fa fa-eye-slash"></i>
+                    <span class="hidden-xs">Desativar</span>
+                </button>
+                <button action="excluirSelecionados" type="submit" name="Acao" value="remover" class="btn btn-danger" title="clique aqui para excluir selecionados">
+                    <i class="fa fa-trash"></i>
+                    <span class="hidden-xs">Excluir</span>
+                </button>
+            </div>
+        }
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="hidden-xs">#</th>
+                    <th>Nome</th>
+                    <th class="hidden-xs">E-mail</th>
+                    <th class="hidden-xs">Nível</th>
+                    <th class="col-xs-8 col-md-4 text-right">
+                        @if (minhaPermissao.Operador)
+                        {
+                            <button action="selecionaTodos" type="submit" name="Acao" value="selecionar-todos" class="btn btn-default" title="clique aqui para selecionar todos os item">
+                                <i class="fa fa-check-square-o"></i>
+                                <span class="hidden-xs">Seleciona</span>
+                            </button>
+                            <button action="desselecionaTodos" type="submit" name="Acao" value="desselecionar-todos" class="btn btn-default" title="clique aqui para desselicionar todo os itens">
+                                <i class="fa fa-square-o"></i>
+                                <span class="hidden-xs">Desseleciona</span>
+                            </button>
+                        }
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Usuario item in lista)
+                {
+                    usuatioInfo = new UsuarioInfo(item, minhaPermissao);
+                    <tr>
+                        <td class="hidden-xs">@Html.Raw(item.Id)</td>
+                        <td>@string.Format("{0} {1}", Html.Raw(item.Nome), Html.Raw(item.Sobrenome))</td>
+                        <td class="hidden-xs">
+                            <a href="mailto:@Html.Raw(item.Email)" title="clique aqui para enviar um e-mail para @string.Format("{0} {1}", Html.Raw(item.Nome), Html.Raw(item.Sobrenome))">@Html.Raw(item.Email)</a>
+                        </td>
+                        <td class="hidden-xs">@Html.Raw(item.Nivel)</td>
+                        <td class="text-right text-middle">
+                            @if (!usuatioInfo.Autenticado)
+                            {
+                                <a href="@Url.Action("SolicitaAutenticacao", new { @Id = item.Id })" class="btn btn-link" title="clique aqui para enviar a solicitação de autenticação">
+                                    <i class="fa fa-envelope"></i>
+                                    <span class="sr-only">Solicitar autenticação</span>
+                                </a>
+                            }
+                            @if (item.Status == Status.Ativo)
+                            {
+                                <a href="@Url.Action("Desativa", new { @Id=item.Id })" class="btn btn-success @string.Format("{0}", usuatioInfo.Subordinado ? "" : "disabled")" title="clique aqui para desativar">
+                                    <i class="fa fa-eye"></i>
+                                    <span class="sr-only">Ativo</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("Ativa", new { @Id=item.Id })" class="btn btn-warning @string.Format("{0}", usuatioInfo.Subordinado ? "" : "disabled")" title="clique aqui para ativar">
+                                    <i class="fa fa-eye-slash"></i>
+                                    <span class="sr-only">Inativo</span>
+                                </a>
+                            }
+                            @if (minhaPermissao.Administrador)
+                            {
+                                if (!usuatioInfo.Autenticado)
+                                {
+                                    <a href="@Url.Action("Altera", new { @Id = @Html.Raw(item.Id) })" class="btn btn-primary @string.Format("{0}", usuatioInfo.Subordinado && !usuatioInfo.Autenticado ? "" : "disabled")" title="clique aqui para altera">
+                                        <i class="fa fa-edit"></i>
+                                        <span class="hidden-xs">Alterar</span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Info", new { @Id = @Html.Raw(item.Id) })" class="btn btn-link" title="clique aqui para ver as informações">
+                                        <i class="fa fa-info hidden-xs"></i>
+                                        <i class="fa fa-info-circle visible-xs"></i>
+                                        <span class="hidden-xs">Detalhe</span>
+                                    </a>
+                                }
+                                <label class="btn btn-link">
+                                    <input type="checkbox" name="Selecionados" value="@Html.Raw(item.Id)" @string.Format("{0}", Model.Selecionados != null && Model.Selecionados.Contains(item.Id) ? "checked=\"checked\"" : "") @string.Format("{0}", usuatioInfo.Subordinado ? "" : "disabled=\"disabled\"") />
+                                </label>
+                            }
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+
+</div>
+

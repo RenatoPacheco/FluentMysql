@@ -19,7 +19,7 @@
             ['Source', '-', 'Bold', 'Italic', 'Underline', 'Subscript', 'Superscript', '-', 'RemoveFormat'], ['NumberedList', 'BulletedList', '-', 'Indent', 'Outdent', 'Blockquote', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-'], ['Image']
         ],
         filebrowserBrowseUrl: 'browser/browse.php',
-        filebrowserUploadUrl: '/Admin/Artigo/Upload',
+        filebrowserUploadUrl: '/Admin/Upload/CKEditor',
         filebrowserImageWindowWidth: '640',
         filebrowserImageWindowHeight: '480'
     });

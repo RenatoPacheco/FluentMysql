@@ -26,4 +26,21 @@ h2 {
 .navbar-default .navbar-toggle:hover {
   background-color: transparent;
 }
+.btn,
+.label-control,
+.form-control,
+.alert,
+pre {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+.alert pre {
+  border: none;
+  background-color: transparent;
+  font-weight: bold;
+}
+.text-middle {
+  vertical-align: middle !important;
+}
 /*# sourceMappingURL=template.css.map */

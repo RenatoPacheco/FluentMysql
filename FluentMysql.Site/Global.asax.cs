@@ -39,7 +39,7 @@ namespace FluentMysql.Site
 
             if (httpException != null)
             {
-                if (httpException.GetHttpCode() == 404)
+                if (httpException.GetHttpCode() > 399 && httpException.GetHttpCode() < 411)
                 {
                     routeData.Values["action"] = "NotFound";
                 }
