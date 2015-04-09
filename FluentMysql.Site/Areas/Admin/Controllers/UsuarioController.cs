@@ -87,7 +87,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                     TempData["Mensagem"] = AlertsMessages.Success("Registro inserido com sucesso");
                     try
                     {
-                        Models.Services.MinhaContaService.SolicitarAutenticacao(info);
+                        Models.Services.MinhaContaService.SolicitarAutenticar(info);
                         TempData["Mensagem"] += AlertsMessages.Success("E-mail de autenticação enviado com sucesso");
                     }
                     catch (Exception ex)
@@ -178,7 +178,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 if (object.Equals(usuario, null) || usuario.Id <= 0)
                     throw new HttpException(404, "O registro solicitado não foi encontrado");
                 
-                Models.Services.MinhaContaService.SolicitarAutenticacao(usuario);                
+                Models.Services.MinhaContaService.SolicitarAutenticar(usuario);                
                 TempData["Mensagem"] = AlertsMessages.Success("E-mail solicitando autenticação enviado com sucesso");
             }
             catch (ValidationException ex)

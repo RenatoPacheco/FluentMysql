@@ -1,0 +1,65 @@
+﻿@using FluentMysql.Infrastructure.Entities
+@model FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta.AutenticaEmailForm
+@{    
+    ViewBag.Title = "Autenticar E-mail";
+    Usuario minhaConta = (Usuario)ViewBag.MinhaConta;
+}
+@section styles{
+
+}
+@section scripts{
+
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+            <h2 class="text-center">
+                <i class="fa fa-users"></i>
+                @ViewBag.Title
+            </h2>
+            <div class="alertas">
+                @Html.Raw(ViewBag.Mensagem)
+                @Html.BSValidationSummaryFor(x => x.NovoEmail)
+                @Html.BSValidationSummaryFor(x => x.Token)
+            </div>
+            <form class="form-horizontal" method="post" action="@Url.Action("AutenticaEmail", new { })">
+                <fieldset>
+                    <legend class="sr-only">Formulário de autenticação</legend>
+                    <p class="text-muted">Olá <strong>@minhaConta.Nome @minhaConta.Sobrenome</strong>, informe sua senha para confirmar a alteração do seu e-mail.</p>
+                    @using (Html.BSFormGroupFor(x => x.NovoEmail, false, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.NovoEmail, new { @class = "col-md-3 control-label" })
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(x => x.NovoEmail, new { @class = "form-control", @title = "Informe seu e-mail", @placeholder = "Informe seu e-mail", @disabled = "disabled" })
+                            @Html.BSValidationIconFor(x => x.NovoEmail, false)
+                            @Html.ValidationMessageFor(x => x.NovoEmail, string.Empty, new { @class = "text-danger" })
+                        </div>
+                    }
+                    @using (Html.BSFormGroupFor(x => x.Senha, false, new { @class = "has-feedback" }))
+                    {
+                        @Html.LabelFor(x => x.Senha, new { @class = "col-md-3 control-label" })
+                        <div class="col-md-9">
+                            @Html.PasswordFor(x => x.Senha, new { @class = "form-control", @title = "Informe sua senha", @autofocus = "autofocus", @placeholder = "Informe sua senha", @required = "required" })
+                            @Html.BSValidationIconFor(x => x.Senha, false)
+                            @Html.ValidationMessageFor(x => x.Senha, string.Empty, new { @class = "text-danger" })
+                        </div>
+                    }
+                    <div class="form-group">
+                        @Html.HiddenFor(x => x.NovoEmail)
+                        @Html.HiddenFor(x => x.Token)
+                        <div class="col-sm-12">
+                            <button type="submit" class="btn btn-primary btn-lg col-md-6 col-sm-6 col-xs-12" title="clique aqui para salvar">
+                                <i class="fa fa-save"></i>
+                                Salvar
+                            </button>
+                            <a href="@Url.Action("Login")" class="btn btn-link btn-lg col-md-6 col-sm-6 col-xs-12" title="clique aqui para ir a tela de login">
+                                <i class="fa fa-sign-in"></i>
+                                <span class="hidden-md">Ir ao login</span>
+                            </a>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

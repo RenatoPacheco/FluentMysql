@@ -10,7 +10,7 @@ using System.Web;
 
 namespace FluentMysql.Site.Areas.Admin.Template.Email
 {
-    public class SolicitarAutenticacao
+    public class AutenticarEmailTemp
     {
         public string Nome { get; set; }
 
@@ -20,7 +20,7 @@ namespace FluentMysql.Site.Areas.Admin.Template.Email
         
         public override string ToString()
         {
-            string resultado = File.ReadAllText(HttpContext.Current.Server.MapPath("~/Areas/Admin/Template/Email/SolicitarAutenticacao.html"));
+            string resultado = File.ReadAllText(HttpContext.Current.Server.MapPath("~/Areas/Admin/Template/Email/AutenticarEmail.html"));
             resultado = Regex.Replace(resultado, "{nome}", Nome, RegexOptions.IgnoreCase);
             resultado = Regex.Replace(resultado, "{link}", Link, RegexOptions.IgnoreCase);
             resultado = Regex.Replace(resultado, "{empresa}", Empresa, RegexOptions.IgnoreCase);
@@ -29,7 +29,7 @@ namespace FluentMysql.Site.Areas.Admin.Template.Email
             return resultado;
         }
 
-        public SolicitarAutenticacao(string nome, string link, string empresa)
+        public AutenticarEmailTemp(string nome, string link, string empresa)
         {
             Nome = nome;
             Link = link;

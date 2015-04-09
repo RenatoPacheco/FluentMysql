@@ -42,6 +42,9 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                     dados.Id = minhaConta.Id;
                     MinhaContaService.AlterarDados(dados);
                     TempData["Mensagem"] = AlertsMessages.Success("Seus dados foram alterados com sucesso");
+                    if (!string.IsNullOrWhiteSpace(dados.NovoEmail) && !minhaConta.Email.Equals(dados.NovoEmail))
+                        TempData["Mensagem"] += AlertsMessages.Success("Uma mensagem foi enviada para confirmação do seu novo e-mail");
+
                     return RedirectToAction("Index");
                 }
                 catch (ValidationException ex)
@@ -144,7 +147,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         public ActionResult Autentica(string token)
         {
             MinhaContaService.Logout();
-            Usuario usuario = MinhaContaService.ExtrairTokenAutenticacao(token);
+            Usuario usuario = MinhaContaService.ExtrairTokenAutenticar(token);
             AutenticaForm dados = new AutenticaForm();
 
             dados.Nome = usuario.Nome;
@@ -164,7 +167,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 try
                 {
                     // Autenticando
-                    Usuario usuario = MinhaContaService.AutenticarConta(dados);
+                    Usuario usuario = MinhaContaService.Autenticar(dados);
                     TempData["Mensagem"] = AlertsMessages.Warning("Autenticação realizada com sucesso");
                     
                     // Logando e redirecionando para a home
@@ -210,7 +213,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 {
                     // Autenticando
                     usuario = MinhaContaService.RedefinirSenha(dados);
-                    TempData["Mensagem"] = AlertsMessages.Warning("Senha redefinida com sucesso");
+                    TempData["Mensagem"] = AlertsMessages.Success("Senha redefinida com sucesso");
 
                     // Logando e redirecionando para a home
                     usuario = MinhaContaService.Logar(new LoginForm() { LembarAcesso = true, Login = usuario.Email, Senha = usuario.Senha });
@@ -233,6 +236,53 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         public ActionResult Acesso()
         {
             return View();
+        }
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult AutenticaEmail(string token)
+        {
+            MinhaContaService.Logout();
+            Usuario usuario = MinhaContaService.ExtrairTokenAutenticarEmail(token);
+            AutenticaEmailForm dados = new AutenticaEmailForm();
+
+            dados.NovoEmail = usuario.Email;
+            dados.Token = token;
+
+            ViewBag.MinhaConta = usuario;
+
+            return View("AutenticaEmail", "_LayoutClean", dados);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AutenticaEmail(AutenticaEmailForm dados)
+        {
+            MinhaContaService.Logout();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Autenticando
+                    Usuario usuario = MinhaContaService.AutenticarEmail(dados);
+                    TempData["Mensagem"] = AlertsMessages.Success("Auteração de e-mail realizada com sucesso");
+
+                    // Logando e redirecionando para a home
+                    usuario = MinhaContaService.Logar(new LoginForm() { LembarAcesso = true, Login = usuario.Email, Senha = usuario.Senha });
+                    return RedirectToAction("Index", "Home");
+                }
+                catch (ValidationException ex)
+                {
+                    ViewBag.Mensagem += AlertsMessages.Warning(string.Format("Atenção: <strong>{0}</strong>", ex.Message.ToString()));
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Mensagem += AlertsMessages.Danger(string.Format("<p>Ocorreu um erro ao enviar o e-mail de autenticação: <strong>{0}</strong><p><pre>{1}</pre>", ex.Message.ToString(), ex.StackTrace.ToString()), "div");
+                }
+            }
+
+            return View("AutenticaEmail", "_LayoutClean", dados);
         }
     }
 }

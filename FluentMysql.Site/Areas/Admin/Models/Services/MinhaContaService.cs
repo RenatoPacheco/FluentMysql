@@ -118,7 +118,7 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             return resultado;
         }
 
-        public static void SolicitarAutenticacao(Usuario usuario)
+        public static void SolicitarAutenticar(Usuario usuario)
         {
             if (object.Equals(usuario, null))
                 throw new ArgumentNullException("usuario", "O valor não pode ser nulo");
@@ -131,13 +131,13 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             string token = Token.EncryptString(string.Format("{0}|{1}",usuario.Id, usuario.Email), DateTime.Now.AddDays(14));
             string link = string.Format("{0}?token={1}", UriUtility.ToAbsoluteUrl("~/Admin/MinhaConta/Autentica/"), HttpUtility.UrlEncode(token));
             
-            SolicitarAutenticacao mensagem = new SolicitarAutenticacao(usuario.Nome, link, "Sistema");
+            AutenticarUsuarioTemp mensagem = new AutenticarUsuarioTemp(usuario.Nome, link, "Sistema");
             EmailSimples.Enviar("Autenticar conta de acesso", mensagem.ToString(), new List<string>() { usuario.Email });
         }
 
-        internal static Usuario AutenticarConta(AutenticaForm dados)
+        internal static Usuario Autenticar(AutenticaForm dados)
         {
-            Usuario resultado = MinhaContaService.ExtrairTokenAutenticacao(dados.Token);
+            Usuario resultado = MinhaContaService.ExtrairTokenAutenticar(dados.Token);
             resultado.Nome = dados.Nome;
             resultado.Sobrenome = dados.Sobrenome;
             resultado.Login = dados.Login;
@@ -151,7 +151,7 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             return resultado;
         }
 
-        internal static Usuario ExtrairTokenAutenticacao(string token)
+        internal static Usuario ExtrairTokenAutenticar(string token)
         {
             Usuario resultado = new Usuario();
             string[] extrair;
@@ -195,7 +195,7 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             string token = Token.EncryptString(string.Format("{0}|{1}", usuario.Id, usuario.Email), DateTime.Now.AddDays(1));
             string link = string.Format("{0}?token={1}", UriUtility.ToAbsoluteUrl("~/Admin/MinhaConta/RedefineSenha/"), HttpUtility.UrlEncode(token));
 
-            SolicitarRedefinirSenha mensagem = new SolicitarRedefinirSenha(usuario.Nome, link, "Sistema");
+            RedefinirSenhaTemp mensagem = new RedefinirSenhaTemp(usuario.Nome, link, "Sistema");
             EmailSimples.Enviar("Redefinir senha", mensagem.ToString(), new List<string>() { usuario.Email });
         }
 
@@ -279,11 +279,73 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
 
             if (!string.IsNullOrWhiteSpace(dados.NovaSenha))
                 resultado.Senha = dados.NovaSenha;
-
-            if (!string.IsNullOrWhiteSpace(dados.NovoEmail))
-                resultado.Email = dados.NovoEmail;
-
+            
+            if (!string.IsNullOrWhiteSpace(dados.NovoEmail) && !resultado.Email.Equals(dados.NovoEmail))
+                MinhaContaService.SolicitarAutenticarEmail(resultado, dados.NovoEmail);
+            
             resultado = FluentMysql.Domain.Services.UsuarioService.AlterarUnico(resultado);
+
+            return resultado;
+        }
+        
+        public static void SolicitarAutenticarEmail(Usuario usuario, string novoEmail)
+        {
+            if (object.Equals(usuario, null) || usuario.Id <= 0)
+                throw new ArgumentNullException("usuario", "O valor não pode ser nulo");
+
+            if (string.IsNullOrWhiteSpace(usuario.Nome))
+                throw new ArgumentNullException("nome", "O valor não pode ser nulo ou vazio");
+
+            if (string.IsNullOrWhiteSpace(novoEmail))
+                throw new ArgumentNullException("novoEmail", "O valor não pode ser nulo ou vazio");
+
+            string token = Token.EncryptString(string.Format("{0}|{1}", usuario.Id, novoEmail), DateTime.Now.AddDays(6));
+            string link = string.Format("{0}?token={1}", UriUtility.ToAbsoluteUrl("~/Admin/MinhaConta/AutenticaEmail/"), HttpUtility.UrlEncode(token));
+
+            AutenticarEmailTemp mensagem = new AutenticarEmailTemp(usuario.Nome, link, "Sistema");
+            EmailSimples.Enviar("Autenticar E-mail", mensagem.ToString(), new List<string>() { novoEmail });
+        }
+
+        internal static Usuario ExtrairTokenAutenticarEmail(string token)
+        {
+            Usuario resultado = new Usuario();
+            string[] extrair;
+            long id;
+            string email;
+            try
+            {
+                extrair = Token.DecryptString(token).Split('|');
+                id = long.Parse(extrair[0]);
+                email = extrair[1].Trim();
+            }
+            catch
+            {
+                throw new ValidationException("O token informado expirou ou não é válido");
+            }
+
+            resultado = UsuarioService.Info(id);
+
+            if (object.Equals(resultado, null) || resultado.Id <= 0)
+                throw new ValidationException("O token informado expirou ou não é válido");
+
+            resultado.Email = email;
+
+            return resultado;
+        }
+
+        internal static Usuario AutenticarEmail(AutenticaEmailForm dados)
+        {
+            Usuario resultado = MinhaContaService.ExtrairTokenAutenticarEmail(dados.Token);
+            resultado.DataAlteracao = DateTime.Now;
+            resultado.Responsavel = resultado;
+
+            if (!resultado.Senha.Equals(dados.Senha))
+                throw new ValidationException("Senha de confirmação não é válida");
+
+            if (!resultado.Email.Equals(dados.NovoEmail))
+                throw new ValidationException("O e-mail envido não é válido para esse token");
+
+            resultado = Domain.Services.UsuarioService.AlterarUnico(resultado);
 
             return resultado;
         }
