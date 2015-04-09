@@ -90,7 +90,7 @@
                             <a href="mailto:@Html.Raw(item.Email)" title="clique aqui para enviar um e-mail para @string.Format("{0} {1}", Html.Raw(item.Nome), Html.Raw(item.Sobrenome))">@Html.Raw(item.Email)</a>
                         </td>
                         <td class="hidden-xs">@Html.Raw(item.Nivel)</td>
-                        <td class="text-right">
+                        <td class="text-right text-middle">
                             @if (!usuatioInfo.Autenticado)
                             {
                                 <a href="@Url.Action("SolicitaAutenticacao", new { @Id = item.Id })" class="btn btn-link" title="clique aqui para enviar a solicitação de autenticação">

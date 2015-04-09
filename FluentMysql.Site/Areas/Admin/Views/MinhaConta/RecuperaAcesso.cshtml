@@ -7,7 +7,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
+        <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
             <h2 class="text-center">Recuperar acesso</h2>
             <div class="alertas">
                 @Html.Raw(ViewBag.Mensagem)
@@ -16,7 +16,7 @@
                 <fieldset>
                     <legend class="sr-only">Formulário de autenticação</legend>
                     <p class="text-muted">Enviando seu e-mail, login ou <abbr title="Cadastro de Pessoa Física">CPF</abbr> você poderá solicitar seu login por e-mail ou receber um e-mail com um link para redefinir sua senha.</p>
-                    @using (Html.BsBeginFormGroupFor(x => x.Identificacao, new { @class = "has-feedback" }))
+                    @using (Html.BSFormGroupFor(x => x.Identificacao, false, new { @class = "has-feedback" }))
                     {
                         @Html.LabelFor(x => x.Identificacao, new { @class = "col-sm-3 control-label" })
                         <div class="col-sm-9">
@@ -26,7 +26,8 @@
                                 </div>
                                 @Html.TextBoxFor(x => x.Identificacao, new { @class = "form-control", @autofocus = "autofocus", @title = "Informe seu login, e-mail ou CPF", @placeholder = "Informe seu login, e-mail ou CPF", @required = "required" })
                             </div>
-                            @Html.BsValidationMessageFor(x => x.Identificacao, true)
+                            @Html.BSValidationIconFor(x => x.Identificacao, false)
+                            @Html.ValidationMessageFor(x => x.Identificacao, string.Empty, new { @class = "text-danger" })
                         </div>
                     }
                     <div class="form-group">

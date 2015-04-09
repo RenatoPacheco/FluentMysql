@@ -26,7 +26,7 @@ namespace FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta
 
         [Display(Name = "Login")]
         [Required(ErrorMessage = "{0} é obrigatório")]
-        [MaxLength(30, ErrorMessage = "{0} deve ter no máximo caractére(s)")]
+        [StringLength(30, MinimumLength = 5, ErrorMessage = "{0} deve ter ente {2} e {1} caractére(s)")]
         public virtual string Login { get; set; }
 
         [Display(Name = "CPF")]

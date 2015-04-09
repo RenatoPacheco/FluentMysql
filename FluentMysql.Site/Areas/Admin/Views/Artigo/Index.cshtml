@@ -78,7 +78,7 @@
                         <td class="hidden-xs">@Html.Raw(item.Id)</td>
                         <td>@Html.Raw(item.Titulo)</td>
                         <td class="hidden-xs">@Html.Raw(item.Resumo)</td>
-                        <td class="text-right">
+                        <td class="text-right text-middle">
                             @if (item.Status == Status.Ativo)
                             {
                                 <a href="@Url.Action("Desativa", new { @Id=item.Id })" class="btn btn-success" title="clique aqui para desativars">

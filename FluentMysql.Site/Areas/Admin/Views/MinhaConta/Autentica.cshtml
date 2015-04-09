@@ -11,63 +11,70 @@
 }
 <div class="container">
     <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
+        <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
             <h2 class="text-center">
                 <i class="fa fa-users"></i>
                 @ViewBag.Title
             </h2>
             <div class="alertas">
                 @Html.Raw(ViewBag.Mensagem)
+                @Html.BSValidationSummaryFor(x => x.Token)
             </div>
             <form class="form-horizontal" method="post" action="@Url.Action("Autentica", new { })">
                 <fieldset>
                     <legend class="sr-only">Formulário de inserção</legend>
-                    @using (Html.BsBeginFormGroupFor(x => x.Nome, new { @class = "has-feedback" }))
+                    @using (Html.BSFormGroupFor(x => x.Nome, false, new { @class = "has-feedback" }))
                     {
                         @Html.LabelFor(x => x.Nome, new { @class = "col-md-2 control-label" })
                         <div class="col-md-10">
                             @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @autofocus = "autofocus", @title = "Informe seu nome", @placeholder = "Informe seu nome", @required = "required" })
-                            @Html.BsValidationMessageFor(x => x.Nome, true)
+                            @Html.BSValidationIconFor(x => x.Nome, false)
+                            @Html.ValidationMessageFor(x => x.Nome, string.Empty, new { @class = "text-danger" })
                         </div>
                     }
-                    @using (Html.BsBeginFormGroupFor(x => x.Sobrenome, new { @class = "has-feedback" }))
+                    @using (Html.BSFormGroupFor(x => x.Sobrenome, false, new { @class = "has-feedback" }))
                     {
                         @Html.LabelFor(x => x.Sobrenome, new { @class = "col-md-2 control-label" })
                         <div class="col-md-10">
                             @Html.TextBoxFor(x => x.Sobrenome, new { @class = "form-control", @title = "Informe seu sobrenome", @placeholder = "Informe seu sobrenome", @required = "required" })
-                            @Html.BsValidationMessageFor(x => x.Sobrenome, true)
+                            @Html.BSValidationIconFor(x => x.Sobrenome, false)
+                            @Html.ValidationMessageFor(x => x.Sobrenome, string.Empty, new { @class = "text-danger" })
                         </div>
                     }
-                    @using (Html.BsBeginFormGroupFor(x => x.Login, new { @class = "has-feedback" }))
+                    @using (Html.BSFormGroupFor(x => x.Login, false, new { @class = "has-feedback" }))
                     {
                         @Html.LabelFor(x => x.Login, new { @class = "col-md-2 control-label" })
                         <div class="col-md-10">
                             @Html.TextBoxFor(x => x.Login, new { @class = "form-control", @title = "Informe seu login", @placeholder = "Informe seu login", @required = "required" })
-                            @Html.BsValidationMessageFor(x => x.Login, true)
+                            @Html.BSValidationIconFor(x => x.Login, false)
+                            @Html.ValidationMessageFor(x => x.Login, string.Empty, new { @class = "text-danger" })
                         </div>
                     }
-                    @using (Html.BsBeginFormGroupFor(x => x.CPF, new { @class = "has-feedback" }))
+                    @using (Html.BSFormGroupFor(x => x.CPF, false, new { @class = "has-feedback" }))
                     {
                         @Html.LabelFor(x => x.CPF, new { @class = "col-md-2 control-label" })
                         <div class="col-md-10">
                             @Html.TextBoxFor(x => x.CPF, new { @class = "form-control", @title = "Informe seu CPF", @placeholder = "Informe seu CPF", @required = "required" })
-                            @Html.BsValidationMessageFor(x => x.CPF, true)
+                            @Html.BSValidationIconFor(x => x.CPF, false)
+                            @Html.ValidationMessageFor(x => x.CPF, string.Empty, new { @class = "text-danger" })
                         </div>
                     }
-                    @using (Html.BsBeginFormGroupFor(x => x.Senha, new { @class = "has-feedback" }))
+                    @using (Html.BSFormGroupFor(x => x.Senha, false, new { @class = "has-feedback" }))
                     {
                         @Html.LabelFor(x => x.Senha, new { @class = "col-md-2 control-label" })
                         <div class="col-md-10">
                             @Html.PasswordFor(x => x.Senha, new { @class = "form-control", @title = "Informe sua senha", @placeholder = "Informe sua senha", @required = "required" })
-                            @Html.BsValidationMessageFor(x => x.Senha, true)
+                            @Html.BSValidationIconFor(x => x.Senha, false)
+                            @Html.ValidationMessageFor(x => x.Senha, string.Empty, new { @class = "text-danger" })
                         </div>
                     }
-                    @using (Html.BsBeginFormGroupFor(x => x.ConfirmaSenha, new { @class = "has-feedback" }))
+                    @using (Html.BSFormGroupFor(x => x.ConfirmaSenha, false, new { @class = "has-feedback" }))
                     {
                         @Html.LabelFor(x => x.ConfirmaSenha, new { @class = "col-md-2 control-label" })
                         <div class="col-md-10">
                             @Html.PasswordFor(x => x.ConfirmaSenha, new { @class = "form-control", @title = "Confirme sua senha", @placeholder = "Confirme sua senha", @required = "required" })
-                            @Html.BsValidationMessageFor(x => x.ConfirmaSenha, true)
+                            @Html.BSValidationIconFor(x => x.ConfirmaSenha, false)
+                            @Html.ValidationMessageFor(x => x.ConfirmaSenha, string.Empty, new { @class = "text-danger" })
                         </div>
                     }
                     <div class="form-group">
