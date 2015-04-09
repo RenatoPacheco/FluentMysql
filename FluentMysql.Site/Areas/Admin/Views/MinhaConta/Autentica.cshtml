@@ -18,6 +18,7 @@
             </h2>
             <div class="alertas">
                 @Html.Raw(ViewBag.Mensagem)
+                @Html.BSValidationSummaryFor(x => x.Token)
             </div>
             <form class="form-horizontal" method="post" action="@Url.Action("Autentica", new { })">
                 <fieldset>

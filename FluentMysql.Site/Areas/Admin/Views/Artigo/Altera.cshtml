@@ -22,6 +22,8 @@
             </h2>
             <div class="alertas">
                 @Html.Raw(ViewBag.Mensagem)
+                @Html.BSValidationSummaryFor(x => x.DataCriacao)
+                @Html.BSValidationSummaryFor(x => x.Id)
             </div>
             <form class="form-horizontal" method="post" action="@Url.Action("Altera", new { @Id = Model.Id })">
                 <fieldset>
