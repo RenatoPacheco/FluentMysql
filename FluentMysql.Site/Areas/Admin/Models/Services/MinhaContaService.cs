@@ -4,6 +4,7 @@ using FluentMysql.Domain.ValueObject;
 using FluentMysql.Infrastructure.Entities;
 using FluentMysql.Infrastructure.Security;
 using FluentMysql.Infrastructure.Web;
+using FluentMysql.Site.Areas.Admin.Template.Email;
 using FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta;
 using FluentMysql.Site.Mail;
 using System;
@@ -128,14 +129,10 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
                 throw new ValidationException("Este registro já foi autenticado");
             
             string token = Token.EncryptString(string.Format("{0}|{1}",usuario.Id, usuario.Email), DateTime.Now.AddDays(14));
-            string mensagem = File.ReadAllText(HttpContext.Current.Server.MapPath("~/Areas/Admin/Template/Email/SolicitarAutenticacaoUsuario.html"));
             string link = string.Format("{0}?token={1}", UriUtility.ToAbsoluteUrl("~/Admin/MinhaConta/Autentica/"), HttpUtility.UrlEncode(token));
-
-            mensagem = Regex.Replace(mensagem, "{nome}", usuario.Nome, RegexOptions.IgnoreCase);
-            mensagem = Regex.Replace(mensagem, "{link}", link, RegexOptions.IgnoreCase);
-            mensagem = Regex.Replace(mensagem, "{site}", UriUtility.ToAbsoluteUrl("~/"), RegexOptions.IgnoreCase);
-
-            EmailSimples.Enviar("Autenticar conta de acesso", mensagem, new List<string>() { usuario.Email });
+            
+            SolicitarAutenticacao mensagem = new SolicitarAutenticacao(usuario.Nome, link, "Sistema");
+            EmailSimples.Enviar("Autenticar conta de acesso", mensagem.ToString(), new List<string>() { usuario.Email });
         }
 
         internal static Usuario AutenticarConta(AutenticaForm dados)
@@ -196,14 +193,10 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
                 throw new ArgumentNullException("email", "O valor não pode ser nulo ou vazio");
             
             string token = Token.EncryptString(string.Format("{0}|{1}", usuario.Id, usuario.Email), DateTime.Now.AddDays(1));
-            string mensagem = File.ReadAllText(HttpContext.Current.Server.MapPath("~/Areas/Admin/Template/Email/SolicitarRedefinirSenhaUsuario.html"));
             string link = string.Format("{0}?token={1}", UriUtility.ToAbsoluteUrl("~/Admin/MinhaConta/RedefineSenha/"), HttpUtility.UrlEncode(token));
 
-            mensagem = Regex.Replace(mensagem, "{nome}", usuario.Nome, RegexOptions.IgnoreCase);
-            mensagem = Regex.Replace(mensagem, "{link}", link, RegexOptions.IgnoreCase);
-            mensagem = Regex.Replace(mensagem, "{site}", UriUtility.ToAbsoluteUrl("~/"), RegexOptions.IgnoreCase);
-
-            EmailSimples.Enviar("Redefinir senha", mensagem, new List<string>() { usuario.Email });
+            SolicitarRedefinirSenha mensagem = new SolicitarRedefinirSenha(usuario.Nome, link, "Sistema");
+            EmailSimples.Enviar("Redefinir senha", mensagem.ToString(), new List<string>() { usuario.Email });
         }
 
         internal static Usuario RedefinirSenha(RedefineSenhaForm dados)
@@ -260,13 +253,8 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             if (string.IsNullOrWhiteSpace(usuario.Login))
                 throw new ArgumentNullException("login", "O valor não pode ser nulo ou vazio");
 
-            string mensagem = File.ReadAllText(HttpContext.Current.Server.MapPath("~/Areas/Admin/Template/Email/EnviarLoginUsuario.html"));
-
-            mensagem = Regex.Replace(mensagem, "{nome}", usuario.Nome, RegexOptions.IgnoreCase);
-            mensagem = Regex.Replace(mensagem, "{login}", usuario.Login, RegexOptions.IgnoreCase);
-            mensagem = Regex.Replace(mensagem, "{site}", UriUtility.ToAbsoluteUrl("~/"), RegexOptions.IgnoreCase);
-
-            EmailSimples.Enviar("Login de acesso", mensagem, new List<string>() { usuario.Email });
+            EnviarLoginTemp mensagem = new EnviarLoginTemp(usuario.Nome, usuario.Login, "Sistema");
+            EmailSimples.Enviar("Login de acesso", mensagem.ToString(), new List<string>() { usuario.Email });
         }
 
         public static Usuario AlterarDados(AlterarDadosForm dados)

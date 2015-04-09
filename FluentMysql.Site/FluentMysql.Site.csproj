@@ -139,6 +139,9 @@
     <Compile Include="Areas\Admin\Models\Services\ArtigoService.cs" />
     <Compile Include="Areas\Admin\Models\Services\MinhaContaService.cs" />
     <Compile Include="Areas\Admin\Models\Services\UsuarioService.cs" />
+    <Compile Include="Areas\Admin\Template\Email\SolicitarRedefinirSenha.cs" />
+    <Compile Include="Areas\Admin\Template\Email\SolicitarAutenticacao.cs" />
+    <Compile Include="Areas\Admin\Template\Email\EnviarLoginTemp.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\AlteraForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\FiltroForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\InsereForm.cs" />
@@ -170,9 +173,9 @@
     <Compile Include="Web\MVC\Bootstrap\TagDisponse.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\Template\Email\EnviarLoginUsuario.html" />
-    <Content Include="Areas\Admin\Template\Email\SolicitarRedefinirSenhaUsuario.html" />
-    <Content Include="Areas\Admin\Template\Email\SolicitarAutenticacaoUsuario.html" />
+    <Content Include="Areas\Admin\Template\Email\EnviarLogin.html" />
+    <Content Include="Areas\Admin\Template\Email\SolicitarRedefinirSenha.html" />
+    <Content Include="Areas\Admin\Template\Email\SolicitarAutenticacao.html" />
     <Content Include="Content\Areas\Admin\error.404.css">
       <DependentUpon>error.404.less</DependentUpon>
     </Content>
