@@ -155,6 +155,7 @@
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\RecuperaAcessoForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Usuario\AlteraForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Usuario\FiltroForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\Usuario\AlteraNivelForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Usuario\InsereForm.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

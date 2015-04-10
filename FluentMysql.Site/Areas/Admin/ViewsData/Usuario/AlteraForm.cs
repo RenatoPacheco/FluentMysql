@@ -10,7 +10,7 @@ namespace FluentMysql.Site.Areas.Admin.ViewsData.Usuario
 {
     public class AlteraForm : InsereForm
     {
-        [Display(Name = "Artigo")]
+        [Display(Name = "Usuário")]
         [Range(1, long.MaxValue, ErrorMessage = "{0} é obrigatório")]
         public virtual long Id { get; set; }
 
