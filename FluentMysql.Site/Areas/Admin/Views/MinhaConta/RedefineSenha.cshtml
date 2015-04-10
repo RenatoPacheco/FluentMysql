@@ -24,7 +24,7 @@
             <form class="form-horizontal" method="post" action="@Url.Action("RedefineSenha", new { })">
                 <fieldset>
                     <legend class="sr-only">Formulário de inserção</legend>
-                    <p class="text-muted">Olá <strong>@MinhaConta.Nome</strong>, conforme sua solicitação essa página vai permitir que você possa redefinir sua senha.</p>
+                    <p class="text-muted">Olá <strong>@MinhaConta.Nome @MinhaConta.Sobrenome</strong>, conforme sua solicitação essa página vai permitir que você possa redefinir sua senha.</p>
                     @using (Html.BSFormGroupFor(x => x.NovaSenha, false, new { @class = "has-feedback" }))
                     {
                         @Html.LabelFor(x => x.NovaSenha, new { @class = "col-md-4 control-label" })
@@ -50,6 +50,10 @@
                                 <i class="fa fa-save"></i>
                                 Salvar
                             </button>
+                            <a href="@Url.Action("Login")" class="btn btn-link btn-lg col-md-6 col-sm-6 col-xs-12" title="clique aqui para voltar a tela de login">
+                                <i class="fa fa-sign-in"></i>
+                                <span class="hidden-md">Voltar ao login</span>
+                            </a>
                         </div>
                     </div>
                 </fieldset>

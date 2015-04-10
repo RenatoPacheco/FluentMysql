@@ -139,9 +139,14 @@
     <Compile Include="Areas\Admin\Models\Services\ArtigoService.cs" />
     <Compile Include="Areas\Admin\Models\Services\MinhaContaService.cs" />
     <Compile Include="Areas\Admin\Models\Services\UsuarioService.cs" />
+    <Compile Include="Areas\Admin\Template\Email\AutenticarEmailTemp.cs" />
+    <Compile Include="Areas\Admin\Template\Email\RedefinirSenhaTemp.cs" />
+    <Compile Include="Areas\Admin\Template\Email\AutenticarUsuarioTemp.cs" />
+    <Compile Include="Areas\Admin\Template\Email\EnviarLoginTemp.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\AlteraForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\FiltroForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\InsereForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\MinhaConta\AutenticaEmailForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\AutenticaForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\AlterarDadosForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\RedefineSenhaForm.cs" />
@@ -150,6 +155,7 @@
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\RecuperaAcessoForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Usuario\AlteraForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Usuario\FiltroForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\Usuario\AlteraNivelForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Usuario\InsereForm.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -170,9 +176,10 @@
     <Compile Include="Web\MVC\Bootstrap\TagDisponse.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Admin\Template\Email\EnviarLoginUsuario.html" />
-    <Content Include="Areas\Admin\Template\Email\SolicitarRedefinirSenhaUsuario.html" />
-    <Content Include="Areas\Admin\Template\Email\SolicitarAutenticacaoUsuario.html" />
+    <Content Include="Areas\Admin\Template\Email\EnviarLogin.html" />
+    <Content Include="Areas\Admin\Template\Email\AutenticarEmail.html" />
+    <Content Include="Areas\Admin\Template\Email\RedefinirSenha.html" />
+    <Content Include="Areas\Admin\Template\Email\AutenticacarUsuario.html" />
     <Content Include="Content\Areas\Admin\error.404.css">
       <DependentUpon>error.404.less</DependentUpon>
     </Content>
@@ -383,6 +390,7 @@
     <Content Include="Areas\Admin\Views\MinhaConta\Autentica.cshtml" />
     <Content Include="Areas\Admin\Views\MinhaConta\RedefineSenha.cshtml" />
     <Content Include="Areas\Admin\Views\MinhaConta\Acesso.cshtml" />
+    <Content Include="Areas\Admin\Views\MinhaConta\AutenticaEmail.cshtml" />
     <None Include="Scripts\jquery-1.11.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-1.11.2.js" />

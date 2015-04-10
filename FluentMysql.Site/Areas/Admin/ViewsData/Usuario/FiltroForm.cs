@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentMysql.Infrastructure.ValueObject;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -20,5 +21,11 @@ namespace FluentMysql.Site.Areas.Admin.ViewsData.Usuario
 
         [Display(Name = "Página")]
         public int Pagina { get; set; }
+
+        [Display(Name = "Altera Nível")]
+        public IList<Nivel> AlteraNivelValor { get; set; }
+
+        [Display(Name = "Altera Usuário Id")]
+        public IList<long> AlteraUsuarioId { get; set; }
     }
 }

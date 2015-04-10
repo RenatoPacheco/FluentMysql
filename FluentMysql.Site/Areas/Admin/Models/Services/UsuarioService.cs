@@ -7,6 +7,7 @@ using FluentMysql.Site.Areas.Admin.ViewsData.Usuario;
 using NHibernate;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -193,6 +194,32 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             resultado = Domain.Services.UsuarioService.InserirUnico(resultado);
 
             return resultado;
+        }
+        
+        internal static void AlterarNivel(IList<long> id, Nivel nivel, Usuario responsavel)
+        {
+            if (object.Equals(id, null) || id.Count.Equals(0))
+                throw new ArgumentNullException("id", "Valor não pode ser nulo ou vazio");
+
+            if (object.Equals(nivel, null))
+                throw new ArgumentNullException("nivel", "Valor não pode ser nulo ou vazio");
+
+            if (object.Equals(responsavel, null))
+                throw new ArgumentNullException("responsavel", "Valor não pode ser nulo ou vazio");
+
+            if (nivel.Equals(Nivel.Indefinido))
+                throw new ValidationException("Valor do nível não foi definido");
+            
+            using (Connection connection = new Connection())
+            {
+                using (ISession session = connection.Session)
+                {
+                    session.CreateQuery(@"UPDATE Usuario SET Nivel = :nivel WHERE Id IN (:id)")
+                        .SetInt32("nivel", (int)nivel)
+                        .SetParameterList("id", id)
+                        .ExecuteUpdate();
+                }
+            }
         }
     }
 }
