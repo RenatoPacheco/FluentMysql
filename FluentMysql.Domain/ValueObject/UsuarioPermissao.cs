@@ -14,6 +14,8 @@ namespace FluentMysql.Domain.ValueObject
 
         public virtual bool Usuario { get; protected set; }
 
+        public virtual bool Visitante { get; protected set; }
+
         public virtual bool Administrador { get; protected set; }
 
         public virtual bool Sistema { get; protected set; }
@@ -26,6 +28,7 @@ namespace FluentMysql.Domain.ValueObject
             Nivel = usuario.Nivel;
             if(nivel > (int)Nivel.Indefinido)
             {
+                Visitante = nivel <= (int)Nivel.Visitante;
                 Usuario = nivel <= (int)Nivel.Usuario;
                 Operador = nivel <= (int)Nivel.Operador;
                 Administrador = nivel <= (int)Nivel.Administrador;

@@ -27,13 +27,12 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
     [AuthorizeUser(Nivel = new Nivel[] { Nivel.Administrador })]
     public class UsuarioController : Controller
     {
-        public ActionResult Index(FiltroForm filtro = null, bool voltar = false)
+        public ActionResult Index(FiltroForm filtro = null, bool voltar = false, bool json = false, bool xml = false)
         {
             int index;
             string ids;
             IList<Usuario> lista = new List<Usuario>();
             CommonRouteData routeData = new CommonRouteData(ControllerContext);
-            string sessionRef = string.Format("{0}-{1}-{2}", routeData.Action, routeData.Controller, routeData.Area);
             
             if (ModelState.IsValid)
             {
@@ -55,10 +54,10 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                             ids = string.Join("&", filtro.Selecionados.Select(x => string.Format("id={0}", x)));
                             return Redirect(string.Format("Usuario/Desativa/?{0}", ids));
                         }
-                        else if (filtro.Acao == "remover")
+                        else if (filtro.Acao == "excluir")
                         {
                             ids = string.Join("&", filtro.Selecionados.Select(x => string.Format("id={0}", x)));
-                            return Redirect(string.Format("Usuario/Remove/?{0}", ids));
+                            return Redirect(string.Format("Usuario/Exclue/?{0}", ids));
                         }
                     }
                 }
@@ -71,12 +70,17 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                     ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
                 }
 
-                if (voltar && !object.Equals(Session[sessionRef], null))
-                    filtro = (FiltroForm)Session[sessionRef];
+                if (voltar && !object.Equals(Session[ViewBag.ActionRef], null))
+                    filtro = (FiltroForm)Session[ViewBag.ActionRef];
 
-                Session[sessionRef] = filtro;
+                Session[ViewBag.ActionRef] = filtro;
                 lista = Models.Services.UsuarioService.Filtrar(filtro);
             }
+
+            if (xml)
+                return ConverteResultadoService.ParaXml(lista, filtro, (string)ViewBag.Memsagem);
+            else if (json)
+                return ConverteResultadoService.ParaJson(lista, filtro, (string)ViewBag.Memsagem);
 
             ViewBag.Lista = lista;
             return View(filtro);

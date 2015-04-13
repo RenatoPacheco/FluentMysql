@@ -86,7 +86,7 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
                     if (!long.TryParse(context.Request.Cookies["usuario"].ToString(), out id))
                         id = 0;
 
-            using (var acao = new UsuarioRepository())
+            using (UsuarioRepository acao = new UsuarioRepository())
             {
                 resultado = acao.Find(id);
             }

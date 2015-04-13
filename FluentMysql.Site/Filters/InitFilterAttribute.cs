@@ -12,20 +12,37 @@ namespace FluentMysql.Site.Filters
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             WebData web = new WebData(filterContext);
+            dynamic viewBag = web.Controller.ViewBag;
+            TempDataDictionary tempData = filterContext.Controller.TempData;
+            string areaStr = web.Route.Area;
+            string controllerStr = web.Route.Controller;
+            string actionStr = web.Route.Action;
+            
+            viewBag.AreaRef = string.Format("{0}", areaStr);
+            viewBag.ControllerRef = string.Format("{0}-{1}", areaStr, controllerStr);
+            viewBag.ActionRef = string.Format("{0}-{1}-{2}", areaStr, controllerStr, actionStr);
+            
+            if (tempData.ContainsKey("AreaAtual"))
+                tempData[tempData["AreaAtual"].ToString()] = string.Empty;
 
-            web.Controller.ViewBag.AreaRef = string.Format("{0}", web.Route.Area);
-            web.Controller.ViewBag.ControllerRef = string.Format("{0}-{1}", web.Route.Area, web.Route.Controller);
-            web.Controller.ViewBag.AtionRef = string.Format("{0}-{1}-{2}", web.Route.Area, web.Route.Controller, web.Route.Action);
+            if (tempData.ContainsKey("ControllerAtual"))
+                tempData[tempData["ControllerAtual"].ToString()] = string.Empty;
 
-            filterContext.Controller.TempData["Area-" + web.Route.Area] = "active";
-            filterContext.Controller.TempData["Controller-" + web.Route.Controller] = "active";
-            filterContext.Controller.TempData["Action-" + web.Route.Action] = "active";
+            if (tempData.ContainsKey("ActionAtual"))
+                tempData[tempData["ActionAtual"].ToString()] = string.Empty;
 
-            web.Controller.ViewBag.Alerta = string.Empty;
+            tempData["AreaAtual"] = string.Format("Area-{0}",areaStr);
+            tempData["ControllerAtual"] = string.Format("Controller-{0}",controllerStr);
+            tempData["ActionAtual"] = string.Format("Action-{0}", actionStr);
 
-            if (filterContext.Controller.TempData["Mensagem"] != null)
-                filterContext.Controller.ViewBag.Mensagem = filterContext.Controller.TempData["Mensagem"];
+            tempData[tempData["AreaAtual"].ToString()] = "active";
+            tempData[tempData["ControllerAtual"].ToString()] = "active";
+            tempData[tempData["ActionAtual"].ToString()] = "active";
 
+            if (tempData["Mensagem"] == null)
+                tempData["Mensagem"] = string.Empty;
+
+            viewBag.Alerta = tempData["Mensagem"];
         }
     }
 }

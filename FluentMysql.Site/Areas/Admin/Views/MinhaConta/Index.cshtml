@@ -57,7 +57,7 @@
                     }
                     <fieldset>
                         <legend>Alterar E-mail</legend>
-                        <p class="text-muted">Preencha esses campos somente se desejar mudar seu e-mail atual. Caso seja alterado, um e-mail será enviado para autenticar a nova caixa postal para poder auterá-lo.</p>
+                        <p class="text-muted">Preencha esses campos somente se desejar mudar seu e-mail atual. Caso seja alterado, um e-mail será enviado para autenticar a nova caixa postal para poder alterá-lo.</p>
                         @using (Html.BSFormGroupFor(x => x.NovoEmail, false, new { @class = "has-feedback" }))
                         {
                             @Html.LabelFor(x => x.NovoEmail, new { @class = "col-md-3 col-sm-4 control-label" })

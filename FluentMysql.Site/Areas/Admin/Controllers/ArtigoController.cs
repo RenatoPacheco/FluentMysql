@@ -13,39 +13,40 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using FluentMysql.Site.Web.Mvc;
+using System.Xml.Linq;
+using FluentMysql.Infrastructure;
+using System.Text;
 
 namespace FluentMysql.Site.Areas.Admin.Controllers
 {
     [AuthorizeUser(Nivel = new Nivel[] { Nivel.Operador })]
     public class ArtigoController : Controller
     {
-        public ActionResult Index(FiltroForm filtro = null, bool voltar = false)
+        public ActionResult Index(FiltroForm filtro = null, bool voltar = false, bool json = false, bool xml = false)
         {
+            string ids;
             IList<Artigo> lista = new List<Artigo>();
             CommonRouteData routeData = new CommonRouteData(ControllerContext);
-            string sessionRef = string.Format("{0}-{1}-{2}", routeData.Action, routeData.Controller, routeData.Area);
-
+            
             if (ModelState.IsValid)
             {
                 try
                 {
                     if (filtro.Acao == "ativar")
                     {
-                        ArtigoService.Ativar(filtro.Selecionados, (Usuario)ViewBag.MinhaConta);
-                        ViewBag.Mensagem += AlertsMessages.Success("Registro(s) ativado(s) com sucesso");
-                        filtro.Selecionados = null;
+                        ids = string.Join("&", filtro.Selecionados.Select(x => string.Format("id={0}", x)));
+                        return Redirect(string.Format("Artigo/Ativa/?{0}", ids));
                     }
                     else if (filtro.Acao == "desativar")
                     {
-                        ArtigoService.Desativar(filtro.Selecionados, (Usuario)ViewBag.MinhaConta);
-                        ViewBag.Mensagem += AlertsMessages.Success("Registro(s) desativado(s) com sucesso");
-                        filtro.Selecionados = null;
+                        ids = string.Join("&", filtro.Selecionados.Select(x => string.Format("id={0}", x)));
+                        return Redirect(string.Format("Artigo/Desativa/?{0}", ids));
                     }
-                    else if (filtro.Acao == "remover")
+                    else if (filtro.Acao == "excluir")
                     {
-                        ArtigoService.Excluir(filtro.Selecionados, (Usuario)ViewBag.MinhaConta);
-                        ViewBag.Mensagem += AlertsMessages.Success("Registro(s) excluído(s) com sucesso");
-                        filtro.Selecionados = null;
+                        ids = string.Join("&", filtro.Selecionados.Select(x => string.Format("id={0}", x)));
+                        return Redirect(string.Format("Artigo/Exclue/?{0}", ids));
                     }
                 }
                 catch (ValidationException ex)
@@ -57,14 +58,19 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                     ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
                 }
 
-                if (voltar && !object.Equals(Session[sessionRef], null))
-                    filtro = (FiltroForm)Session[sessionRef];
+                if (voltar && !object.Equals(Session[ViewBag.ActionRef], null))
+                    filtro = (FiltroForm)Session[ViewBag.ActionRef];
 
-                Session[sessionRef] = filtro;
+                Session[ViewBag.ActionRef] = filtro;
                 lista = ArtigoService.Filtrar(filtro);
             }
 
-            ViewBag.Lista = lista;
+            if (xml)
+                return ConverteResultadoService.ParaXml(lista, filtro, (string)ViewBag.Memsagem);
+            else if (json)
+                return ConverteResultadoService.ParaJson(lista, filtro, (string)ViewBag.Memsagem);
+            
+            ViewBag.Lista = lista;            
             return View(filtro);
         }
 
@@ -139,7 +145,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                     ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
                 }
             }
-                        
+
             ViewBag.Info = info;
             return View(dados);
         }
