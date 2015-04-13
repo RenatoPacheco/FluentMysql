@@ -1,4 +1,5 @@
-﻿using FluentMysql.Infrastructure.ValueObject;
+﻿using FluentMysql.Infrastructure.Security;
+using FluentMysql.Infrastructure.ValueObject;
 using NHibernate;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
@@ -10,7 +11,7 @@ using System.Text;
 
 namespace FluentMysql.Infrastructure.UserTypes
 {
-    public class EnumAsChar<T> : IUserType where T : struct
+    public class StringAsPassword : IUserType
     {
         #region IUserType Members
 
@@ -46,10 +47,10 @@ namespace FluentMysql.Infrastructure.UserTypes
             var obj = NHibernateUtil.String.NullSafeGet(rs, names[0]);
             if (obj == null)
                 return null;
-            T value;
+            string value;
             try
             {
-                value = (T)Enum.ToObject(typeof(T), (int)obj.ToString()[0] - (int)'0');
+                value = string.Format("{0}", obj.ToString());
             }
             catch (Exception)
             {
@@ -67,7 +68,7 @@ namespace FluentMysql.Infrastructure.UserTypes
             }
             else
             {
-                var text = (char)((int)Enum.ToObject(typeof(T), value) + (int)'0');
+                string text = EncryptyPassword.Set(value);
                 ((IDataParameter)cmd.Parameters[index]).Value = text.ToString();
             }
         }
@@ -78,12 +79,12 @@ namespace FluentMysql.Infrastructure.UserTypes
 
         public Type ReturnedType
         {
-            get { return typeof(T); }
+            get { return typeof(string); }
         }
 
         public NHibernate.SqlTypes.SqlType[] SqlTypes
         {
-            get { return new[] { NHibernateUtil.Character.SqlType }; }
+            get { return new[] { NHibernateUtil.String.SqlType }; }
         }
         #endregion
 

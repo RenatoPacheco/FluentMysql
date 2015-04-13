@@ -2,6 +2,7 @@
 using FluentMysql.Domain.Repository;
 using FluentMysql.Infrastructure;
 using FluentMysql.Infrastructure.Entities;
+using FluentMysql.Infrastructure.Security;
 using FluentMysql.Infrastructure.ValueObject;
 using FluentMysql.Site.Areas.Admin.ViewsData.Usuario;
 using NHibernate;
@@ -130,6 +131,25 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             using (UsuarioRepository acao = new UsuarioRepository())
             {
                 resultado = acao.Find(id);
+            }
+
+            return resultado;
+        }
+
+        internal static Usuario Info(long id, string senha)
+        {
+            if (id <= 0)
+                throw new ArgumentException("Valor não pode ser menor ou igual a 0", "id");
+
+            if (string.IsNullOrWhiteSpace(senha))
+                throw new ArgumentNullException("senha", "Valor não pode ser nulo ou vazio");
+
+            Usuario resultado = null;
+
+            using (UsuarioRepository acao = new UsuarioRepository())
+            {
+                resultado = acao.Query().Where(x => x.Id == id 
+                    && x.Senha == EncryptyPassword.Set(senha)).FirstOrDefault();
             }
 
             return resultado;

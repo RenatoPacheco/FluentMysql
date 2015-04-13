@@ -19,11 +19,6 @@ using System.Web.Mvc;
 
 namespace FluentMysql.Site.Areas.Admin.Controllers
 {
-    public class teste
-    {
-        public IList<long> id { get; set; }
-    }
-
     [AuthorizeUser(Nivel = new Nivel[] { Nivel.Administrador })]
     public class UsuarioController : Controller
     {

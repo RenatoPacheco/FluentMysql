@@ -42,7 +42,7 @@ namespace FluentMysql.Site.Filters
             if (tempData["Mensagem"] == null)
                 tempData["Mensagem"] = string.Empty;
 
-            viewBag.Alerta = tempData["Mensagem"];
+            viewBag.Mensagem = tempData["Mensagem"];
         }
     }
 }

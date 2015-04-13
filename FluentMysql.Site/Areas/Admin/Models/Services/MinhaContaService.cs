@@ -259,16 +259,20 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
 
         public static Usuario AlterarDados(AlterarDadosForm dados)
         {
+            bool requerSenha = !string.IsNullOrWhiteSpace(dados.NovaSenha)
+                || !string.IsNullOrWhiteSpace(dados.NovoEmail);
+
             if (object.Equals(dados, null))
                 throw new ArgumentNullException("dados", "O valor não pode ser nulo");
 
-            Usuario resultado = UsuarioService.Info(dados.Id);
+            Usuario resultado = requerSenha 
+                ? UsuarioService.Info(dados.Id, dados.SenhaAtual) 
+                : UsuarioService.Info(dados.Id);
 
-            if ((!string.IsNullOrWhiteSpace(dados.NovoEmail) && !dados.NovoEmail.Equals(resultado.Email)) && !resultado.Senha.Equals(dados.SenhaAtual))
-                throw new ValidationException("A senha atual não é válida");
-
-            if ((!string.IsNullOrWhiteSpace(dados.NovaSenha) && !dados.NovaSenha.Equals(resultado.Senha)) && !resultado.Senha.Equals(dados.SenhaAtual))
-                throw new ValidationException("A senha atual não é válida");
+            if (object.Equals(resultado, null) && requerSenha)
+                throw new ValidationException("Registro não foi encontrado para ser alterado, verifique sua senha de autenticação");
+            else if (object.Equals(resultado, null))
+                throw new ValidationException("Registro não foi encontrado para ser alterado");
             
             resultado.Nome = dados.Nome;
             resultado.Sobrenome = dados.Sobrenome;
