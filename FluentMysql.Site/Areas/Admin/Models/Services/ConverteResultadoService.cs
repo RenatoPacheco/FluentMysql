@@ -25,7 +25,7 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             if (string.IsNullOrEmpty(mensagem))
                 mensagem = string.Empty;
 
-            xDoc.Element("Sistema").Add(ObjectUtility.PropertyToXElement(filtro));
+            xDoc.Element("Sistema").Add(ObjectUtility.PropertyToXElement(filtro, "Filtro"));
             xDoc.Element("Sistema").Add(new XElement("Mensagem", new XCData(mensagem)));
             foreach (var item in valor)
             {

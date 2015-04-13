@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentMysql.Infrastructure.DataAnnotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,17 +27,18 @@ namespace FluentMysql.Infrastructure
 
         private static PropertyData GetPropertyData(PropertyInfo property, object value)
         {
-            PropertyData result = new PropertyData(); 
+            PropertyData result = new PropertyData();
             object[] displayAttr;
             object[] descriptionAttr;
             Type type = value.GetType();
             PropertyInfo[] properties = type.GetProperties();
+            bool hiddenValue = property.GetCustomAttributes(typeof(HideValueAttribute), false).Count() > 0;
 
             result.Value = string.Empty;
 
-            if (property.PropertyType == typeof(string) || !(typeof(IEnumerable).IsAssignableFrom(property.PropertyType)))
+            if (!hiddenValue && (property.PropertyType == typeof(string) || !(typeof(IEnumerable).IsAssignableFrom(property.PropertyType))))
                 result.Value = string.Format("{0}", property.GetValue(value, null));
-            else
+            else if (property.PropertyType != typeof(string) || !(typeof(IEnumerable).IsAssignableFrom(property.PropertyType)))
                 result.List = true;
 
             if (result.Value.Equals(string.Format("{0}", property.PropertyType)))

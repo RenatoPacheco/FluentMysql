@@ -1,4 +1,5 @@
-﻿using FluentMysql.Infrastructure.Interfaces;
+﻿using FluentMysql.Infrastructure.DataAnnotations;
+using FluentMysql.Infrastructure.Interfaces;
 using FluentMysql.Infrastructure.ValueObject;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ namespace FluentMysql.Infrastructure.Entities
         [MaxLength(255, ErrorMessage = "{0} deve conter no máximo {1} caractér(es)")]
         public virtual string Login { get; set; }
 
+        [HideValue]
         [Display(Name = "Senha")]
         [MaxLength(100, ErrorMessage = "{0} deve conter no máximo {1} caractér(es)")]
         public virtual string Senha { get; set; }
