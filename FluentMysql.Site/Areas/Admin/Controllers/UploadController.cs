@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentMysql.Infrastructure.Entities;
 using FluentMysql.Infrastructure.ValueObject;
-using FluentMysql.Site.Areas.Admin.Models.Services;
+using FluentMysql.Site.Areas.Admin.Services;
 using FluentMysql.Site.Areas.Admin.ViewsData.Upload;
 using FluentMysql.Site.Filters;
 using FluentMysql.Site.Helpers;

@@ -72,39 +72,73 @@ namespace FluentMysql.Infrastructure
 
         public static XElement PropertyToXElement(object value, XElement element)
         {
-            XElement item;
-            PropertyData data;
-            Type type = value.GetType();
-            PropertyInfo[] properties = type.GetProperties();
-            foreach (PropertyInfo property in properties)
+            if (object.Equals(value, null))
             {
-                data = GetPropertyData(property, value);
-
-                if (Regex.IsMatch(data.Value, "<|>|\""))
+                element.Add(new XElement("Value", (string)value));
+            }
+            else
+            {
+                XElement item;
+                PropertyData data;
+                Type type = value.GetType();
+                PropertyInfo[] properties = type.GetProperties();
+                if (value is string || value is char
+                    || value is decimal || value is double
+                    || value is Int16 || value is Int32 || value is Int64
+                    || value is UInt16 || value is UInt32 || value is UInt64)
                 {
-                    item = new XElement(data.Property, new XCData(data.Value));
+                    element.Add(new XElement("Value", (string)value));
                 }
                 else
                 {
-                    item = new XElement(data.Property, data.Value);
+                    foreach (PropertyInfo property in properties)
+                    {
+                        data = GetPropertyData(property, value);
+
+                        if (Regex.IsMatch(data.Value, "<|>|\""))
+                        {
+                            item = new XElement(data.Property, new XCData(data.Value));
+                        }
+                        else
+                        {
+                            item = new XElement(data.Property, data.Value);
+                        }
+                        item.Add(new XAttribute("Name", data.Name));
+                        item.Add(new XAttribute("Description", data.Description));
+                        element.Add(item);
+                    }
                 }
-                item.Add(new XAttribute("Name", data.Name));
-                item.Add(new XAttribute("Description", data.Description));
-                element.Add(item);                
             }
             return element;
         }
-
+        
         public static IDictionary<string, string> PropertyToDictionary(object value)
         {
-            IDictionary<string, string> result = new Dictionary<string,string>();
-            PropertyData data;
-            Type type = value.GetType();
-            PropertyInfo[] properties = type.GetProperties();
-            foreach (PropertyInfo property in properties)
+            IDictionary<string, string> result = new Dictionary<string, string>();
+            if (object.Equals(value, null))
             {
-                data = GetPropertyData(property, value);
-                result.Add(data.Property, data.Value);
+                result.Add("Value", (string)value);
+            }
+            else
+            {
+                PropertyData data;
+                Type type = value.GetType();
+                PropertyInfo[] properties = type.GetProperties();
+                if (value is string || value is char
+                        || value is decimal || value is double
+                        || value is Int16 || value is Int32 || value is Int64
+                        || value is UInt16 || value is UInt32 || value is UInt64)
+                {
+                    result.Add("Value", (string)value);
+                }
+                else
+                {
+                    foreach (PropertyInfo property in properties)
+                    {
+                        data = GetPropertyData(property, value);
+                        result.Add(data.Property, data.Value);
+                    }
+                }
             }
             return result;
         }

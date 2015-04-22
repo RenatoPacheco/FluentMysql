@@ -11,7 +11,7 @@ namespace FluentMysql.Site.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            WebData web = new WebData(filterContext);
+            WebData web = new WebData(filterContext.HttpContext, filterContext.Controller);
             dynamic viewBag = web.Controller.ViewBag;
             TempDataDictionary tempData = filterContext.Controller.TempData;
             string areaStr = web.Route.Area;

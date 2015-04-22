@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentMysql.Infrastructure.Entities;
 using FluentMysql.Infrastructure.ValueObject;
-using FluentMysql.Site.Areas.Admin.Models.Services;
+using FluentMysql.Site.Areas.Admin.Services;
 using FluentMysql.Site.Areas.Admin.ViewsData.Artigo;
 using FluentMysql.Site.Filters;
 using FluentMysql.Site.Helpers;
@@ -17,13 +17,20 @@ using FluentMysql.Site.Web.Mvc;
 using System.Xml.Linq;
 using FluentMysql.Infrastructure;
 using System.Text;
+using FluentMysql.Site.Services;
+using FluentMysql.Site.DataAnnotations;
 
 namespace FluentMysql.Site.Areas.Admin.Controllers
 {
     [AuthorizeUser(Nivel = new Nivel[] { Nivel.Operador })]
     public class ArtigoController : Controller
     {
-        public ActionResult Index(FiltroForm filtro = null, bool voltar = false, bool json = false, bool xml = false)
+
+        [FormatarViewFilter]
+        [FormatarViewXml("xml", ViewData = new string[] { "Mensagem", "Lista" })]
+        [FormatarViewJson("json", ViewData = new string[] { "Mensagem", "Lista" })]
+        [FormatarViewHtml("html", "_IndexTBody", "_LayoutEmpty")]
+        public ActionResult Index(FiltroForm filtro = null, bool voltar = false)
         {
             string ids;
             IList<Artigo> lista = new List<Artigo>();
@@ -49,13 +56,12 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                         return Redirect(string.Format("Artigo/Exclue/?{0}", ids));
                     }
                 }
-                catch (ValidationException ex)
+                catch (Exception ex)
                 {
-                    ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
-                }
-                catch (ArgumentException ex)
-                {
-                    ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                    if (ex is ValidationException || ex is ArgumentException)
+                        ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                    else
+                        throw ex;
                 }
 
                 if (voltar && !object.Equals(Session[ViewBag.ActionRef], null))
@@ -64,24 +70,27 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 Session[ViewBag.ActionRef] = filtro;
                 lista = ArtigoService.Filtrar(filtro);
             }
-
-            if (xml)
-                return ConverteResultadoService.ParaXml(lista, filtro, (string)ViewBag.Memsagem);
-            else if (json)
-                return ConverteResultadoService.ParaJson(lista, filtro, (string)ViewBag.Memsagem);
             
             ViewBag.Lista = lista;            
             return View(filtro);
         }
 
         [HttpGet]
+        [FormatarViewFilter]
+        [FormatarViewXml("xml", ViewData = new string[] { "Mensagem" })]
+        [FormatarViewJson("json", ViewData = new string[] { "Mensagem" })]
+        [FormatarViewHtml("html", "_InsereForm", "_LayoutEmpty")]
         public ActionResult Insere()
         {
-            return View();
+            return View(new InsereForm());
         }
 
         [HttpPost]
         [ValidateInput(false)]
+        [FormatarViewFilter]
+        [FormatarViewXml("xml", ViewData = new string[] { "Mensagem" })]
+        [FormatarViewJson("json", ViewData = new string[] { "Mensagem" })]
+        [FormatarViewHtml("html", "_InsereForm", "_LayoutEmpty")]
         public ActionResult Insere(InsereForm dados)
         {
             if (ModelState.IsValid)
@@ -92,13 +101,12 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                     TempData["Mensagem"] = AlertsMessages.Success("Registro inserido com sucesso");
                     return RedirectToAction("Altera", new { @Id = info.Id });
                 }
-                catch (ValidationException ex)
+                catch (Exception ex)
                 {
-                    ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
-                }
-                catch (ArgumentException ex)
-                {
-                    ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                    if (ex is ValidationException || ex is ArgumentException)
+                        ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                    else
+                        throw ex;
                 }
             }
 
@@ -106,6 +114,10 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [FormatarViewFilter]
+        [FormatarViewXml("xml", ViewData = new string[] { "Mensagem" })]
+        [FormatarViewJson("json", ViewData = new string[] { "Mensagem" })]
+        [FormatarViewHtml("html", "_InsereForm", "_LayoutEmpty")]
         public ActionResult Altera(long id = 0)
         {
 
@@ -121,6 +133,10 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
+        [FormatarViewFilter]
+        [FormatarViewXml("xml", ViewData = new string[] { "Mensagem" })]
+        [FormatarViewJson("json", ViewData = new string[] { "Mensagem" })]
+        [FormatarViewHtml("html", "_InsereForm", "_LayoutEmpty")]
         public ActionResult Altera(AlteraForm dados)
         {
             Artigo info = ArtigoService.Info(dados.Id);
@@ -136,13 +152,12 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                     TempData["Mensagem"] = AlertsMessages.Success("Registro alterado com sucesso");
                     return RedirectToAction("Altera", new { @Id = Artigo.Id });
                 }
-                catch (ValidationException ex)
+                catch (Exception ex)
                 {
-                    ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
-                }
-                catch (ArgumentException ex)
-                {
-                    ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                    if (ex is ValidationException || ex is ArgumentException)
+                        ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                    else
+                        throw ex;
                 }
             }
 
@@ -150,6 +165,9 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             return View(dados);
         }
 
+        [FormatarViewFilter]
+        [FormatarViewXml("xml", TempData = new string[] { "Mensagem" })]
+        [FormatarViewJson("json", TempData = new string[] { "Mensagem" })]
         public ActionResult Ativa(IList<long> id)
         {
             try
@@ -157,18 +175,20 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 ArtigoService.Ativar(id, (Usuario)ViewBag.MinhaConta);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) ativado(s) com sucesso");
             }
-            catch (ValidationException ex)
+            catch (Exception ex)
             {
-                ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
-            }
-            catch (ArgumentException ex)
-            {
-                ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                if (ex is ValidationException || ex is ArgumentException || ex is HttpException)
+                    TempData["Mensagem"] = AlertsMessages.Warning(ex.Message.ToString());
+                else
+                    throw ex;
             }
 
             return RedirectToAction("Index", new { @Voltar = true });
         }
 
+        [FormatarViewFilter]
+        [FormatarViewXml("xml", TempData = new string[] { "Mensagem" })]
+        [FormatarViewJson("json", TempData = new string[] { "Mensagem" })]
         public ActionResult Desativa(IList<long> id)
         {
             try
@@ -176,18 +196,20 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 ArtigoService.Desativar(id, (Usuario)ViewBag.MinhaConta);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) desativado(s) com sucesso");
             }
-            catch (ValidationException ex)
+            catch (Exception ex)
             {
-                ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
-            }
-            catch (ArgumentException ex)
-            {
-                ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                if (ex is ValidationException || ex is ArgumentException || ex is HttpException)
+                    TempData["Mensagem"] = AlertsMessages.Warning(ex.Message.ToString());
+                else
+                    throw ex;
             }
 
             return RedirectToAction("Index", new { @Voltar = true });
         }
 
+        [FormatarViewFilter]
+        [FormatarViewXml("xml", TempData = new string[] { "Mensagem" })]
+        [FormatarViewJson("json", TempData = new string[] { "Mensagem" })]
         public ActionResult Exclue(IList<long> id)
         {
             try
@@ -195,13 +217,12 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 ArtigoService.Excluir(id, (Usuario)ViewBag.MinhaConta);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) excluído(s) com sucesso");
             }
-            catch (ValidationException ex)
+            catch (Exception ex)
             {
-                ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
-            }
-            catch (ArgumentException ex)
-            {
-                ViewBag.Mensagem += AlertsMessages.Warning(ex.Message.ToString());
+                if (ex is ValidationException || ex is ArgumentException || ex is HttpException)
+                    TempData["Mensagem"] = AlertsMessages.Warning(ex.Message.ToString());
+                else
+                    throw ex;
             }
 
             return RedirectToAction("Index", new { @Voltar = true });

@@ -15,10 +15,7 @@ namespace FluentMysql.Site.Filters
             public string Area;
             public string Controller;
             public string Action;
-
-            public RouteData(ActionExecutingContext filterContext)
-                : this(filterContext.HttpContext) { }
-
+            
             public RouteData(HttpContextBase httpContext)
             {
                 var RouteData = httpContext.Request.RequestContext.RouteData;
@@ -37,13 +34,14 @@ namespace FluentMysql.Site.Filters
             public HttpSessionStateBase Session;
             public ControllerBase Controller;
 
-            public WebData(ActionExecutingContext filterContext)
+
+            public WebData(HttpContextBase httpContext, ControllerBase controller)
             {
-                this.Route = new RouteData(filterContext);
-                this.Response = filterContext.HttpContext.Response;
-                this.Request = filterContext.HttpContext.Request;
-                this.Session = filterContext.HttpContext.Session;
-                this.Controller = filterContext.Controller;
+                this.Route = new RouteData(httpContext);
+                this.Response = httpContext.Response;
+                this.Request = httpContext.Request;
+                this.Session = httpContext.Session;
+                this.Controller = controller;
             }
         }
 

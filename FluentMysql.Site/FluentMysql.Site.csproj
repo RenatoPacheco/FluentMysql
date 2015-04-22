@@ -136,10 +136,13 @@
     <Compile Include="Areas\Admin\Controllers\ArtigoController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\MinhaContaController.cs" />
-    <Compile Include="Areas\Admin\Models\Services\ArtigoService.cs" />
-    <Compile Include="Areas\Admin\Models\Services\MinhaContaService.cs" />
-    <Compile Include="Areas\Admin\Models\Services\ConverteResultadoService.cs" />
-    <Compile Include="Areas\Admin\Models\Services\UsuarioService.cs" />
+    <Compile Include="Areas\Admin\Services\ArtigoService.cs" />
+    <Compile Include="Areas\Admin\Services\MinhaContaService.cs" />
+    <Compile Include="DataAnnotations\FormatarViewXmlAttribute.cs" />
+    <Compile Include="DataAnnotations\FormatarViewJsonAttribute.cs" />
+    <Compile Include="DataAnnotations\IFormatarViewAttribute.cs" />
+    <Compile Include="Services\FormatarViewService.cs" />
+    <Compile Include="Areas\Admin\Services\UsuarioService.cs" />
     <Compile Include="Areas\Admin\Template\Email\AutenticarEmailTemp.cs" />
     <Compile Include="Areas\Admin\Template\Email\RedefinirSenhaTemp.cs" />
     <Compile Include="Areas\Admin\Template\Email\AutenticarUsuarioTemp.cs" />
@@ -147,6 +150,7 @@
     <Compile Include="Areas\Admin\ViewsData\Artigo\AlteraForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\FiltroForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\Artigo\InsereForm.cs" />
+    <Compile Include="Areas\Admin\ViewsData\BaseFiltroForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\AutenticaEmailForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\AutenticaForm.cs" />
     <Compile Include="Areas\Admin\ViewsData\MinhaConta\AlterarDadosForm.cs" />
@@ -160,8 +164,10 @@
     <Compile Include="Areas\Admin\ViewsData\Usuario\InsereForm.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="DataAnnotations\FormatarViewHtmlAttribute.cs" />
     <Compile Include="Filters\AuthorizeUserAttribute.cs" />
     <Compile Include="Filters\BaseFilterAttribute.cs" />
+    <Compile Include="Filters\FormatarViewFilterAttribute.cs" />
     <Compile Include="Filters\InitFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -171,6 +177,7 @@
     <Compile Include="Mail\EmailSimples.cs" />
     <Compile Include="ValueObject\CommonRouteData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueObject\AcaoView.cs" />
     <Compile Include="Web\Mvc\Bootstrap\BSFormGroupExtensions.cs" />
     <Compile Include="Web\Mvc\Bootstrap\BSSummaryExtensions.cs" />
     <Compile Include="Web\Mvc\Bootstrap\BSValidationIconExtensions.cs" />
@@ -393,6 +400,15 @@
     <Content Include="Areas\Admin\Views\MinhaConta\RedefineSenha.cshtml" />
     <Content Include="Areas\Admin\Views\MinhaConta\Acesso.cshtml" />
     <Content Include="Areas\Admin\Views\MinhaConta\AutenticaEmail.cshtml" />
+    <Content Include="Areas\Admin\Views\Usuario\_IndexTbody.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_LayoutEmpty.cshtml" />
+    <Content Include="Areas\Admin\Views\Usuario\_AlteraForm.cshtml" />
+    <Content Include="Areas\Admin\Views\Usuario\_InsereForm.cshtml" />
+    <Content Include="Areas\Admin\Views\Usuario\_InfoBody.cshtml" />
+    <Content Include="Areas\Admin\Views\Artigo\_AlteraForm.cshtml" />
+    <Content Include="Areas\Admin\Views\Artigo\_InsereForm.cshtml" />
+    <Content Include="Areas\Admin\Views\Artigo\_IndexTbody.cshtml" />
+    <Content Include="Areas\Admin\Views\MinhaConta\_IndexForm.cshtml" />
     <None Include="Scripts\jquery-1.11.2.intellisense.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-1.11.2.js" />
@@ -428,6 +444,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Images\" />
     <Folder Include="Models\" />
   </ItemGroup>
@@ -463,7 +480,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>57963</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:57963/</IISUrl>
+          <IISUrl>http://localhost:57966/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

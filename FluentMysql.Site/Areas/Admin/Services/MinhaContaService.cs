@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Security;
 
-namespace FluentMysql.Site.Areas.Admin.Models.Services
+namespace FluentMysql.Site.Areas.Admin.Services
 {
     public static class MinhaContaService
     {

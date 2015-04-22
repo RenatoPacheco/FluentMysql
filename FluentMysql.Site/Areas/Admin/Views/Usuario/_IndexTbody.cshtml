@@ -1,0 +1,107 @@
+﻿@using FluentMysql.Infrastructure.Entities
+@using FluentMysql.Infrastructure.ValueObject
+@using FluentMysql.Infrastructure.Interfaces
+@using FluentMysql.Domain.ValueObject
+@using FluentMysql.Site.Areas.Admin.ViewsData.Usuario
+@model FluentMysql.Site.Areas.Admin.ViewsData.Usuario.FiltroForm
+@{
+    Usuario minhaConta = !object.Equals(ViewBag.MinhaConta, null) ? (Usuario)ViewBag.MinhaConta : new Usuario();
+    UsuarioPermissao minhaPermissao = new UsuarioPermissao(minhaConta);
+    IList<Usuario> lista = object.Equals(ViewBag.Lista, null) ? new List<Usuario>() : (List<Usuario>)ViewBag.Lista;
+    UsuarioInfo usuatioInfo;
+    AlteraNivelForm form = new AlteraNivelForm();
+    int contar = -1;
+}
+
+<tbody>
+    @foreach (Usuario item in lista)
+    {
+        contar++;
+        usuatioInfo = new UsuarioInfo(item, minhaPermissao);
+        <tr>
+            <td class="hidden-xs hidden-sm">
+                @Html.Raw(item.Id)
+                @Html.Hidden("AlteraUsuarioId", item.Id)
+            </td>
+            <td>@string.Format("{0} {1}", Html.Raw(item.Nome), Html.Raw(item.Sobrenome))</td>
+            <td class="hidden-xs hidden-sm">
+                <a href="mailto:@Html.Raw(item.Email)" title="clique aqui para enviar um e-mail para @string.Format("{0} {1}", Html.Raw(item.Nome), Html.Raw(item.Sobrenome))">@Html.Raw(item.Email)</a>
+            </td>
+            @if (usuatioInfo.Subordinado)
+            {
+                <td class="hidden-xs">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <button name="AlteraNivelIndex" value="@contar" type="submit" class="btn btn-default" title="clique aqui e altere para a permissão selecionada" role="button">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                            </button>
+                        </div>
+                        <div class="col-sm-10">
+                            @Html.DropDownList("AlteraNivelValor", form.NivelOpcoes((Usuario)ViewBag.MinhaConta).Select(x => new SelectListItem() { Text = x.Text, Value = x.Value, Selected = (item.Nivel.ToString().Equals(x.Text)) }), new { @class = "form-control", @title = "Informe o nível", @placeholder = "Informe o nível" })
+                        </div>
+                    </div>
+                </td>
+            }
+            else
+            {
+                <td class="hidden-xs">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <button name="AlteraNivelIndex" value="@contar" type="submit" class="btn btn-default disabled" title="clique aqui e altere para a permissão selecionada" role="button">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                            </button>
+                        </div>
+                        <div class="col-sm-10">
+                            @Html.Hidden("AlteraNivelValor", item.Nivel.ToString())
+                            @Html.DropDownList("AlteraNivelValorOff", new List<SelectListItem>() { new SelectListItem() { Text = item.Nivel.ToString() } }, new { @class = "form-control", @title = "Informe o nível", @placeholder = "Informe o nível", @disabled = "disabled" })
+                        </div>
+                    </div>
+                </td>
+            }
+            <td class="text-right text-middle">
+                @if (!usuatioInfo.Autenticado)
+                {
+                    <a href="@Url.Action("SolicitaAutenticacao", new { @Id = item.Id })" class="btn btn-link" title="clique aqui para enviar a solicitação de autenticação">
+                        <i class="fa fa-envelope"></i>
+                        <span class="sr-only">Solicitar autenticação</span>
+                    </a>
+                }
+                @if (item.Status == Status.Ativo)
+                {
+                    <a href="@Url.Action("Desativa", new { @Id=item.Id })" class="btn btn-success @string.Format("{0}", usuatioInfo.Subordinado ? "" : "disabled")" title="clique aqui para desativar">
+                        <i class="fa fa-eye"></i>
+                        <span class="sr-only">Ativo</span>
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Ativa", new { @Id=item.Id })" class="btn btn-warning @string.Format("{0}", usuatioInfo.Subordinado ? "" : "disabled")" title="clique aqui para ativar">
+                        <i class="fa fa-eye-slash"></i>
+                        <span class="sr-only">Inativo</span>
+                    </a>
+                }
+                @if (minhaPermissao.Administrador)
+                {
+                    if (!usuatioInfo.Autenticado)
+                    {
+                        <a href="@Url.Action("Altera", new { @Id = @Html.Raw(item.Id) })" class="btn btn-primary @string.Format("{0}", usuatioInfo.Subordinado && !usuatioInfo.Autenticado ? "" : "disabled")" title="clique aqui para altera">
+                            <i class="fa fa-edit"></i>
+                            <span class="hidden-xs">Alterar</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Info", new { @Id = @Html.Raw(item.Id) })" class="btn btn-link" title="clique aqui para ver as informações">
+                            <i class="fa fa-info hidden-xs"></i>
+                            <i class="fa fa-info-circle visible-xs"></i>
+                            <span class="hidden-xs">Detalhe</span>
+                        </a>
+                    }
+                    <label class="btn btn-link">
+                        <input type="checkbox" name="Selecionados" value="@Html.Raw(item.Id)" @string.Format("{0}", Model.Selecionados != null && Model.Selecionados.Contains(item.Id) ? "checked=\"checked\"" : "") @string.Format("{0}", usuatioInfo.Subordinado ? "" : "disabled=\"disabled\"") />
+                    </label>
+                }
+            </td>
+        </tr>
+    }
+</tbody>

@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FluentMysql.Site.Areas.Admin.Models.Services
+namespace FluentMysql.Site.Areas.Admin.Services
 {
     public static class ArtigoService
     {

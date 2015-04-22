@@ -1,7 +1,8 @@
 ﻿using FluentMysql.Infrastructure.Entities;
 using FluentMysql.Infrastructure.ValueObject;
-using FluentMysql.Site.Areas.Admin.Models.Services;
+using FluentMysql.Site.Areas.Admin.Services;
 using FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta;
+using FluentMysql.Site.DataAnnotations;
 using FluentMysql.Site.Filters;
 using FluentMysql.Site.Helpers;
 using System;
@@ -18,6 +19,10 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
     public class MinhaContaController : Controller
     {
         [HttpGet]
+        [FormatarViewFilter]
+        [FormatarViewXml("xml", ViewData = new string[] { "Mensagem" })]
+        [FormatarViewJson("json", ViewData = new string[] { "Mensagem" })]
+        [FormatarViewHtml("html", "_IndexForm", "_LayoutEmpty")]
         public ActionResult Index()
         {
             Usuario minhaConta = (Usuario)ViewBag.MinhaConta;
@@ -32,6 +37,10 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [FormatarViewFilter]
+        [FormatarViewXml("xml", ViewData = new string[] { "Mensagem" })]
+        [FormatarViewJson("json", ViewData = new string[] { "Mensagem" })]
+        [FormatarViewHtml("html", "_IndexForm", "_LayoutEmpty")]
         public ActionResult Index(AlterarDadosForm dados)
         {
             if (ModelState.IsValid)
