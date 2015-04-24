@@ -74,6 +74,8 @@
     <Compile Include="DataAnnotations\IsRequeridIfOtherNotNull.cs" />
     <Compile Include="Entities\Artigo.cs" />
     <Compile Include="Entities\Usuario.cs" />
+    <Compile Include="Factory\FindFactory.cs" />
+    <Compile Include="Factory\QueryFactory.cs" />
     <Compile Include="Interfaces\IConnection.cs" />
     <Compile Include="Interfaces\IEntidade.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
