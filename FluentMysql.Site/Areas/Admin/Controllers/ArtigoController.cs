@@ -98,7 +98,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             {
                 try
                 {
-                    Artigo info = ArtigoService.Inserir(dados, MinhaConta.Instance.Info);
+                    Artigo info = ArtigoService.Inserir(dados);
                     TempData["Mensagem"] = AlertsMessages.Success("Registro inserido com sucesso");
                     return RedirectToAction("Altera", new { @Id = info.Id });
                 }
@@ -149,7 +149,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             {
                 try
                 {
-                    var Artigo = ArtigoService.Alterar(dados, MinhaConta.Instance.Info);
+                    var Artigo = ArtigoService.Alterar(dados);
                     TempData["Mensagem"] = AlertsMessages.Success("Registro alterado com sucesso");
                     return RedirectToAction("Altera", new { @Id = Artigo.Id });
                 }
@@ -173,7 +173,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
-                ArtigoService.Ativar(id, MinhaConta.Instance.Info);
+                ArtigoService.Ativar(id);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) ativado(s) com sucesso");
             }
             catch (Exception ex)
@@ -194,7 +194,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
-                ArtigoService.Desativar(id, MinhaConta.Instance.Info);
+                ArtigoService.Desativar(id);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) desativado(s) com sucesso");
             }
             catch (Exception ex)
@@ -215,7 +215,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
-                ArtigoService.Excluir(id, MinhaConta.Instance.Info);
+                ArtigoService.Excluir(id);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) excluído(s) com sucesso");
             }
             catch (Exception ex)
