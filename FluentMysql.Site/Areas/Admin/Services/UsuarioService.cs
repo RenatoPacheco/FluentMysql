@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentMysql.Domain;
 using FluentMysql.Domain.Repository;
 using FluentMysql.Infrastructure;
 using FluentMysql.Infrastructure.Entities;
@@ -17,14 +18,11 @@ namespace FluentMysql.Site.Areas.Admin.Services
 {
     public static class UsuarioService
     {
-        internal static void Ativar(IList<long> id, Usuario responsavel)
+        internal static void Ativar(IList<long> id)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
                 throw new ArgumentNullException("id", "Valor não pode ser nulo ou vazio");
-
-            if (object.Equals(responsavel, null))
-                throw new ArgumentNullException("responsavel", "Valor não pode ser nulo ou vazio");
-
+            
             using (Connection connection = new Connection())
             {
                 using (ISession session = connection.Session)
@@ -37,13 +35,10 @@ namespace FluentMysql.Site.Areas.Admin.Services
             }
         }
 
-        internal static void Desativar(IList<long> id, Usuario responsavel)
+        internal static void Desativar(IList<long> id)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
                 throw new ArgumentNullException("id", "Valor não pode ser nulo ou vazio");
-
-            if (object.Equals(responsavel, null))
-                throw new ArgumentNullException("responsavel", "Valor não pode ser nulo");
 
             using (Connection connection = new Connection())
             {
@@ -57,13 +52,10 @@ namespace FluentMysql.Site.Areas.Admin.Services
             }
         }
 
-        internal static void Excluir(IList<long> id, Usuario responsavel)
+        internal static void Excluir(IList<long> id)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
                 throw new ArgumentNullException("id", "Valor não pode ser nulo ou vazio");
-
-            if (object.Equals(responsavel, null))
-                throw new ArgumentNullException("responsavel", "Valor não pode ser nulo");
 
             using (Connection connection = new Connection())
             {
@@ -123,17 +115,14 @@ namespace FluentMysql.Site.Areas.Admin.Services
             return resultado;
         }
 
-        internal static Usuario Alterar(AlteraForm dados, Usuario responsavel)
+        internal static Usuario Alterar(AlteraForm dados)
         {
             if (object.Equals(dados, null))
                 throw new ArgumentNullException("dados", "Valor não pode ser nulo");
 
-            if (object.Equals(responsavel, null))
-                throw new ArgumentNullException("responsavel", "Valor não pode ser nulo");
-
             Usuario resultado = Mapper.Map<AlteraForm, Usuario>(dados);
 
-            resultado.Responsavel = responsavel;
+            resultado.Responsavel = MinhaConta.Instance.Info;
             resultado.DataAlteracao = DateTime.Now;
             resultado = Domain.Services.UsuarioService.AlterarUnico(resultado);
 
@@ -219,32 +208,26 @@ namespace FluentMysql.Site.Areas.Admin.Services
             return resultado;
         }
 
-        internal static Usuario Inserir(InsereForm dados, Usuario responsavel)
+        internal static Usuario Inserir(InsereForm dados)
         {
             if (object.Equals(dados, null))
                 throw new ArgumentNullException("dados", "Valor não pode ser nulo");
 
-            if (object.Equals(responsavel, null))
-                throw new ArgumentNullException("responsavel", "Valor não pode ser nulo");
-
             Usuario resultado = Mapper.Map<InsereForm, Usuario>(dados);
 
-            resultado.Responsavel = responsavel;
+            resultado.Responsavel = MinhaConta.Instance.Info;
             resultado = Domain.Services.UsuarioService.InserirUnico(resultado);
 
             return resultado;
         }
         
-        internal static void AlterarNivel(IList<long> id, Nivel nivel, Usuario responsavel)
+        internal static void AlterarNivel(IList<long> id, Nivel nivel)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
                 throw new ArgumentNullException("id", "Valor não pode ser nulo ou vazio");
 
             if (object.Equals(nivel, null))
                 throw new ArgumentNullException("nivel", "Valor não pode ser nulo ou vazio");
-
-            if (object.Equals(responsavel, null))
-                throw new ArgumentNullException("responsavel", "Valor não pode ser nulo ou vazio");
 
             if (nivel.Equals(Nivel.Indefinido))
                 throw new ValidationException("Valor do nível não foi definido");

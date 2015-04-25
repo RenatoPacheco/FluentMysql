@@ -12,43 +12,39 @@ namespace FluentMysql.Domain.Services
 {
     public static class PermissaoService
     {
-        public static bool SobreUsuario(Usuario minhaConta, Usuario usuario)
+        public static bool SobreUsuario(Usuario usuario)
         {
-            return SobreUsuario(minhaConta, new List<Usuario>() { usuario }, false);
+            return SobreUsuario(new List<Usuario>() { usuario }, false);
         }
 
-        public static bool SobreUsuario(Usuario minhaConta, IList<Usuario> usuarios)
+        public static bool SobreUsuario(IList<Usuario> usuarios)
         {
-            return SobreUsuario(minhaConta, usuarios, false);
+            return SobreUsuario(usuarios, false);
         }
 
-        public static bool SobreUsuario(Usuario minhaConta, Usuario usuario, bool afetarAutenticado)
+        public static bool SobreUsuario(Usuario usuario, bool afetarAutenticado)
         {
-            return SobreUsuario(minhaConta, new List<Usuario>() { usuario }, afetarAutenticado);
+            return SobreUsuario(new List<Usuario>() { usuario }, afetarAutenticado);
         }
 
-        public static bool SobreUsuario(Usuario minhaConta, IList<Usuario> usuarios, bool afetarAutenticado)
+        public static bool SobreUsuario(IList<Usuario> usuarios, bool afetarAutenticado)
         {
-            if (object.Equals(minhaConta, null))
-                throw new ArgumentNullException("minhaConta", "O valor não pode ser nulo");
-
             if (object.Equals(usuarios, null) || usuarios.Count <= 0)
                 throw new HttpException(404, "O usuário solicitado não foi encontrado");
 
-            UsuarioPermissao minhaPermissao = new UsuarioPermissao(minhaConta);
-            UsuarioInfo usuatioInfo;
+            ContaAcesso acesso;
 
             foreach (Usuario usuario in usuarios)
             {
                 if (object.Equals(usuario, null) || usuario.Id <= 0)
                     throw new HttpException(404, "O usuário solicitado não foi encontrado");
 
-                usuatioInfo = new UsuarioInfo(usuario, minhaPermissao);
+                acesso = new ContaAcesso(usuario);
 
-                if (!usuatioInfo.Subordinado)
+                if (!MinhaConta.Instance.Acesso.AutorizadoSobre(acesso.Info))
                     throw new HttpException(406, "Sua permissão não dá acesso a essa ação para este registro");
 
-                if (usuatioInfo.Autenticado && !afetarAutenticado)
+                if (acesso.Autenticado && !afetarAutenticado)
                     throw new HttpException(406, "Ação não permitida para registro já autenticado");
             }
 

@@ -1,7 +1,7 @@
 ﻿@using FluentMysql.Infrastructure.Entities
 @model FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta.AlterarDadosForm
 @{
-    Usuario minhaConta = (Usuario)ViewBag.MinhaConta;
+    Usuario minhaConta = MinhaConta.Instance.Info;
     ViewBag.Title = "Minha Conta";
 }
 

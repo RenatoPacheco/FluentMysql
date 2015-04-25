@@ -1,4 +1,5 @@
-﻿using FluentMysql.Infrastructure.Entities;
+﻿using FluentMysql.Domain;
+using FluentMysql.Infrastructure.Entities;
 using FluentMysql.Infrastructure.ValueObject;
 using FluentMysql.Site.Areas.Admin.Services;
 using FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta;
@@ -15,7 +16,7 @@ using System.Web.Security;
 
 namespace FluentMysql.Site.Areas.Admin.Controllers
 {
-    [AuthorizeUser(Nivel = new Nivel[] { Nivel.Visitante })]
+    [AuthorizeUser(Nivel = Nivel.Visitante)]
     public class MinhaContaController : Controller
     {
         [HttpGet]
@@ -25,7 +26,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         [FormatarViewHtml("html", "_IndexForm", "_LayoutEmpty")]
         public ActionResult Index()
         {
-            Usuario minhaConta = (Usuario)ViewBag.MinhaConta;
+            Usuario minhaConta = MinhaConta.Instance.Info;
             AlterarDadosForm dados = new AlterarDadosForm();
             dados.Id = minhaConta.Id;
             dados.Nome = minhaConta.Nome;
@@ -47,7 +48,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             {
                 try
                 {
-                    Usuario minhaConta = (Usuario)ViewBag.MinhaConta;
+                    Usuario minhaConta = MinhaConta.Instance.Info;
                     dados.Id = minhaConta.Id;
                     MinhaContaService.AlterarDados(dados);
                     TempData["Mensagem"] = AlertsMessages.Success("Seus dados foram alterados com sucesso");
@@ -86,7 +87,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             {
                 try
                 {
-                    Usuario usuario = MinhaContaService.Logar(dados);
+                    MinhaContaService.Logar(dados);
                     if (Request.QueryString["ReturnUrl"] != null)
                     {
                         return Redirect(Request.QueryString["ReturnUrl"]);
@@ -129,9 +130,6 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 try
                 {
                     Usuario usuario = MinhaContaService.RecuperarAcesso(dados);
-                    if (object.Equals(usuario, null) || usuario.Id <= 0)
-                        throw new ValidationException("Seus dados de acesso não foram encontrados");
-
                     TempData["Mensagem"] = AlertsMessages.Success(string.Format("Os dados solicitados foram enviado para <strong>{0}</strong>", usuario.Email));
                     return RedirectToAction("RecuperaAcesso");
                 }
@@ -206,7 +204,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
 
             dados.Token = token;
             
-            ViewBag.MinhaConta = usuario;
+            MinhaConta.Factory(usuario);
             return View("RedefineSenha", "_LayoutClean", dados);
         }
 
@@ -238,16 +236,15 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 }
             }
 
-            ViewBag.MinhaConta = usuario;
+            MinhaConta.Factory(usuario);
             return View("RedefineSenha", "_LayoutClean", dados);
         }
-
+        
         public ActionResult Acesso()
         {
             return View();
         }
-
-
+        
         [HttpGet]
         [AllowAnonymous]
         public ActionResult AutenticaEmail(string token)
@@ -259,8 +256,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             dados.NovoEmail = usuario.Email;
             dados.Token = token;
 
-            ViewBag.MinhaConta = usuario;
-
+            MinhaConta.Factory(usuario);
             return View("AutenticaEmail", "_LayoutClean", dados);
         }
 

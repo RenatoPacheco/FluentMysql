@@ -19,10 +19,11 @@ using FluentMysql.Infrastructure;
 using System.Text;
 using FluentMysql.Site.Services;
 using FluentMysql.Site.DataAnnotations;
+using FluentMysql.Domain;
 
 namespace FluentMysql.Site.Areas.Admin.Controllers
 {
-    [AuthorizeUser(Nivel = new Nivel[] { Nivel.Operador })]
+    [AuthorizeUser(Nivel = Nivel.Operador)]
     public class ArtigoController : Controller
     {
 
@@ -97,7 +98,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             {
                 try
                 {
-                    Artigo info = ArtigoService.Inserir(dados, (Usuario)ViewBag.MinhaConta);
+                    Artigo info = ArtigoService.Inserir(dados, MinhaConta.Instance.Info);
                     TempData["Mensagem"] = AlertsMessages.Success("Registro inserido com sucesso");
                     return RedirectToAction("Altera", new { @Id = info.Id });
                 }
@@ -148,7 +149,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             {
                 try
                 {
-                    var Artigo = ArtigoService.Alterar(dados, (Usuario)ViewBag.MinhaConta);
+                    var Artigo = ArtigoService.Alterar(dados, MinhaConta.Instance.Info);
                     TempData["Mensagem"] = AlertsMessages.Success("Registro alterado com sucesso");
                     return RedirectToAction("Altera", new { @Id = Artigo.Id });
                 }
@@ -172,7 +173,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
-                ArtigoService.Ativar(id, (Usuario)ViewBag.MinhaConta);
+                ArtigoService.Ativar(id, MinhaConta.Instance.Info);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) ativado(s) com sucesso");
             }
             catch (Exception ex)
@@ -193,7 +194,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
-                ArtigoService.Desativar(id, (Usuario)ViewBag.MinhaConta);
+                ArtigoService.Desativar(id, MinhaConta.Instance.Info);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) desativado(s) com sucesso");
             }
             catch (Exception ex)
@@ -214,7 +215,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
-                ArtigoService.Excluir(id, (Usuario)ViewBag.MinhaConta);
+                ArtigoService.Excluir(id, MinhaConta.Instance.Info);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) excluído(s) com sucesso");
             }
             catch (Exception ex)

@@ -2,7 +2,7 @@
 @model FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta.AutenticaEmailForm
 @{    
     ViewBag.Title = "Autenticar E-mail";
-    Usuario minhaConta = (Usuario)ViewBag.MinhaConta;
+    Usuario minhaConta = MinhaConta.Instance.Info;
 }
 @section styles{
 

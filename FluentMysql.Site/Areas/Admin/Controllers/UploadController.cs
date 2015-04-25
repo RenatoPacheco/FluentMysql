@@ -16,7 +16,7 @@ using System.Web.Mvc;
 
 namespace FluentMysql.Site.Areas.Admin.Controllers
 {
-    [AuthorizeUser(Nivel = new Nivel[] { Nivel.Operador })]
+    [AuthorizeUser(Nivel = Nivel.Operador)]
     public class UploadController : Controller
     {
         public ActionResult CKEditor(CKEditorForm dados = null)

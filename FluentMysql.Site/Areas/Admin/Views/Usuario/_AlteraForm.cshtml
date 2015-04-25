@@ -1,8 +1,6 @@
 ﻿@using FluentMysql.Infrastructure.Entities
 @model FluentMysql.Site.Areas.Admin.ViewsData.Usuario.AlteraForm
-@{
-    Usuario MinhaConta = (Usuario)ViewBag.MinhaConta;
-}            
+           
 <form class="form-horizontal" method="post" action="@Url.Action("Altera", new { @Id = Model.Id })">
     <div class="alertas">
         @Html.Raw(ViewBag.Mensagem)
@@ -42,7 +40,7 @@
         {
             @Html.LabelFor(x => x.Nivel, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
-                @Html.DropDownListFor(x => x.Nivel, Model.NivelOpcoes((Usuario)ViewBag.MinhaConta), new { @class = "form-control", @title = "Informe o nível", @placeholder = "Informe o nível" })
+                @Html.DropDownListFor(x => x.Nivel, Model.NivelOpcoes(MinhaConta.Instance.Info), new { @class = "form-control", @title = "Informe o nível", @placeholder = "Informe o nível" })
                 @Html.ValidationMessageFor(x => x.Nivel, string.Empty, new { @class = "text-danger" })
             </div>
         }

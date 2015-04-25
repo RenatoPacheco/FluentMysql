@@ -6,8 +6,6 @@
 @model FluentMysql.Site.Areas.Admin.ViewsData.Usuario.FiltroForm
 @{
     ViewBag.Title = "Lista de Usuários";
-    Usuario minhaConta = !object.Equals(ViewBag.MinhaConta, null) ? (Usuario)ViewBag.MinhaConta : new Usuario();
-    UsuarioPermissao minhaPermissao = new UsuarioPermissao(minhaConta);
 }
 @section scripts{
     @Scripts.Render("~/Scripts/Areas/Admin/usuario.index.min.js")
@@ -38,7 +36,7 @@
                 </div>
             </div>
         </div>
-        @if(minhaPermissao.Operador)
+        @if (MinhaConta.Instance.Acesso.Operador)
         {
             <div class="form-group">
                 <a href="@Url.Action("Insere")" class="btn btn-info" title="clique aqui para inserir novo">
@@ -67,7 +65,7 @@
                     <th class="hidden-xs hidden-sm">E-mail</th>
                     <th class="hidden-xs">Nível</th>
                     <th class="col-xs-8 col-sm-5 col-md-4 text-right">
-                        @if (minhaPermissao.Operador)
+                        @if (MinhaConta.Instance.Acesso.Operador)
                         {
                             <button action="selecionaTodos" type="submit" name="Acao" value="selecionar-todos" class="btn btn-default" title="clique aqui para selecionar todos os item">
                                 <i class="fa fa-check-square-o"></i>

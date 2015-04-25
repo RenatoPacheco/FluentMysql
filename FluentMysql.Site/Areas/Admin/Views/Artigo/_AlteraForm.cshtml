@@ -1,8 +1,6 @@
 ﻿@using FluentMysql.Infrastructure.Entities
 @model FluentMysql.Site.Areas.Admin.ViewsData.Artigo.AlteraForm
-@{
-    Usuario MinhaConta = (Usuario)ViewBag.MinhaConta;
-}
+
 <form class="form-horizontal" method="post" action="@Url.Action("Altera", new { @Id = Model.Id })">
     <div class="alertas">
         @Html.Raw(ViewBag.Mensagem)

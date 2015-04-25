@@ -1,4 +1,6 @@
-﻿using FluentMysql.Infrastructure.Entities;
+﻿using FluentMysql.Domain;
+using FluentMysql.Domain.ValueObject;
+using FluentMysql.Infrastructure.Entities;
 using FluentMysql.Infrastructure.ValueObject;
 using FluentMysql.Site.Areas.Admin.Services;
 using FluentMysql.Site.ValueObject;
@@ -8,57 +10,63 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.Security;
 
 namespace FluentMysql.Site.Filters
 {
     public class AuthorizeUserAttribute : AuthorizeAttribute
     {
-        protected Usuario MinhaConta { get; set; }
+        protected MinhaConta MinhaConta { get; set; }
 
-        private Nivel[] _Nivel = new Nivel[] { };
-        public Nivel[] Nivel
+        public Nivel Nivel { get; set; }
+
+        public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            get { return _Nivel; }
-            set { _Nivel = value != null ? value : new Nivel[] { }; }
-        }
+            TokenAcesso token = (TokenAcesso)filterContext.HttpContext.User.Identity.Name;
+            this.MinhaConta = MinhaConta.Factory((Usuario)token);
 
-        public override void OnAuthorization( AuthorizationContext filterContext)
-        {
-            MinhaConta = MinhaContaService.ExtrairConta();
-            if (object.Equals(MinhaConta, null))
-                MinhaConta = new Usuario();
+            if (object.Equals(this.MinhaConta, null)
+                || this.MinhaConta.Acesso.Nivel.Equals(Nivel.Indefinido))
+            {
 
-            filterContext.Controller.ViewBag.MinhaConta = MinhaConta;
+                this.MinhaConta = MinhaConta.Factory(null);
+                FormsAuthentication.SignOut();
+            }
+
             base.OnAuthorization(filterContext);
         }
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            int[] niveis = Nivel.Select(x => (int)x).ToArray();
-            if (!httpContext.User.Identity.IsAuthenticated)
-            {
-                return base.AuthorizeCore(httpContext);
-            }
-            else if (Nivel.Length > 0)
-            {
-                return (int)MinhaConta.Nivel > 0 && niveis.Where(x => x >= (int)MinhaConta.Nivel).Count() > 0;
-            }
-            return true;
+            return httpContext.User.Identity.IsAuthenticated
+                && this.MinhaConta.Acesso.AutorizadoSobre(this.Nivel);
         }
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
             var routeData = new CommonRouteData(filterContext.HttpContext);
-            
+
             if (!filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
                 filterContext.Result = new RedirectToRouteResult(
-                    new RouteValueDictionary(new { @Controller = "MinhaConta", @Action = "Login", @Area = routeData.Area, @ReturnUrl = filterContext.HttpContext.Request.Url.ToString() }));
+                    new RouteValueDictionary(new
+                    {
+                        @Controller = "MinhaConta",
+                        @Action = "Login",
+                        @Area = routeData.Area,
+                        @ReturnUrl = filterContext.HttpContext.Request.Url.ToString()
+                    }));
             }
-            else if (MinhaConta.Nivel > 0)
+            else
             {
                 filterContext.Result = new RedirectToRouteResult(
-                    new RouteValueDictionary(new { @Controller = "MinhaConta", @Action = "Acesso", @Area = routeData.Area }));
+                    new RouteValueDictionary(new
+                    {
+                        @Controller = "MinhaConta",
+                        @Action = "Acesso",
+                        @Area = routeData.Area,
+                        @ReturnUrl = filterContext.HttpContext.Request.Url.ToString()
+                    }));
             }
         }
     }

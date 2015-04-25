@@ -5,8 +5,6 @@
 @model FluentMysql.Site.Areas.Admin.ViewsData.Artigo.FiltroForm
 @{
     ViewBag.Title = "Lista de Artigos";
-    Usuario minhaConta = !object.Equals(ViewBag.MinhaConta, null) ? (Usuario)ViewBag.MinhaConta : new Usuario();
-    UsuarioPermissao minhaPermissao = new UsuarioPermissao(minhaConta);
     IList<Artigo> Lista = object.Equals(ViewBag.Lista, null) ? new List<Artigo>() : (List<Artigo>)ViewBag.Lista;
 }
 @section scripts{

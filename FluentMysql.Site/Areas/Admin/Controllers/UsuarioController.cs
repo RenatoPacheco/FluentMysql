@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentMysql.Domain;
 using FluentMysql.Domain.Services;
 using FluentMysql.Domain.ValueObject;
 using FluentMysql.Infrastructure.Entities;
@@ -21,7 +22,7 @@ using System.Web.Mvc;
 
 namespace FluentMysql.Site.Areas.Admin.Controllers
 {
-    [AuthorizeUser(Nivel = new Nivel[] { Nivel.Administrador })]
+    [AuthorizeUser(Nivel = Nivel.Administrador)]
     public class UsuarioController : Controller
     {
         [FormatarViewFilter()]
@@ -102,7 +103,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             {
                 try
                 {
-                    Usuario info = Services.UsuarioService.Inserir(dados, (Usuario)ViewBag.MinhaConta);
+                    Usuario info = Services.UsuarioService.Inserir(dados);
                     TempData["Mensagem"] = AlertsMessages.Success("Registro inserido com sucesso");
                     try
                     {
@@ -141,7 +142,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 throw new HttpException(404, "O registro solicitado não foi encontrado");
 
             AlteraForm dados = Mapper.Map<Usuario, AlteraForm>(info);
-            PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, info);
+            PermissaoService.SobreUsuario(info);
             
             ViewBag.Info = info;
             
@@ -160,13 +161,13 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             if (object.Equals(info, null) || info.Id <= 0)
                 throw new HttpException(404, "O registro solicitado não foi encontrado");
 
-            PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, info);
+            PermissaoService.SobreUsuario(info);
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var Usuario = Services.UsuarioService.Alterar(dados, (Usuario)ViewBag.MinhaConta);
+                    var Usuario = Services.UsuarioService.Alterar(dados);
                     TempData["Mensagem"] = AlertsMessages.Success("Registro alterado com sucesso");
                     return RedirectToAction("Altera", new { @Id = Usuario.Id });
                 }
@@ -230,9 +231,9 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             try
             {
                 IList<Usuario> usuarios = Services.UsuarioService.Info(id);
-                PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, usuarios, true);
+                PermissaoService.SobreUsuario(usuarios, true);
 
-                Services.UsuarioService.Ativar(id, (Usuario)ViewBag.MinhaConta);
+                Services.UsuarioService.Ativar(id);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) ativado(s) com sucesso");
             }
             catch (Exception ex)
@@ -254,9 +255,9 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             try
             {
                 IList<Usuario> usuarios = Services.UsuarioService.Info(id);
-                PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, usuarios, true);
+                PermissaoService.SobreUsuario(usuarios, true);
 
-                Services.UsuarioService.Desativar(id, (Usuario)ViewBag.MinhaConta);
+                Services.UsuarioService.Desativar(id);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) desativado(s) com sucesso");
             }
             catch (Exception ex)
@@ -278,9 +279,9 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             try
             {
                 IList<Usuario> usuarios = Services.UsuarioService.Info(id);
-                PermissaoService.SobreUsuario((Usuario)ViewBag.MinhaConta, usuarios, true);
+                PermissaoService.SobreUsuario(usuarios, true);
 
-                Services.UsuarioService.Excluir(id, (Usuario)ViewBag.MinhaConta);
+                Services.UsuarioService.Excluir(id);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) excluído(s) com sucesso");
             }
             catch (Exception ex)
@@ -301,20 +302,20 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
-                Usuario minhaConta = (Usuario)ViewBag.MinhaConta;
+                Usuario minhaConta = MinhaConta.Instance.Info;
                 IList<Usuario> usuarios = Services.UsuarioService.Info(id);
-                PermissaoService.SobreUsuario(minhaConta, usuarios, true);
+                PermissaoService.SobreUsuario(usuarios, true);
                 
                 if (nivel == Nivel.Indefinido)
                     throw new ValidationException("Um valor de nível não foi selecionado");
 
                 Usuario modelo = (Usuario)minhaConta.Clone();
                 modelo.Nivel = nivel;
-                UsuarioInfo info = new UsuarioInfo(modelo, new UsuarioPermissao(minhaConta));
-                if (!info.Subordinado)
+                ContaAcesso acesso = new ContaAcesso(modelo);
+                if (!MinhaConta.Instance.Acesso.AutorizadoSobre(modelo))
                     throw new ValidationException("Seu nível de acesso não permite aplicar esse nível de acesso");
 
-                Services.UsuarioService.AlterarNivel(id, nivel, (Usuario)ViewBag.MinhaConta);
+                Services.UsuarioService.AlterarNivel(id, nivel);
                 TempData["Mensagem"] = AlertsMessages.Success("Nível dos registro(s) alterados(s) com sucesso");
             }
             catch(Exception ex)

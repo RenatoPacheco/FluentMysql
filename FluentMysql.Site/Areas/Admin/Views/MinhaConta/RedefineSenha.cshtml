@@ -2,7 +2,7 @@
 @model FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta.RedefineSenhaForm
 @{    
     ViewBag.Title = "Redefinir Senha";
-    Usuario MinhaConta = (Usuario)ViewBag.MinhaConta;
+    Usuario MinhaConta = MinhaConta.Instance.Info;
 }
 @section styles{
 
