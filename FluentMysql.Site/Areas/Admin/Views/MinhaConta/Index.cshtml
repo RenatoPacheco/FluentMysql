@@ -1,7 +1,7 @@
 ﻿@using FluentMysql.Infrastructure.Entities
 @model FluentMysql.Site.Areas.Admin.ViewsData.MinhaConta.AlterarDadosForm
 @{
-    Usuario minhaConta = (Usuario)ViewBag.MinhaConta;
+    Usuario minhaConta = MinhaConta.Instance.Info;
     ViewBag.Title = "Minha Conta";
 }
 
@@ -13,115 +13,7 @@
                 <i class="fa fa-users"></i>
                 @ViewBag.Title
             </h2>
-            <div class="alertas">
-                @Html.Raw(ViewBag.Mensagem)
-            </div>
-            <form class="form-horizontal" method="post" action="@Url.Action("Index", new { })">
-                <fieldset>
-                    <legend class="sr-only">Formulário de alteração</legend>
-                    @using (Html.BSFormGroupFor(x => x.Nome, false, new { @class = "has-feedback" }))
-                    {
-                        @Html.LabelFor(x => x.Nome, new { @class = "col-md-3 col-sm-4 control-label" })
-                        <div class="col-md-9 col-sm-8">
-                            @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", @autofocus = "autofocus", @title = "Informe seu nome", @placeholder = "Informe seu nome", @required = "required" })
-                            @Html.BSValidationIconFor(x => x.Nome, false)
-                            @Html.ValidationMessageFor(x => x.Nome, string.Empty, new { @class = "text-danger" })
-                        </div>
-                    }
-                    @using (Html.BSFormGroupFor(x => x.Sobrenome, false, new { @class = "has-feedback" }))
-                    {
-                        @Html.LabelFor(x => x.Sobrenome, new { @class = "col-md-3 col-sm-4 control-label" })
-                        <div class="col-md-9 col-sm-8">
-                            @Html.TextBoxFor(x => x.Sobrenome, new { @class = "form-control", @title = "Informe seu sobrenome", @placeholder = "Informe seu sobrenome", @required = "required" })
-                            @Html.BSValidationIconFor(x => x.Sobrenome, false)
-                            @Html.ValidationMessageFor(x => x.Sobrenome, string.Empty, new { @class = "text-danger" })
-                        </div>
-                    }
-                    @using (Html.BSFormGroupFor(x => x.Login, false, new { @class = "has-feedback" }))
-                    {
-                        @Html.LabelFor(x => x.Login, new { @class = "col-md-3 col-sm-4 control-label" })
-                        <div class="col-md-9 col-sm-8">
-                            @Html.TextBoxFor(x => x.Login, new { @class = "form-control", @title = "Informe seu login", @placeholder = "Informe seu login", @required = "required" })
-                            @Html.BSValidationIconFor(x => x.Login, false)
-                            @Html.ValidationMessageFor(x => x.Login, string.Empty, new { @class = "text-danger" })
-                        </div>
-                    }
-                    @using (Html.BSFormGroupFor(x => x.CPF, false, new { @class = "has-feedback" }))
-                    {
-                        @Html.LabelFor(x => x.CPF, new { @class = "col-md-3 col-sm-4 control-label" })
-                        <div class="col-md-9 col-sm-8">
-                            @Html.TextBoxFor(x => x.CPF, new { @class = "form-control", @title = "Informe seu CPF", @placeholder = "Informe seu CPF", @required = "required" })
-                            @Html.BSValidationIconFor(x => x.CPF, false)
-                            @Html.ValidationMessageFor(x => x.CPF, string.Empty, new { @class = "text-danger" })
-                        </div>
-                    }
-                    <fieldset>
-                        <legend>Alterar E-mail</legend>
-                        <p class="text-muted">Preencha esses campos somente se desejar mudar seu e-mail atual. Caso seja alterado, um e-mail será enviado para autenticar a nova caixa postal para poder auterá-lo.</p>
-                        @using (Html.BSFormGroupFor(x => x.NovoEmail, false, new { @class = "has-feedback" }))
-                        {
-                            @Html.LabelFor(x => x.NovoEmail, new { @class = "col-md-3 col-sm-4 control-label" })
-                            <div class="col-md-9 col-sm-8">
-                                @Html.TextBoxFor(x => x.NovoEmail, new { @class = "form-control", @title = "Informe seu novo e-mail", @placeholder = minhaConta.Email })
-                                @Html.BSValidationIconFor(x => x.NovoEmail, false)
-                                @Html.ValidationMessageFor(x => x.NovoEmail, string.Empty, new { @class = "text-danger" })
-                            </div>
-                        }
-                        @using (Html.BSFormGroupFor(x => x.ConfirmaEmail, false, new { @class = "has-feedback" }))
-                        {
-                            @Html.LabelFor(x => x.ConfirmaEmail, new { @class = "col-md-3 col-sm-4 control-label" })
-                            <div class="col-md-9 col-sm-8">
-                                @Html.TextBoxFor(x => x.ConfirmaEmail, new { @class = "form-control", @title = "Confirme seu novo e-mail", @placeholder = minhaConta.Email })
-                                @Html.BSValidationIconFor(x => x.ConfirmaEmail, false)
-                                @Html.ValidationMessageFor(x => x.ConfirmaEmail, string.Empty, new { @class = "text-danger" })
-                            </div>
-                        }
-                    </fieldset>
-                    <fieldset>
-                        <legend>Alterar Senha</legend>
-                        <p class="text-muted">Preencha esses campos somente se desejar mudar sua senha atual.</p>
-                        @using (Html.BSFormGroupFor(x => x.NovaSenha, false, new { @class = "has-feedback" }))
-                        {
-                            @Html.LabelFor(x => x.NovaSenha, new { @class = "col-md-3 col-sm-4 control-label" })
-                            <div class="col-md-9 col-sm-8">
-                                @Html.PasswordFor(x => x.NovaSenha, new { @class = "form-control", @title = "Informe sua nova senha", @placeholder = "****************" })
-                                @Html.BSValidationIconFor(x => x.NovaSenha, false)
-                                @Html.ValidationMessageFor(x => x.NovaSenha, string.Empty, new { @class = "text-danger" })
-                            </div>
-                        }
-                        @using (Html.BSFormGroupFor(x => x.ConfirmaSenha, false, new { @class = "has-feedback" }))
-                        {
-                            @Html.LabelFor(x => x.ConfirmaSenha, new { @class = "col-md-3 col-sm-4 control-label" })
-                            <div class="col-md-9 col-sm-8">
-                                @Html.PasswordFor(x => x.ConfirmaSenha, new { @class = "form-control", @title = "Confirme sua sua senha", @placeholder = "****************" })
-                                @Html.BSValidationIconFor(x => x.ConfirmaSenha, false)
-                                @Html.ValidationMessageFor(x => x.ConfirmaSenha, string.Empty, new { @class = "text-danger" })
-                            </div>
-                        }
-                    </fieldset>
-                    <fieldset>
-                        <legend>Senha Atual</legend>
-                        <p class="text-muted">Caso deseje alterar sua senha ou e-mail, informar a senha atual é obrigatório.</p>
-                        @using (Html.BSFormGroupFor(x => x.SenhaAtual, false, new { @class = "has-feedback" }))
-                        {
-                            @Html.LabelFor(x => x.SenhaAtual, new { @class = "col-md-3 col-sm-4 control-label" })
-                            <div class="col-md-9 col-sm-8">
-                                @Html.PasswordFor(x => x.SenhaAtual, new { @class = "form-control", @title = "Confirme sua senha atual", @placeholder = "Confirme sua senha atual" })
-                                @Html.BSValidationIconFor(x => x.SenhaAtual, false)
-                                @Html.ValidationMessageFor(x => x.SenhaAtual, string.Empty, new { @class = "text-danger" })
-                            </div>
-                        }
-                    </fieldset><div class="form-group">
-                        @Html.HiddenFor(x => x.Id)
-                        <div class="col-sm-12">
-                            <button type="submit" class="btn btn-primary btn-lg col-md-6 col-sm-6 col-xs-12" title="clique aqui para salvar">
-                                <i class="fa fa-save"></i>
-                                Salvar
-                            </button>
-                        </div>
-                    </div>
-                </fieldset>
-            </form>
+            @Html.Partial("_IndexForm", Model)
         </div>
     </div>
 </div>

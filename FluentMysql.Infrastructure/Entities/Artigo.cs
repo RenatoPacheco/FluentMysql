@@ -1,10 +1,13 @@
 ﻿using FluentMysql.Infrastructure.Interfaces;
 using FluentMysql.Infrastructure.ValueObject;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Xml.Linq;
 
 namespace FluentMysql.Infrastructure.Entities
 {

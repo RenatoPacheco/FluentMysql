@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using FluentMysql.Domain;
 using FluentMysql.Domain.Repository;
 using FluentMysql.Infrastructure;
 using FluentMysql.Infrastructure.Entities;
+using FluentMysql.Infrastructure.Security;
 using FluentMysql.Infrastructure.ValueObject;
 using FluentMysql.Site.Areas.Admin.ViewsData.Usuario;
 using NHibernate;
@@ -12,18 +14,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FluentMysql.Site.Areas.Admin.Models.Services
+namespace FluentMysql.Site.Areas.Admin.Services
 {
     public static class UsuarioService
     {
-        internal static void Ativar(IList<long> id, Usuario responsavel)
+        internal static void Ativar(IList<long> id)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
                 throw new ArgumentNullException("id", "Valor não pode ser nulo ou vazio");
-
-            if (object.Equals(responsavel, null))
-                throw new ArgumentNullException("responsavel", "Valor não pode ser nulo ou vazio");
-
+            
             using (Connection connection = new Connection())
             {
                 using (ISession session = connection.Session)
@@ -36,13 +35,10 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             }
         }
 
-        internal static void Desativar(IList<long> id, Usuario responsavel)
+        internal static void Desativar(IList<long> id)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
                 throw new ArgumentNullException("id", "Valor não pode ser nulo ou vazio");
-
-            if (object.Equals(responsavel, null))
-                throw new ArgumentNullException("responsavel", "Valor não pode ser nulo");
 
             using (Connection connection = new Connection())
             {
@@ -56,13 +52,10 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             }
         }
 
-        internal static void Excluir(IList<long> id, Usuario responsavel)
+        internal static void Excluir(IList<long> id)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
                 throw new ArgumentNullException("id", "Valor não pode ser nulo ou vazio");
-
-            if (object.Equals(responsavel, null))
-                throw new ArgumentNullException("responsavel", "Valor não pode ser nulo");
 
             using (Connection connection = new Connection())
             {
@@ -78,42 +71,58 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
 
         internal static IList<Usuario> Filtrar()
         {
-            return Filtrar(new FiltroForm());
+            FiltroForm filtro = new FiltroForm();
+            return Filtrar(ref filtro);
         }
 
-        internal static IList<Usuario> Filtrar(FiltroForm filtro)
+        internal static IList<Usuario> Filtrar(ref FiltroForm filtro)
         {
             if (object.Equals(filtro, null))
                 throw new ArgumentNullException("filtro", "Valor não pode ser nulo");
 
             IList<Usuario> resultado = new List<Usuario>();
+            IQuery query;
+            StringBuilder hsql = new StringBuilder();
+
+            hsql.Append(@" FROM Usuario WHERE (Login LIKE :texto OR Email LIKE :texto OR concat(Nome, ' ', Sobrenome) LIKE :texto) ");
+
+            if (!object.Equals(filtro.Status, null) && filtro.Status.Count > 0)
+                hsql.Append(@" AND Status IN (:status) ");
+
+            if (!filtro.OrdemCrescente && filtro.IdReferencia < 0)
+                filtro.IdReferencia = long.MaxValue;
+
+            if (filtro.OrdemCrescente)
+                hsql.Append(@" AND Id > :idReferencia ORDER BY Id Asc ");
+            else
+                hsql.Append(@" AND Id < :idReferencia ORDER BY Id Desc ");
             
             using (Connection connection = new Connection())
             {
                 using (ISession session = connection.Session)
                 {
-                    resultado = session.CreateQuery(@"FROM Usuario WHERE Status IN (:status) AND (Email LIKE :texto OR concat(Nome, ' ', Sobrenome) LIKE :texto) ORDER BY Id Desc")
-                        .SetParameterList("status", new List<Status>() { Status.Ativo, Status.Inativo })
+                    query = session.CreateQuery(hsql.ToString())
                         .SetString("texto", "%" + filtro.PalavraChave + "%")
-                        .SetMaxResults(1000)
-                        .List<Usuario>();
+                        .SetInt64("idReferencia", filtro.IdReferencia);
+
+                    if (!object.Equals(filtro.Status, null) && filtro.Status.Count > 0)
+                        query.SetParameterList("status", filtro.Status.Select(x => (int)x));
+
+                    resultado = query.SetMaxResults(filtro.MaximoPorConsulta).List<Usuario>();
                 }
             }
-
+            
             return resultado;
         }
 
-        internal static Usuario Alterar(AlteraForm dados, Usuario responsavel)
+        internal static Usuario Alterar(AlteraForm dados)
         {
             if (object.Equals(dados, null))
                 throw new ArgumentNullException("dados", "Valor não pode ser nulo");
 
-            if (object.Equals(responsavel, null))
-                throw new ArgumentNullException("responsavel", "Valor não pode ser nulo");
-
             Usuario resultado = Mapper.Map<AlteraForm, Usuario>(dados);
 
-            resultado.Responsavel = responsavel;
+            resultado.Responsavel = MinhaConta.Instance.Info;
             resultado.DataAlteracao = DateTime.Now;
             resultado = Domain.Services.UsuarioService.AlterarUnico(resultado);
 
@@ -130,6 +139,25 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             using (UsuarioRepository acao = new UsuarioRepository())
             {
                 resultado = acao.Find(id);
+            }
+
+            return resultado;
+        }
+
+        internal static Usuario Info(long id, string senha)
+        {
+            if (id <= 0)
+                throw new ArgumentException("Valor não pode ser menor ou igual a 0", "id");
+
+            if (string.IsNullOrWhiteSpace(senha))
+                throw new ArgumentNullException("senha", "Valor não pode ser nulo ou vazio");
+
+            Usuario resultado = null;
+
+            using (UsuarioRepository acao = new UsuarioRepository())
+            {
+                resultado = acao.Query().Where(x => x.Id == id 
+                    && x.Senha == EncryptyPassword.Set(senha)).FirstOrDefault();
             }
 
             return resultado;
@@ -180,32 +208,26 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             return resultado;
         }
 
-        internal static Usuario Inserir(InsereForm dados, Usuario responsavel)
+        internal static Usuario Inserir(InsereForm dados)
         {
             if (object.Equals(dados, null))
                 throw new ArgumentNullException("dados", "Valor não pode ser nulo");
 
-            if (object.Equals(responsavel, null))
-                throw new ArgumentNullException("responsavel", "Valor não pode ser nulo");
-
             Usuario resultado = Mapper.Map<InsereForm, Usuario>(dados);
 
-            resultado.Responsavel = responsavel;
+            resultado.Responsavel = MinhaConta.Instance.Info;
             resultado = Domain.Services.UsuarioService.InserirUnico(resultado);
 
             return resultado;
         }
         
-        internal static void AlterarNivel(IList<long> id, Nivel nivel, Usuario responsavel)
+        internal static void AlterarNivel(IList<long> id, Nivel nivel)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
                 throw new ArgumentNullException("id", "Valor não pode ser nulo ou vazio");
 
             if (object.Equals(nivel, null))
                 throw new ArgumentNullException("nivel", "Valor não pode ser nulo ou vazio");
-
-            if (object.Equals(responsavel, null))
-                throw new ArgumentNullException("responsavel", "Valor não pode ser nulo ou vazio");
 
             if (nivel.Equals(Nivel.Indefinido))
                 throw new ValidationException("Valor do nível não foi definido");

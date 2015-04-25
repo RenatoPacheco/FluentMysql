@@ -20,7 +20,7 @@ namespace FluentMysql.Infrastructure.Factory
             }
         }
 
-        public static T Find<T>(object key, ISession session) where T : class,new()
+        public static T Find<T>(ISession session, object key) where T : class,new()
         {
             return (T)session.Get<T>(key);
         }

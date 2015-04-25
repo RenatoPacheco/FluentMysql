@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace FluentMysql.Site.Areas.Admin.Controllers
 {
-    [AuthorizeUser(Nivel = new Nivel[] { Nivel.Visitante })]
+    [AuthorizeUser(Nivel = Nivel.Visitante)]
     public class HomeController : Controller
     {
         public ActionResult Index()

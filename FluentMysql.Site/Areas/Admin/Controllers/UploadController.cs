@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentMysql.Infrastructure.Entities;
 using FluentMysql.Infrastructure.ValueObject;
-using FluentMysql.Site.Areas.Admin.Models.Services;
+using FluentMysql.Site.Areas.Admin.Services;
 using FluentMysql.Site.Areas.Admin.ViewsData.Upload;
 using FluentMysql.Site.Filters;
 using FluentMysql.Site.Helpers;
@@ -16,7 +16,7 @@ using System.Web.Mvc;
 
 namespace FluentMysql.Site.Areas.Admin.Controllers
 {
-    [AuthorizeUser(Nivel = new Nivel[] { Nivel.Operador })]
+    [AuthorizeUser(Nivel = Nivel.Operador)]
     public class UploadController : Controller
     {
         public ActionResult CKEditor(CKEditorForm dados = null)

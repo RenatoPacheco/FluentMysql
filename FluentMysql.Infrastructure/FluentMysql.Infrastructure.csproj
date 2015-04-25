@@ -50,6 +50,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -67,6 +68,7 @@
     <Compile Include="AutoMapper\TypeConverter\StringToDateNullable.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="DataAnnotations\BaseValidationAttribute.cs" />
+    <Compile Include="DataAnnotations\HideValueAttribute.cs" />
     <Compile Include="DataAnnotations\IsCPFAttribute.cs" />
     <Compile Include="DataAnnotations\IsDateAttribute.cs" />
     <Compile Include="DataAnnotations\IsDateTimeAttribute.cs" />
@@ -81,11 +83,14 @@
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Maps\ArtigoMap.cs" />
     <Compile Include="Maps\UsuarioMap.cs" />
+    <Compile Include="ObjectUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Security\Encryption.cs" />
+    <Compile Include="Security\EncryptyPassword.cs" />
     <Compile Include="Security\Token.cs" />
     <Compile Include="EnumExtensions.cs" />
+    <Compile Include="UserTypes\StringAsPassword.cs" />
     <Compile Include="UserTypes\EnumAsChar.cs" />
     <Compile Include="ValueObject\Nivel.cs" />
     <Compile Include="ValueObject\Status.cs" />

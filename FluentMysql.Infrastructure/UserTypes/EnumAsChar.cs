@@ -12,16 +12,6 @@ namespace FluentMysql.Infrastructure.UserTypes
 {
     public class EnumAsChar<T> : IUserType where T : struct
     {
-        public static char ConvertToChar(T value)
-        {
-            return (char)((int)Enum.ToObject(typeof(T), value) + (int)'0');
-        }
-
-        public static int ConvertToInt(char value)
-        {
-            return (int)value - (int)'0';
-        }
-
         #region IUserType Members
 
         public object Assemble(object cached, object owner)

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentMysql.Domain;
 using FluentMysql.Domain.Repository;
 using FluentMysql.Infrastructure;
 using FluentMysql.Infrastructure.Entities;
@@ -11,18 +12,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FluentMysql.Site.Areas.Admin.Models.Services
+namespace FluentMysql.Site.Areas.Admin.Services
 {
     public static class ArtigoService
     {
-        internal static void Ativar(IList<long> id, Usuario usuario)
+        internal static void Ativar(IList<long> id)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
                 throw new ArgumentNullException("id", "Valor não pode ser nulo ou vazio");
-
-            if (object.Equals(usuario, null))
-                throw new ArgumentNullException("usuario", "Valor não pode ser nulo ou vazio");
-
+            
             using (Connection connection = new Connection())
             {
                 using (ISession session = connection.Session)
@@ -35,14 +33,11 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             }
         }
 
-        internal static void Desativar(IList<long> id, Usuario usuario)
+        internal static void Desativar(IList<long> id)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
                 throw new ArgumentException("Valor não pode ser nulo ou vazio", "id");
-
-            if (object.Equals(usuario, null))
-                throw new ArgumentException("Valor não pode ser nulo ou vazio", "usuario");
-
+            
             using (Connection connection = new Connection())
             {
                 using (ISession session = connection.Session)
@@ -55,14 +50,11 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             }
         }
 
-        internal static void Excluir(IList<long> id, Usuario usuario)
+        internal static void Excluir(IList<long> id)
         {
             if (object.Equals(id, null) || id.Count.Equals(0))
                 throw new ArgumentException("Valor não pode ser nulo ou vazio", "id");
-
-            if (object.Equals(usuario, null))
-                throw new ArgumentException("Valor não pode ser nulo ou vazio", "usuario");
-
+            
             using (Connection connection = new Connection())
             {
                 using (ISession session = connection.Session)
@@ -94,17 +86,14 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             return resultado;
         }
 
-        internal static Artigo Alterar(AlteraForm dados, Usuario usuario)
+        internal static Artigo Alterar(AlteraForm dados)
         {
             if (object.Equals(dados, null))
                 throw new ArgumentException("Valor não pode ser nulo", "dados");
 
-            if (object.Equals(usuario, null))
-                throw new ArgumentException("Valor não pode ser nulo", "usuario");
-
             Artigo resultado = Mapper.Map<AlteraForm, Artigo>(dados);
 
-            resultado.Responsavel = usuario;
+            resultado.Responsavel = MinhaConta.Instance.Info;
             resultado.DataAlteracao = DateTime.Now;
             using (ArtigoRepository acao = new ArtigoRepository())
             {
@@ -154,17 +143,14 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             return resultado;
         }
 
-        internal static Artigo Inserir(InsereForm dados, Usuario usuario)
+        internal static Artigo Inserir(InsereForm dados)
         {
             if (object.Equals(dados, null))
                 throw new ArgumentException("Valor não pode ser nulo", "dados");
 
-            if (object.Equals(usuario, null))
-                throw new ArgumentException("Valor não pode ser nulo", "usuario");
-
             Artigo resultado = Mapper.Map<InsereForm, Artigo>(dados);
 
-            resultado.Responsavel = usuario;
+            resultado.Responsavel = MinhaConta.Instance.Info;
             using(ArtigoRepository acao = new ArtigoRepository())
             {
                 acao.Add(resultado);

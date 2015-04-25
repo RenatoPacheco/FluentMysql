@@ -1,4 +1,5 @@
-﻿using FluentMysql.Domain.Repository;
+﻿using FluentMysql.Domain;
+using FluentMysql.Domain.Repository;
 using FluentMysql.Domain.Services;
 using FluentMysql.Domain.ValueObject;
 using FluentMysql.Infrastructure.Entities;
@@ -18,7 +19,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Security;
 
-namespace FluentMysql.Site.Areas.Admin.Models.Services
+namespace FluentMysql.Site.Areas.Admin.Services
 {
     public static class MinhaContaService
     {
@@ -39,6 +40,7 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
         {
             HttpContext context = HttpContext.Current;
 
+            TokenAcesso token;
             Usuario resultado = null;
 
             resultado = AutenticacaoService.Logar(dados.Login, dados.Senha);
@@ -52,14 +54,16 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             if (resultado.DataTermino != null && DateTime.Now.CompareTo((DateTime)resultado.DataTermino) > 0)
                 throw new ValidationException("Seu usuário não tem mais acesso ao sistema");
 
-            FormsAuthentication.SetAuthCookie(resultado.Id.ToString(), false);
-            context.Session["usuario"] = resultado.Id.ToString();
+            token = (TokenAcesso)resultado;
+            FormsAuthentication.SetAuthCookie(token.ToString(), false);
+            MinhaConta.Factory(resultado);
+            context.Session["usuario"] = token.ToString();
             
             if(dados.LembarAcesso)
             {
                 HttpCookie cookie = new HttpCookie("usuario");
                 cookie.Expires = DateTime.Now.AddDays(14);
-                cookie.Value = resultado.Id.ToString();
+                cookie.Value = token.ToString();
 
                 context.Response.SetCookie(cookie);
             }
@@ -86,7 +90,7 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
                     if (!long.TryParse(context.Request.Cookies["usuario"].ToString(), out id))
                         id = 0;
 
-            using (var acao = new UsuarioRepository())
+            using (UsuarioRepository acao = new UsuarioRepository())
             {
                 resultado = acao.Find(id);
             }
@@ -99,7 +103,7 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             Usuario resultado = null;
 
             resultado = UsuarioService.Info(dados.Identificacao);
-            if (!object.Equals(resultado, null))
+            if (!object.Equals(resultado, null) && resultado.Id > 0)
             {
                 if (dados.Acao.Equals("redefinir-senha"))
                 {
@@ -114,6 +118,10 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
                     throw new ValidationException("Nenhuma ação válida foi solicitada");
                 }
             }
+            else
+            {
+                throw new ValidationException("Seus dados de acesso não foram encontrados");
+            }
 
             return resultado;
         }
@@ -123,7 +131,7 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             if (object.Equals(usuario, null))
                 throw new ArgumentNullException("usuario", "O valor não pode ser nulo");
 
-            UsuarioInfo info = new UsuarioInfo(usuario);
+            ContaAcesso info = new ContaAcesso(usuario);
 
             if (info.Autenticado)
                 throw new ValidationException("Este registro já foi autenticado");
@@ -173,7 +181,7 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
             if (object.Equals(resultado, null) || resultado.Id <= 0 || resultado.Email != email)
                 throw new ValidationException("O token informado expirou ou não é válido");
 
-            UsuarioInfo info = new UsuarioInfo(resultado);
+            ContaAcesso info = new ContaAcesso(resultado);
             if (info.Autenticado)
                 throw new ValidationException("Este registro já foi autenticado");
 
@@ -259,16 +267,20 @@ namespace FluentMysql.Site.Areas.Admin.Models.Services
 
         public static Usuario AlterarDados(AlterarDadosForm dados)
         {
+            bool requerSenha = !string.IsNullOrWhiteSpace(dados.NovaSenha)
+                || !string.IsNullOrWhiteSpace(dados.NovoEmail);
+
             if (object.Equals(dados, null))
                 throw new ArgumentNullException("dados", "O valor não pode ser nulo");
 
-            Usuario resultado = UsuarioService.Info(dados.Id);
+            Usuario resultado = requerSenha 
+                ? UsuarioService.Info(dados.Id, dados.SenhaAtual) 
+                : UsuarioService.Info(dados.Id);
 
-            if ((!string.IsNullOrWhiteSpace(dados.NovoEmail) && !dados.NovoEmail.Equals(resultado.Email)) && !resultado.Senha.Equals(dados.SenhaAtual))
-                throw new ValidationException("A senha atual não é válida");
-
-            if ((!string.IsNullOrWhiteSpace(dados.NovaSenha) && !dados.NovaSenha.Equals(resultado.Senha)) && !resultado.Senha.Equals(dados.SenhaAtual))
-                throw new ValidationException("A senha atual não é válida");
+            if (object.Equals(resultado, null) && requerSenha)
+                throw new ValidationException("Registro não foi encontrado para ser alterado, verifique sua senha de autenticação");
+            else if (object.Equals(resultado, null))
+                throw new ValidationException("Registro não foi encontrado para ser alterado");
             
             resultado.Nome = dados.Nome;
             resultado.Sobrenome = dados.Sobrenome;

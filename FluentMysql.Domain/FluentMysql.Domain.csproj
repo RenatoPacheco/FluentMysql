@@ -63,8 +63,10 @@
     <Compile Include="Services\MinhaContaService.cs" />
     <Compile Include="Services\PermissaoService.cs" />
     <Compile Include="Services\UsuarioService.cs" />
-    <Compile Include="ValueObject\UsuarioPermissao.cs" />
-    <Compile Include="ValueObject\UsuarioInfo.cs" />
+    <Compile Include="MinhaConta.cs" />
+    <Compile Include="ValueObject\TokenAcesso.cs" />
+    <Compile Include="ValueObject\NivelAcesso.cs" />
+    <Compile Include="ValueObject\ContaAcesso.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FluentMysql.Infrastructure\FluentMysql.Infrastructure.csproj">

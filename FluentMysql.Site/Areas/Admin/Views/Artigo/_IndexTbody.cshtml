@@ -1,0 +1,43 @@
+﻿@using FluentMysql.Infrastructure.Entities
+@using FluentMysql.Infrastructure.ValueObject
+@using FluentMysql.Infrastructure.Interfaces
+@using FluentMysql.Domain.ValueObject
+@model FluentMysql.Site.Areas.Admin.ViewsData.Artigo.FiltroForm
+@{
+    IList<Artigo> Lista = object.Equals(ViewBag.Lista, null) ? new List<Artigo>() : (List<Artigo>)ViewBag.Lista;
+}
+   
+<tbody>
+    @foreach (Artigo item in Lista)
+    {
+        <tr>
+            <td class="hidden-xs">@Html.Raw(item.Id)</td>
+            <td>@Html.Raw(item.Titulo)</td>
+            <td class="hidden-xs">@Html.Raw(item.Resumo)</td>
+            <td class="text-right text-middle">
+                @if (item.Status == Status.Ativo)
+                {
+                    <a href="@Url.Action("Desativa", new { @Id=item.Id })" class="btn btn-success" title="clique aqui para desativars">
+                        <i class="fa fa-eye"></i>
+                        <span class="sr-only">Ativo</span>
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Ativa", new { @Id=item.Id })" class="btn btn-warning" title="clique aqui para ativar">
+                        <i class="fa fa-eye-slash"></i>
+                        <span class="sr-only">Inativo</span>
+                    </a>
+                }
+                <a href="@Url.Action("Altera", new { @Id = @Html.Raw(item.Id) })" class="btn btn-primary" title="clique aqui para altera">
+                    <i class="fa fa-edit"></i>
+                    <span class="hidden-xs">Alterar</span>
+                </a>
+                <label class="btn btn-link">
+                    <input type="checkbox" name="Selecionados" value="@Html.Raw(item.Id)" @string.Format("{0}", Model.Selecionados != null && Model.Selecionados.Contains(item.Id) ? "checked=\"checked\"" : "") />
+                </label>
+            </td>
+        </tr>
+    }
+</tbody>
+

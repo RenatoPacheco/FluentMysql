@@ -41,6 +41,7 @@ namespace FluentMysql.Infrastructure.Maps
 
             Map(x => x.Senha)
                .Nullable()
+               .CustomType<StringAsPassword>()
                .Length(100);
 
             Map(x => x.CPF)

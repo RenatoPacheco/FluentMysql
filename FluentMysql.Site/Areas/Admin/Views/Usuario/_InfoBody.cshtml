@@ -1,0 +1,32 @@
+﻿@using FluentMysql.Infrastructure.Entities
+@model FluentMysql.Infrastructure.Entities.Usuario
+
+<div class="alertas">
+    @Html.Raw(ViewBag.Mensagem)
+</div>
+<dl class="dl-horizontal">
+    <dt>#</dt>
+    <dd>@Html.DisplayFor(x => x.Id)</dd>
+    <dt>@Html.LabelFor(x => x.Nome)</dt>
+    <dd>@Html.DisplayFor(x => x.Nome) @Html.DisplayFor(x => x.Sobrenome)</dd>
+    <dt>@Html.LabelFor(x => x.CPF)</dt>
+    <dd>@Html.DisplayFor(x => x.CPF)</dd>
+    <dt>@Html.LabelFor(x => x.Email)</dt>
+    <dd><a href="mailto:@Html.DisplayFor(x => x.Email)" title="clique aqui para enviar um e-mail">@Html.DisplayFor(x => x.Email)</a></dd>
+    <dt>@Html.LabelFor(x => x.Nivel)</dt>
+    <dd>@Html.DisplayFor(x => x.Nivel)</dd>
+    <dt title="Indica a data de início para poder acessar o sistema">@Html.LabelFor(x => x.DataInicio)</dt>
+    <dd>@string.Format("{0}", object.Equals(Model.DataInicio, null) ? "Sem limite" : Model.DataInicio.ToString())</dd>
+    <dt title="Indica a data de término para poder acessar o sistema">@Html.LabelFor(x => x.DataTermino)</dt>
+    <dd>@string.Format("{0}", object.Equals(Model.DataTermino, null) ? "Sem limite" : Model.DataTermino.ToString())</dd>
+    <dt>@Html.LabelFor(x => x.DataCriacao)</dt>
+    <dd>@Html.DisplayFor(x => x.DataCriacao)</dd>
+    <dt>@Html.LabelFor(x => x.DataAlteracao)</dt>
+    <dd>@Html.DisplayFor(x => x.DataAlteracao)</dd>
+    <dt>@Html.LabelFor(x => x.Status)</dt>
+    <dd>@Html.DisplayFor(x => x.Status)</dd>
+</dl>
+<a href="@Url.Action("Index", new { @Voltar=true })" class="btn btn-link btn-lg col-xs-12" title="clique aqui para voltar">
+    <i class="fa fa-reply"></i>
+    Voltar
+</a>

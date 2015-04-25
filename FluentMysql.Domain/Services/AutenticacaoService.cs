@@ -1,5 +1,6 @@
 ﻿using FluentMysql.Infrastructure;
 using FluentMysql.Infrastructure.Entities;
+using FluentMysql.Infrastructure.Security;
 using NHibernate;
 using System;
 using System.Collections.Generic;

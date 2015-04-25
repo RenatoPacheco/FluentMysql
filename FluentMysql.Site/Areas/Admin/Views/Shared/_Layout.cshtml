@@ -1,9 +1,7 @@
 ﻿@using FluentMysql.Infrastructure.Entities
 @using FluentMysql.Domain.ValueObject
 @{
-    Usuario minhaConta = (Usuario)ViewBag.MinhaConta;
-    UsuarioInfo usuarioInfo = new UsuarioInfo(minhaConta);
-    UsuarioPermissao usuarioPermissao = new UsuarioPermissao(minhaConta);
+    MinhaConta minhaConta = MinhaConta.Instance;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +42,7 @@
                             <span>Home</span>
                         </a>
                     </li>
-                    @if (usuarioPermissao.Operador) {
+                    @if (minhaConta.Acesso.Operador) {
                         <li class="@TempData["Controller-Artigo"]">
                             <a href="@Url.Action("Index", new { @Controller="Artigo" })" title="clique aqui para gerenciar seus artigos">
                                 <i class="fa fa-file"></i>
@@ -52,7 +50,7 @@
                             </a>
                         </li>
                     }
-                    @if (usuarioPermissao.Administrador)
+                    @if (minhaConta.Acesso.Administrador)
                     {
                         <li class="@TempData["Controller-Usuario"]">
                             <a href="@Url.Action("Index", new { @Controller = "Usuario" })" title="clique aqui para gerenciar os usuários">
@@ -66,7 +64,7 @@
                     <li class="@TempData["Controller-MinhaConta"]">
                         <a href="@Url.Action("Index", new { @Controller="MinhaConta" })" title="clique aqui para ir a sua conta">
                             <i class="fa fa-user"></i>
-                            <span>Olá, @minhaConta.Nome</span>
+                            <span>Olá, @minhaConta.Info.Nome</span>
                         </a>
                     </li>
                     <li>
