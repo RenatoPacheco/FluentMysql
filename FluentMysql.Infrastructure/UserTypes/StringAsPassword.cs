@@ -50,7 +50,7 @@ namespace FluentMysql.Infrastructure.UserTypes
             string value;
             try
             {
-                value = string.Format("{0}", obj.ToString());
+                value = EncryptyPassword.Get(obj.ToString());
             }
             catch (Exception)
             {

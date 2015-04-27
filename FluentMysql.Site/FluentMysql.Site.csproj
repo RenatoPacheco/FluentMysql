@@ -141,6 +141,7 @@
     <Compile Include="DataAnnotations\FormatarViewXmlAttribute.cs" />
     <Compile Include="DataAnnotations\FormatarViewJsonAttribute.cs" />
     <Compile Include="DataAnnotations\IFormatarViewAttribute.cs" />
+    <Compile Include="Filters\AuthorizeAboutUserAttribute.cs" />
     <Compile Include="Services\FormatarViewService.cs" />
     <Compile Include="Areas\Admin\Services\UsuarioService.cs" />
     <Compile Include="Areas\Admin\Template\Email\AutenticarEmailTemp.cs" />

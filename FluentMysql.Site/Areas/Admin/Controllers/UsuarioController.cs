@@ -3,6 +3,7 @@ using FluentMysql.Domain;
 using FluentMysql.Domain.Services;
 using FluentMysql.Domain.ValueObject;
 using FluentMysql.Infrastructure.Entities;
+using FluentMysql.Infrastructure.Factory;
 using FluentMysql.Infrastructure.ValueObject;
 using FluentMysql.Site.Areas.Admin.Services;
 using FluentMysql.Site.Areas.Admin.ViewsData.Usuario;
@@ -130,39 +131,31 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [AuthorizeAboutUser(ProibirAutenticado = true, ProibirMinhaConta = true)]
         [FormatarViewFilter]
         [FormatarViewXml("xml", ViewData = new string[] { "Mensagem" })]
         [FormatarViewJson("json", ViewData = new string[] { "Mensagem" })]
         [FormatarViewHtml("html", "_AlteraForm", "_LayoutEmpty")]
         public ActionResult Altera(long id = 0)
         {
-            Usuario info = Services.UsuarioService.Info(id);
+            Usuario info = FindFactory.Find<Usuario>(id);
 
-            if (object.Equals(info, null) || info.Id <= 0)
+            if (object.Equals(info, null))
                 throw new HttpException(404, "O registro solicitado não foi encontrado");
 
             AlteraForm dados = Mapper.Map<Usuario, AlteraForm>(info);
-            PermissaoService.SobreUsuario(info);
-            
-            ViewBag.Info = info;
             
             return View(dados);
         }
 
         [HttpPost]
+        [AuthorizeAboutUser(ProibirAutenticado = true, ProibirMinhaConta=true)]
         [FormatarViewFilter]
         [FormatarViewXml("xml", ViewData = new string[] { "Mensagem" })]
         [FormatarViewJson("json", ViewData = new string[] { "Mensagem" })]
         [FormatarViewHtml("html", "_AlteraForm", "_LayoutEmpty")]
         public ActionResult Altera(AlteraForm dados = null)
         {
-            Usuario info = Services.UsuarioService.Info(dados.Id);
-            
-            if (object.Equals(info, null) || info.Id <= 0)
-                throw new HttpException(404, "O registro solicitado não foi encontrado");
-
-            PermissaoService.SobreUsuario(info);
-
             if (ModelState.IsValid)
             {
                 try
@@ -180,8 +173,6 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 }
             }
 
-            ViewBag.Info = info;
-            
             return View(dados);
         }
 
@@ -191,9 +182,9 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         [FormatarViewHtml("html", "_InfoBody", "_LayoutEmpty")]
         public ActionResult Info(long id = 0)
         {
-            Usuario info = Services.UsuarioService.Info(id);
+            Usuario info = FindFactory.Find<Usuario>(id);
             
-            if (object.Equals(info, null) || info.Id <= 0)
+            if (object.Equals(info, null))
                 throw new HttpException(404, "O registro solicitado não foi encontrado");
             
             return View(info);
@@ -223,6 +214,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             return RedirectToAction("Index", new { @Voltar = true });
         }
 
+        [AuthorizeAboutUser]
         [FormatarViewFilter]
         [FormatarViewXml("xml", TempData = new string[] { "Mensagem" })]
         [FormatarViewJson("json", TempData = new string[] { "Mensagem" })]
@@ -230,9 +222,6 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {            
             try
             {
-                IList<Usuario> usuarios = Services.UsuarioService.Info(id);
-                PermissaoService.SobreUsuario(usuarios, true);
-
                 Services.UsuarioService.Ativar(id);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) ativado(s) com sucesso");
             }
@@ -247,6 +236,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             return RedirectToAction("Index", new { @Voltar = true });
         }
 
+        [AuthorizeAboutUser]
         [FormatarViewFilter]
         [FormatarViewXml("xml", TempData = new string[] { "Mensagem" })]
         [FormatarViewJson("json", TempData = new string[] { "Mensagem" })]
@@ -254,9 +244,6 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
-                IList<Usuario> usuarios = Services.UsuarioService.Info(id);
-                PermissaoService.SobreUsuario(usuarios, true);
-
                 Services.UsuarioService.Desativar(id);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) desativado(s) com sucesso");
             }
@@ -271,6 +258,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             return RedirectToAction("Index", new { @Voltar = true });
         }
 
+        [AuthorizeAboutUser]
         [FormatarViewFilter]
         [FormatarViewXml("xml", TempData = new string[] { "Mensagem" })]
         [FormatarViewJson("json", TempData = new string[] { "Mensagem" })]
@@ -278,9 +266,6 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
-                IList<Usuario> usuarios = Services.UsuarioService.Info(id);
-                PermissaoService.SobreUsuario(usuarios, true);
-
                 Services.UsuarioService.Excluir(id);
                 TempData["Mensagem"] = AlertsMessages.Success("Registro(s) excluído(s) com sucesso");
             }
@@ -295,6 +280,7 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
             return RedirectToAction("Index", new { @Voltar = true });
         }
 
+        [AuthorizeAboutUser]
         [FormatarViewFilter]
         [FormatarViewXml("xml", TempData = new string[] { "Mensagem" })]
         [FormatarViewJson("json", TempData = new string[] { "Mensagem" })]
@@ -302,19 +288,6 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         {
             try
             {
-                Usuario minhaConta = MinhaConta.Instance.Info;
-                IList<Usuario> usuarios = Services.UsuarioService.Info(id);
-                PermissaoService.SobreUsuario(usuarios, true);
-                
-                if (nivel == Nivel.Indefinido)
-                    throw new ValidationException("Um valor de nível não foi selecionado");
-
-                Usuario modelo = (Usuario)minhaConta.Clone();
-                modelo.Nivel = nivel;
-                ContaAcesso acesso = new ContaAcesso(modelo);
-                if (!MinhaConta.Instance.Acesso.AutorizadoSobre(modelo))
-                    throw new ValidationException("Seu nível de acesso não permite aplicar esse nível de acesso");
-
                 Services.UsuarioService.AlterarNivel(id, nivel);
                 TempData["Mensagem"] = AlertsMessages.Success("Nível dos registro(s) alterados(s) com sucesso");
             }

@@ -29,7 +29,7 @@ namespace FluentMysql.Domain.ValueObject
             if (object.Equals(usuario, null))
                 throw new ArgumentNullException("usuario", string.Format("Valor de {0} não pode ser nulo", typeof(Usuario)));
 
-            return this.NivelInt < (int)usuario.Nivel;
+            return this.Administrador && (this.NivelInt < (int)usuario.Nivel || (int)usuario.Nivel <= 0);
         }
 
         public bool AutorizadoSobre(Nivel nivel)
