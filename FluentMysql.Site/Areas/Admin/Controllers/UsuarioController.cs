@@ -3,6 +3,7 @@ using FluentMysql.Domain;
 using FluentMysql.Domain.Services;
 using FluentMysql.Domain.ValueObject;
 using FluentMysql.Infrastructure.Entities;
+using FluentMysql.Infrastructure.Factory;
 using FluentMysql.Infrastructure.ValueObject;
 using FluentMysql.Site.Areas.Admin.Services;
 using FluentMysql.Site.Areas.Admin.ViewsData.Usuario;
@@ -137,13 +138,12 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         [FormatarViewHtml("html", "_AlteraForm", "_LayoutEmpty")]
         public ActionResult Altera(long id = 0)
         {
-            Usuario info = Services.UsuarioService.Info(id);
+            Usuario info = FindFactory.Find<Usuario>(id);
 
-            if (object.Equals(info, null) || info.Id <= 0)
+            if (object.Equals(info, null))
                 throw new HttpException(404, "O registro solicitado não foi encontrado");
 
             AlteraForm dados = Mapper.Map<Usuario, AlteraForm>(info);
-            ViewBag.Info = info;
             
             return View(dados);
         }
@@ -156,11 +156,6 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         [FormatarViewHtml("html", "_AlteraForm", "_LayoutEmpty")]
         public ActionResult Altera(AlteraForm dados = null)
         {
-            Usuario info = Services.UsuarioService.Info(dados.Id);
-            
-            if (object.Equals(info, null) || info.Id <= 0)
-                throw new HttpException(404, "O registro solicitado não foi encontrado");
-
             if (ModelState.IsValid)
             {
                 try
@@ -178,8 +173,6 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
                 }
             }
 
-            ViewBag.Info = info;
-            
             return View(dados);
         }
 
@@ -189,9 +182,9 @@ namespace FluentMysql.Site.Areas.Admin.Controllers
         [FormatarViewHtml("html", "_InfoBody", "_LayoutEmpty")]
         public ActionResult Info(long id = 0)
         {
-            Usuario info = Services.UsuarioService.Info(id);
+            Usuario info = FindFactory.Find<Usuario>(id);
             
-            if (object.Equals(info, null) || info.Id <= 0)
+            if (object.Equals(info, null))
                 throw new HttpException(404, "O registro solicitado não foi encontrado");
             
             return View(info);
