@@ -16,5 +16,14 @@ namespace FluentMysql.Infrastructure.Security
 
             return encryption.EncryptString(string.Format("{0}", value));
         }
+
+        public static string Get(object value)
+        {
+            Encryption encryption = new Encryption();
+            encryption.salt = "encriptarsenha";
+            encryption.password = "1PvFtfKZ0W";
+
+            return encryption.DecryptString(string.Format("{0}", value));
+        }
     }
 }

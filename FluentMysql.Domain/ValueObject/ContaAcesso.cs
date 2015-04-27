@@ -14,6 +14,7 @@ namespace FluentMysql.Domain.ValueObject
         {
             this.Info = object.Equals(usuario, null) ? new Usuario() : usuario;
             this.Acesso = new NivelAcesso(usuario);
+            this.Valido = this.Info.Id > 0;
             this.Autenticado = !object.Equals(usuario, null)
                 && !string.IsNullOrWhiteSpace(usuario.CPF)
                 && !string.IsNullOrWhiteSpace(usuario.Senha)
@@ -25,5 +26,7 @@ namespace FluentMysql.Domain.ValueObject
         public NivelAcesso Acesso { get; private set; }
 
         public virtual bool Autenticado { get; protected set; }
+
+        public virtual bool Valido { get; protected set; }
     }
 }
